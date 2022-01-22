@@ -1,0 +1,68 @@
+﻿@page
+@model kamjaService.Pages.Admin.SalesAnnouncement.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>SalesAnnouncements</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SalesAnnouncements.description" class="control-label"></label>
+                <input asp-for="SalesAnnouncements.description" class="form-control" />
+                <span asp-validation-for="SalesAnnouncements.description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SalesAnnouncements.title" class="control-label"></label>
+                <input asp-for="SalesAnnouncements.title" class="form-control" />
+                <span asp-validation-for="SalesAnnouncements.title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SalesAnnouncements.date" class="control-label"></label>
+                <input data-jdp asp-for="SalesAnnouncements.date" class="form-control" autocomplete="off"/>
+                <span asp-validation-for="SalesAnnouncements.date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SalesAnnouncements.productGrouping_tag" class="control-label"></label>
+                <input asp-for="SalesAnnouncements.productGrouping_tag" class="form-control" />
+                <span asp-validation-for="SalesAnnouncements.productGrouping_tag" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SalesAnnouncements.productGroup_tag" class="control-label"></label>
+                <input asp-for="SalesAnnouncements.productGroup_tag" class="form-control" />
+                <span asp-validation-for="SalesAnnouncements.productGroup_tag" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="SalesAnnouncements.SalesAnnouncementId" />
+            <div class="form-group">
+                <label asp-for="SalesAnnouncements.file_name" class="control-label"></label>
+                <input asp-for="SalesAnnouncements.file_name" class="form-control" />
+                <span asp-validation-for="SalesAnnouncements.file_name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SalesAnnouncements.parent_tag" class="control-label"></label>
+                <input asp-for="SalesAnnouncements.parent_tag" class="form-control" />
+                <span asp-validation-for="SalesAnnouncements.parent_tag" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+
+</script>

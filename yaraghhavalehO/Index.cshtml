@@ -1,0 +1,675 @@
+﻿@page "/technical/yaraghhavaleO"
+@model kamjaService.Pages.yaraghhavalehO.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_FLayout.cshtml";
+}
+
+<h2>یراق حواله ها</h2>
+
+<form asp-page="./Index" method="get" id="yaraghHavaleForm">
+    <div class="form-actions no-color">
+        <div class="container">
+            <div class="row" style="margin-top:30px;">
+                <h5 class="col-7 col-md-2">جستجو کد حواله </h5>
+                @Html.AntiForgeryToken()
+                <input class="col-5 col-md-4" type="text" name="SearchString" style="max-width:250px;max-height:125px;"
+                       id="yaraghHavaleSearchInput" />
+            </div>
+            <div class="row" style="margin-top:10px;margin-bottom:15px;">
+                <button type="submit" class="btn btn-danger col-5" style="margin-left:4px;max-width:150px;">
+                    <h6 class="buttons_h6">جستجو</h6>
+                </button>
+                <button type="button" class="btn col-6" id="updateBtn" style="        max-width: 150px;
+        background: #f8b739;color:white" data-toggle="modal" data-target="#confirmationUpdateBtn">
+                    <h6 class="buttons_h6">بروزرسانی جدول</h6>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+@if (Model.havaleFulls != null)
+{
+    @if (Model.havaleFulls.Count != 0)
+    {
+        <button class="btn btn-danger" data-toggle="modal" data-target="#previewHavaleFull" style="margin-bottom:10px;">
+            <h6 class="buttons_h6">پیش نمایش حواله</h6>
+        </button>
+
+        <div class="modal fade" id="previewHavaleFull" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document" id="havaleFullModalDialogDiv">
+                <div class="modal-content" id="havaleFullModalContentDiv">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">پیش نمایش یراق حواله</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row justify-content-between">
+                                <div class="col-5">
+                                    <h6>سند مبنا : @Model.havaleFulls.FirstOrDefault().OrderItemSourceType</h6>
+                                </div>
+                                <div class="col-5">
+                                    <h6>شماره : @Model.havaleFulls.FirstOrDefault().OrderNumber</h6>
+                                </div>
+                            </div>
+                            <div class="row justify-content-between"
+                                 style="margin-bottom: 5px;padding-bottom: 5px;border-bottom:2px 2px solid #d8d8d8">
+                                <div class="col-5">
+                                    <h6>شماره مبنا : @Model.havaleFulls.FirstOrDefault().OrderItemSourceNumber</h6>
+                                </div>
+                                <div class="col-5">
+                                    <h6>تاریخ : @Model.havaleFulls.FirstOrDefault().OrderDate</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h6>
+                                        سفارش دهنده : @Model.havaleFulls.FirstOrDefault().OrderSalesOfficeName -
+                                        @Model.havaleFulls.FirstOrDefault().OrderCustomerName
+                                    </h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h6>
+                                        خریدار : @Model.havaleFulls.FirstOrDefault().OrderOneTimeCustomerName - کد :
+                                        @Model.havaleFulls.FirstOrDefault().OrderOneTimeCustomerNumber
+                                    </h6>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="margin-bottom:15px;">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th>کد</th>
+                                            <th>نام</th>
+                                            <th>مقدار</th>
+                                            <th>بدنه</th>
+                                            <th>نما</th>
+                                            <th>پایه</th>
+                                            <th>توضیحات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var yaraghHavale in Model.havaleFulls)
+                                        {
+                                            <tr>
+                                                <td>@yaraghHavale.OrderItemRowNumber</td>
+                                                <td>@yaraghHavale.OrderItemProductNumber</td>
+                                                <td>@yaraghHavale.OrderItemProductName</td>
+                                                <td>@Decimal.ToInt32(yaraghHavale.OrderItemQuantity)</td>
+                                                <td>@yaraghHavale.tf1</td>
+                                                <td>@yaraghHavale.tf2</td>
+                                                <td></td>
+                                                <td>@yaraghHavale.OrderItemDescription</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row justify-content-between">
+                                <div class="col-5">
+                                    <h6>نصب در تاریخ : @Model.havaleFulls.FirstOrDefault().installation_or_delivery_date</h6>
+                                </div>
+                                <div class="col-5">
+                                    <h6>
+                                        از ساعت @Model.havaleFulls.FirstOrDefault().from_hour تا ساعت
+                                        @Model.havaleFulls.FirstOrDefault().to_hour
+                                    </h6>
+                                </div>
+                            </div>
+                            <div class="row justify-content-between"
+                                 style="margin-bottom: 5px;padding-bottom: 5px;border-bottom:2px 2px solid #d8d8d8">
+                                <div class="col-5">
+                                    <h6>تحویل دهنده : @Model.havaleFulls.FirstOrDefault().deliverer</h6>
+                                </div>
+                                <div class="col-5">
+                                    <h6> نصاب : @Model.havaleFulls.FirstOrDefault().installer</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h6>توضیحات : @Model.havaleFulls.FirstOrDefault().description</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h5 id="havale_code">کد حواله : @Model.havaleCode</h5>
+
+        <h5><strong>مرکز فروش: </strong>@Model.havaleFulls.FirstOrDefault().OrderSalesOfficeName</h5>
+        <h5><strong>مشتری: </strong>@Model.havaleFulls.FirstOrDefault().OrderCustomerName</h5>
+        <h5><strong></strong>@Model.havaleFulls.FirstOrDefault().OrderOneTimeCustomerName</h5>
+
+
+        //Pictures
+        <div class="panel panel-default">
+            <div class="panel-heading" style="margin-top: 15px;">
+                <h6><strong>عکس ها :</strong></h6>
+            </div>
+            <div class="panel-body" style="text-align:center">
+                <div class="container-fluid">
+                    <div class="row" id="results">
+                        @foreach (var imgName in Model.imagesNames)
+                        {
+
+                            string fullPath = "YaraghHavaleImages/" + @imgName + ".png";
+
+                            <div class="col-6 col-md-4" style="margin-bottom:7px;max-width: 200px;cursor:pointer"
+                                 onclick="openYaraghHavaleImageModal('@fullPath','@imgName')" data-toggle="modal"
+                                 data-target="#yaraghHavaleImagesModal" data-imageName="@imgName">
+
+                                <img src="@fullPath" class="img-thumbnail">
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <br />
+        </div>
+        //Camera
+        @*<div class="container">
+            <div class="row">*@
+        <button class="btn btn-danger" data-toggle="modal" data-target="#takeImageModal" style="margin-bottom:10px;"
+                onclick="webCamOn()">
+            <h6 id="zamimeAxH6" class="buttons_h6">ضمیمه عکس</h6>
+        </button>
+
+
+        <div class="modal fade" id="takeImageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">دوربین</h5>
+
+                    </div>
+                    <div class="modal-body" style="overflow: auto;width: 100%;height: auto;">
+                        <div id="my_camera" style="position:relative"></div>
+                        <div class="container">
+                            <div class="row" style="text-align:center;">
+                                <form class="col">
+                                    @Html.AntiForgeryToken()
+                                    <button type="button" class="btn margin-buttons" onClick="take_snapshot(@Model.havaleCode)"
+                                            style="background: #f8b739;color:white">
+                                        <h6 class="buttons_h6">گرفتن عکس</h6>
+                                    </button>
+                                </form>
+                                <div class="col">
+                                    <button id="closeCamera" type="button" class="btn btn-danger margin-buttons" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <h6 class="buttons_h6">
+                                            بستن
+                                            <span aria-hidden="true">&times;</span>
+                                        </h6>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    }}
+@if (Model.YaraghHavaleOrders != null)
+{
+    @if (Model.YaraghHavaleOrders.Count != 0)
+    {
+        <h5 style="margin-top: 15px;">توضیحات : </h5>
+
+        <textarea type="text" style="
+                                margin-bottom: 5px;
+                                padding-bottom: 27px;
+                                border-radius: 2px;
+                                overflow: hidden;
+                                resize: none;
+                                width: 100%;
+                                height:50px" id="desc_@Model.havaleCode" contenteditable="true"
+                  onfocusout="postDescription(@Model.havaleCode)">@Model.yaraghHavaleDesc</textarea>
+        <h6><strong>توضیحات هدر حواله : </strong> @Model.YaraghHavaleOrders[0].exp_havale</h6>
+
+
+        
+
+        <!--<div id="takeSnapshotsDiv" class="collapse">
+                                <div class="panel-body">
+                                    <div id="my_camera"></div>-->
+        <!-- A button for taking snaps -->
+        <!--<div class="container">
+                                        <div class="row">
+                                            <form>
+        @Html.AntiForgeryToken()
+                                                <button type="button" class="btn" onClick="take_snapshot(@Model.havaleCode)" style="margin-bottom: 10px;margin-top: 10px;background: #f8b739;color:white">
+                                                    <h6 class="buttons_h6">گرفتن عکس</h6>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+        @*</div>
+            </div>*@
+
+
+    }
+
+    if (Model.havaleFulls.Count == 0)
+    {
+        <script>
+            alert("شماره حواله وارد شده در پایگاه داده موجود نیست. لطفا بروزرسانی فرمایید.");
+        </script>
+    }
+}
+
+
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped" style="font-size: small;font-size:11px;">
+        <thead class="container-fluid">
+            <tr class="d-flex">
+                <th class="col-2">
+                    محصول (کد)
+                </th>
+                <th class="col-3">
+                    یراق (کد)
+                </th>
+                <th class="col-2" style="font-size:10px">
+                    تعداد
+                </th>
+                <th class="col-3">
+                    توضیحات قلم حواله
+                </th>
+                <th class="col-2">
+                    موجود
+                </th>
+            </tr>
+        </thead>
+        <tbody class="container-fluid">
+            @if (Model.YaraghHavaleOrders != null)
+            {
+                @foreach (var item in Model.YaraghHavaleOrders)
+                {
+                    <tr class="d-flex" @*class='clickable-row' data-toggle="modal" data-target="#exampleModal"*@>
+                        <td class="col-2">
+                            @Html.DisplayFor(modelItem => item.product_name) (@Html.DisplayFor(modelItem => item.Number))
+                        </td>
+                        <td class="col-3" style="font-size:12px">
+                            @Html.DisplayFor(modelItem => item.ajza_name) @Html.DisplayFor(modelItem => item.ajza_code)
+                        </td>
+                        <td class="col-2" style="font-size:14px">
+                            @Html.DisplayFor(modelItem => item.tedad)
+                        </td>
+                        <td class="col-3">
+                            @Html.DisplayFor(modelItem => item.exp_order)
+                        </td>
+                        <td class="col-2">
+
+                            <div class="checkbox" style="text-align:center">
+                                @Html.AntiForgeryToken()
+                                <input type="checkbox" onchange="checkBoxFunction(this, @item.ID)"
+                                       checked="@item.tik" />
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="confirmationUpdateBtn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">آپدیت جدول یراق حواله</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-lg-12">
+
+                    <div style="margin:10px;">
+                        <h5>آیا مطمعن هستید؟ با آپدیت جدول یراق حواله تیک ها پاک خواهند شد</h5>
+                    </div>
+                    <div class="row" style="text-align:center">
+                        <div class="col-6">
+                            <button style="min-width:75px;" class="btn btn-success" onclick="UpdateTable()">
+                                <h6 class="buttons_h6">تایید</h6>
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button style="min-width:75px;" type="button" class="btn btn-danger" data-dismiss="modal"
+                                    aria-label="Close">
+                                <h6 class="buttons_h6">بستن</h6>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="yaraghHavaleImagesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">یراق حواله</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-lg-12">
+
+                            <img id="yaraghHavaleImageModal" class="w-100 yimg" src="#">
+                            <input type="hidden" id="imgNameModal">
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                    <button class="btn btn-danger margin-buttons">
+                        <h6 class="buttons_h6" data-toggle="modal" data-target="#confirmationHavaleImageDeletionBtn">پاک کردن عکس</h6>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmationHavaleImageDeletionBtn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">پاک کردن عکس حواله ها</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-lg-12">
+
+                    <div style="margin:10px;">
+                        <h5>آیا مطمعن هستید؟</h5>
+                    </div>
+                    <div class="row" style="text-align:center">
+                        <div class="col-6">
+                            <button style="min-width:75px;" class="btn btn-success" onclick="deletePhoto()">
+                                <h6 class="buttons_h6">تایید</h6>
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button style="min-width:75px;" type="button" class="btn btn-danger" data-dismiss="modal"
+                                    aria-label="Close">
+                                <h6 class="buttons_h6">بستن</h6>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/webcam.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $('.clickable-row').on({
+            'click': function () {
+                $(".yimg").attr("src", "../image/component/" + $(this).data('value') + ".JPG");
+
+
+            }
+        });
+
+        $('#closeCamera').click(function () {
+            Webcam.reset();
+        })
+    });
+    function checkBoxFunction(e, id) {
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Page("index", "checkbox")',
+
+
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+
+            },
+
+            data: {
+                checkboxValue: e.checked,
+                id: id
+            },
+
+            success: function (data) {
+                console.log("tik post ajax data => " + data);
+            }
+        });
+
+    }
+
+    function getTikCheckBox(e, un) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Page("index", "checkbox")',
+
+            data: {
+                checkboxValue: e.checked,
+                un: un
+            },
+
+            success: function (data) {
+                console.log("tik get ajax data => " + data);
+            }
+        });
+
+        
+    }
+
+    function UpdateTable() {
+        var btn = document.getElementById('updateBtn');
+        var havale_code = document.querySelector('input[name="SearchString"]').value;
+
+        if (havale_code) {
+            btn.value = 'لطفا صبر نمایید...';
+            $.ajax({
+                type: 'POST',
+                data: {
+                    havale_code: havale_code.match(/(\d+)/)[0]
+                },
+
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+
+                },
+
+                url: '@Url.Page("index", "update")',
+
+                success: function (result) {
+                    //console.log("update talbe ajax => " + result);
+
+                    if (result === "success") {
+
+                        document.getElementById("yaraghHavaleForm").submit();
+
+                    }
+
+                    else {
+                        alert("شماره حواله نامعتبر میباشد");
+                        window.location.reload();
+                    }
+                },
+
+                error: function (result) {
+                    alert("خطا");
+                    btn.value = 'بروزرسانی جدول';
+
+                }
+            });
+        }
+        else {
+            alert("لطفا شماره حواله را وارد نمایید")
+
+        }
+    }
+
+    function postDescription(id) {
+        var desc = document.querySelector("#desc_" + id).value;
+        //console.log(desc)
+        $.ajax({
+            type: 'POST',
+            data: {
+                id: id,
+                description: desc
+            },
+
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+
+            },
+
+            url: '@Url.Page("index", "description")',
+
+            success: function (result) {
+                //console.log("adding product desc ajax... => " + result);
+            }
+        });
+    }
+
+    function readMore() {
+        var desc_product_group = document.getElementById('desc_product_group');
+        var readmore_btn = document.getElementById('readmore_btn');
+
+
+        if (readmore_btn.getAttribute('data-readmore') == 1) {
+            desc_product_group.style.height = (desc_product_group.scrollHeight) + "px";
+            readmore_btn.innerText = 'کمتر...';
+            readmore_btn.setAttribute('data-readmore', 0);
+        }
+
+        else {
+            readmore_btn.innerText = 'بیشتر...';
+            desc_product_group.style.height = "50px";
+            readmore_btn.setAttribute('data-readmore', 1);
+        }
+    }
+
+    // Configure a few settings and attach camera -->
+    Webcam.set({
+        //width: 285,
+        //height: 340,
+
+        width: 720,
+        height: 1280,
+
+        image_format: 'png',
+        jpeg_quality: 100,
+        constraints: {
+            facingMode: "environment",
+            width: { exact: 1280 },
+            height: { exact: 720 }
+        },
+    });
+
+    // Code to handle taking the snapshot and displaying it locally -->
+    function take_snapshot(havaleCode) {
+        // take snapshot and get image data
+        Webcam.snap(function (data_uri) {
+
+            Webcam.upload(data_uri,
+                '@Url.Page("index", "capture")',
+                function (code, text) {
+                    //console.log(code + "\n" + text)
+                }, havaleCode
+            );
+        });
+
+        setTimeout(() => window.location.reload(), 900);
+    @* window.location.reload(); *@
+    }
+
+    function openYaraghHavaleImageModal(src, imageName) {
+        var image = document.getElementById('yaraghHavaleImageModal');
+
+        image.setAttribute('src', src)
+        var imgnmmodal = document.getElementById('imgNameModal');
+        imgnmmodal.setAttribute('value',imageName);
+    }
+
+    function webCamOn() {
+        if ($(document.getElementById('takeSnapshotsDiv')).hasClass('show')) {
+            Webcam.reset();
+            //document.getElementById('zamimeAxH6').innerText = "ضمیمه عکس";
+
+        }
+        else {
+            Webcam.attach('#my_camera');
+            //document.getElementById('zamimeAxH6').innerText = "بستن ضمیمه عکس";
+            var camera_video = document.querySelector("#my_camera video");
+            camera_video.style.width = '285px';
+            camera_video.style.height = '330px';
+            var camera_div = document.getElementById('my_camera')
+            camera_div.style.width = '';
+            camera_div.style.height = '';
+            camera_div.style.textAlign = 'center';
+        }
+    }
+
+    function deletePhoto() {
+        var imageName = document.getElementById('imgNameModal').value;
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Page("index", "deleteHavaleImage")',
+
+
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+
+            },
+
+            data: {
+                imageName: imageName
+            },
+
+            success: function (data) {
+                @* setTimeout(() => window.location.reload(), 900); *@
+                window.location.reload()
+            }
+        });
+    }
+</script>

@@ -1,0 +1,64 @@
+﻿@page
+@model kamjaService.Pages.Admin.SalesAnnouncement.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>SalesAnnouncements</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.date)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.productGrouping_tag)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.productGrouping_tag)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.productGroup_tag)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.productGroup_tag)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.file_name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.file_name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.parent_tag)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.parent_tag)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="SalesAnnouncements.SalesAnnouncementId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

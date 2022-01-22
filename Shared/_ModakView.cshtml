@@ -1,0 +1,126 @@
+﻿@page
+@model kamjaService.Pages.Shared._ModakViewModel
+
+    @{
+        Layout = "";
+    }
+
+
+<table class="table  table-bordered  table-striped table-dark ">
+    <tr>
+
+        <th>
+            کد
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => Model.compdt.First().AjzakalaCode)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            عنوان
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => Model.compdt.First().AjzaKalaName)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            طول
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => Model.compdt.First().Tool)
+        </td>
+
+    </tr>
+    @*<td>
+
+            @Html.DisplayFor(modelItem => item.Ghotr)
+        </td>*@
+
+    <tr>
+        <th>
+            عرض
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => Model.compdt.First().Arz)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            نوار طول
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => Model.compdt.First().Navartool)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            نوار عرض
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => Model.compdt.First().Navararz)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            ضخامت
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => Model.compdt.First().Ghotr)
+        </td>
+    </tr>
+    @*<th>
+            ایستگاه
+        </th>*@
+
+
+
+    @*<tbody>
+            @foreach (var item in Model.compdt)
+            {
+            <tr class='clickable-row' data-toggle="modal" data-target="#exampleModal"
+                data-value="@Html.DisplayFor(modelItem => item.AjzakalaCode)">
+
+
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.Tool)
+                </td>
+                <td>
+
+
+                    @Html.DisplayFor(modelItem => item.Arz)
+
+                </td>
+
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.Ghotr)
+                </td>
+                <td>
+
+
+                    @Html.DisplayFor(modelItem => item.Navararz)
+
+                </td>
+                <td>
+
+
+                    @Html.DisplayFor(modelItem => item.Navartool)
+
+                </td>
+                <td>
+
+
+                    @Html.DisplayFor(modelItem => item.Station)
+
+                </td>
+
+
+            </tr>
+            }
+        </tbody>*@
+</table>
+
+

@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - kamjaService</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-icons.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <link href="~/css/swiper-bundle.min.css" rel="stylesheet" />
+    <script src="~/js/swiper-bundle-min.js"></script>
+    @*<link rel="manifest" href="~/manifest.webmanifest">*@
+    <link href="~/manifest.json" rel="manifest" />
+    <link rel="stylesheet" href="~/css/util.css" />
+
+    <style>
+        .nav-tabs .nav-link.active
+        /*.nav-tabs .nav-item.show .nav-link*/ {
+            border-top: none;   
+            border-left: none;
+            border-right: none;
+            border-bottom: 2px solid #808080;
+            font-weight: bold;
+            /*transition: 0.1s;*/
+        }
+
+        .nav-linkS.active
+        /*.nav-tabs .nav-item.show .nav-link*/ {
+            color: #f8b739;
+            font-weight: bold;
+            /*transition: 0.1s;*/
+        }
+        /*  .nav-tabs .nav-link {
+            border: solid 4px red;
+            margin-left: 0;
+        }*/
+
+        .btnback {
+            font-size: larger;
+            font: bold;
+            border-radius: 10%;
+            text-align: left;
+            background-color: #ffffff;
+            border: none;
+            /*font-family:s;*/
+            padding: 0px;
+            margin: 0px;
+            margin-bottom: 5px;
+            padding-top: 5px;
+            color: #000000;
+        }
+
+            .btnback:hover {
+                color: #f8b739;
+                background-color: #ffffff;
+            }
+        /* .btnback span i {
+                margin-top: 0px;
+                padding-top:0px;
+            }*/
+        .logoup {
+            width: 75%;
+            padding-right: 20px;
+            float: right;
+        }
+
+
+
+
+        .logoitem {
+            padding-top: 20px;
+            text-align: center;
+            padding-bottom: 50px;
+        }
+    </style>
+
+</head>
+<body>
+    <header style="background-color:#ffffff" class="fixed-top">
+        <a asp-page="/index">
+            <img src="/icons/logo2.png" class=" logoupM" alt="Responsive image" />
+        </a>
+        <div class=" float-left" style="text-align:left;float:left;padding:10px">
+            @{
+                if (Context.Request.Path.ToString() == "/" ||
+                   Context.Request.Path.ToString() == "/index")
+
+                {
+
+                }
+                else
+                {
+
+                    <a class="btn btn-danger" href='javascript:history.go(-1)'>
+                        <h6 class="buttons_h6"> بازگشت</h6>
+                    </a>
+
+                }
+                @*<a class="btn btn-danger" asp-page="/Admin/Index">
+                    <span> پنل ادمین </span>
+                </a>*@
+            }
+        </div>
+
+        <nav class="border-top text-muted main-nav">
+
+            <ul>
+                <li class="logoitem ">
+                    <a asp-page="/index">
+                        <img src="/icons/FLogo.png" class=" logoup" alt="Responsive image" />
+                    </a>
+                </li>
+
+                <li class="nav-item ">
+                    <a class=" nav-linkS nlSI" asp-area="" asp-page="/SalesInfo/Index" style="">
+                        <i class="bif bi bi-list-check"></i>
+
+                        <span class="nav-text">اطلاعات فروش</span>
+                    </a>
+
+                </li>
+
+                <li class="nav-item ">
+                    <a class="nav-linkS nlT" asp-area="" asp-page="/technical/Index" style="">
+                        <i class="bif bi bi-gear"></i>
+                        <span class="nav-text"> اطلاعات فنی</span>
+                    </a>
+                </li>
+
+                <li class="nav-item ">
+                    <a id="servicesAnchorlink" class="nav-linkS nlS" asp-area="" asp-page="/services/Index" style="">
+                        <i class="bif bi bi-wrench"></i>
+                        <span class="nav-text">خدمات پس از فروش</span>
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    @* <script src="~/lib/jquery/dist/jquery.js"></script> *@
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/jalalidatepicker.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>navigator.serviceWorker.register('/service-worker.js');</script>
+    <script src="~/js/materialize.js"></script>
+
+    @* <script>navigator.serviceWorker.register('/service-worker.published.js');</script>*@
+    @RenderSection("Scripts", required: false)
+    @* <script src="~/service-worker.js"></script>*@
+    <script>
+        $(function () {
+            var pgurl = window.location.href.includes("technical");
+            //alert(window.location.href.search("sdf"));
+            $("ul li a").each(function () {
+                //alert(pgurl)
+                //alert($(this).attr("href").substr($(this).attr("href").lastIndexOf("/")));
+                //if ($(this).attr("href").substr($(this).attr("href").lastIndexOf("/")) == pgurl) {
+                //    //alert('2');
+                //    $(this).addClass("active");
+
+                //}
+                if (pgurl) {
+                    //alert('2');
+                    $('.nlT').addClass("active");
+
+                }
+                else if (window.location.href.includes("services")) {
+                    $('.nlS').addClass("active");
+                }
+                else if (window.location.href.includes("Sales")) {
+                    $('.nlSI').addClass("active");
+                }
+            })
+        });
+
+        var servicesLink = document.getElementById('servicesAnchorlink');
+        @if ((await AuthorizationService.AuthorizeAsync(User, "IsForushUser")).Succeeded) {
+            <text>
+                servicesLink.removeAttribute('href');
+                servicesLink.style.color = 'gray';
+            </text>
+        }
+
+    </script>
+</body>
+</html>

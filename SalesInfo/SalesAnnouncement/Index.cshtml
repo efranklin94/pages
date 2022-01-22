@@ -1,0 +1,69 @@
+﻿@page
+@model kamjaService.Pages.SalesInfo.SalesAnnouncement.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h2>اطلاعیه های فروش</h2>
+<hr />
+       
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color" style="margin-top:27px">
+        <p>
+            جستجو : 
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <button type="submit" class="btn btn-danger"><h6 class="buttons_h6">جستجو</h6></button>
+
+        </p>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped" style="font-size: small;font-size:11px;">
+        <thead class="container-fluid">
+            <tr class="d-flex">
+                <th class="col-2">
+                    شماره
+                </th>
+                <th class="col-5">
+                    عنوان
+                </th>
+                <th class="col-3">
+                    تاریخ ثبت
+                </th>
+                <th class="col-2">
+                    دریافت
+                </th>
+            </tr>
+        </thead>
+        <tbody class="container-fluid">
+            @foreach (var item in Model.SalesAnnouncements)
+            {
+            <tr class="d-flex">
+                @*
+                *@
+                <td class="col-2">
+                    @Html.DisplayFor(modelItem => item.SalesAnnouncementId)
+                </td>
+                <td class="col-5">
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td class="col-3">
+                    @Html.DisplayFor(modelItem => item.date)
+                </td>
+                <td class="col-2" style=" padding: 0; text-align: center; padding-top: 5px;font-size: 15px;">
+                    @{ 
+                        var src = "/SalesAnnouncePdf/" + item.file_name + ".pdf";
+                    }
+                    <a href="@src" download id="download" style="text-decoration:none">
+                        <i class="bi bi-download"></i>                    
+                    </a>
+                </td>
+
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

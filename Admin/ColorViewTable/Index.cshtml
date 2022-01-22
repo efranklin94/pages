@@ -1,0 +1,48 @@
+﻿@page
+@model kamjaService.Pages.Admin.ColorViewTable.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h2>گروه رنگها و رنگهای آن</h2>
+
+<p>
+    <a asp-page="Create"><h4>ایجاد</h4></a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <h6>گروه رنگ</h6>
+            </th>
+            <th>
+                <h6>رنگ</h6>
+            </th>
+            <th>
+                <h6>فعال</h6>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ColorsViewTable) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.color_category)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.color)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.flag)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.color_Id">ویرایش</a> |
+                <a asp-page="./Delete" asp-route-id="@item.color_Id">پاک کردن</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

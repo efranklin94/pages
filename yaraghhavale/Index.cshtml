@@ -1,0 +1,154 @@
+﻿@page
+@model kamjaService.Pages.yaraghhavale.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_FLayout.cshtml";
+}
+@Html.AntiForgeryToken()
+<h2>حواله یراق ها</h2>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            جستجو کد حواله :
+            <input type="text" name="SearchString" />
+            <input type="submit" value="جستجو" class="btn btn-danger" />
+
+        </p>
+    </div>
+</form>
+@if (Model.YaraghHavale != null)
+{
+    @if (Model.YaraghHavale.Count != 0)
+    {
+        <h5>کد حواله : @Model.havaleCode</h5>
+        <p><strong>توضیحات هدر حواله : </strong> @Model.YaraghHavale[0].توضیحات_هدر_حواله</p>
+    }
+}
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped" style="font-size: small">
+        <thead>
+            <tr>
+                <th>
+                    محصول (کد)
+                </th>
+                <th>
+                    یراق (کد)
+                </th>
+                <th>
+                    تعداد
+                </th>
+                <th>
+                    توضیحات قلم حواله
+                </th>
+                <th>
+                    OrderRef
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.YaraghHavale != null)
+            {
+                @foreach (var item in Model.YaraghHavale)
+                {
+                    <tr @*class='clickable-row' data-toggle="modal" data-target="#exampleModal"*@>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.نام_محصول) (@Html.DisplayFor(modelItem => item.Number))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.نام_اجزاي_کالا) (@Html.DisplayFor(modelItem => item.کد_اجزاي_کالا))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.تعداد)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.توضیحات_قلم_حواله)
+                        </td>
+                        <td>
+                            <div class="checkbox">
+                                @Html.AntiForgeryToken()
+                                <input asp-for="@item.OrderRef" type="checkbox" onchange="checkBoxFunction(this, @item.ID)" />
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-lg-12">
+
+                    <img class="w-100 yimg" src="#">
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+
+    console.log("scripr is loading.......")
+    $(document).ready(function () {
+
+        $('.clickable-row').on({
+            'click': function () {
+                $(".yimg").attr("src", "../image/component/" + $(this).data('value') + ".JPG");
+
+
+            }
+        });
+    });
+    function checkBoxFunction(e, id) {
+        var tik;
+        if (e.checked) {
+            tik = "1";
+        }
+        else {
+            tik = "0";
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Page("index", "checkbox")',
+          
+
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+                
+            },
+
+            data: {
+                checkboxValue: tik,
+                id: id
+            },
+
+            success: function (data) {
+                //console.log("post ajax data => "+data);
+            }
+        });
+
+        @*$.ajax({
+            type: 'GET',
+
+            url: '@Url.Page("index", "test")',
+            success: function (result) {
+                console.log("get ajax => " + result);
+            }
+        });*@
+
+    }
+</script>

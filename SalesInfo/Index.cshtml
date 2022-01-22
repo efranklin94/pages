@@ -1,0 +1,46 @@
+﻿@page
+@model kamjaService.Pages.SalesInfo.IndexModel
+
+@{
+    ViewData["Title"] = "کمجا سرویس";
+}
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h3>اطلاعات فروش</h3>
+
+
+<button href="#productGroupCollapse" class="btn productGroupCollapseBtn" data-toggle="collapse">
+    <h5>
+        گروه محصولات<i class="arrow down"></i>
+    </h5>
+</button>
+<div id="productGroupCollapse" class="collapse">
+    <table class="table table-hover" style="margin: 0">
+        <tbody>
+            @foreach (var item in Model.Parent)
+            {
+                <tr onclick="location.href = '@(Url.Page("/Salesinfo/ProductGroups/Index", new { id = @item.ParentId }))'">
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<button class="productGroupCollapseBtn btn">
+    <a class="nav-linkF text-dark" asp-area="" asp-page="/SalesInfo/SalesAnnouncement/Index">
+        <h5>اطلاعیه های فروش</h5>
+    </a>
+</button>
+<button class="productGroupCollapseBtn btn">
+    <a class="nav-linkF text-dark" asp-area="" asp-page="/SalesInfo/Colors/list">
+        <h5>رنگ ها</h5>
+    </a>
+</button>

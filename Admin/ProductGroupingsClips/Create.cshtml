@@ -1,0 +1,63 @@
+﻿@page
+@model kamjaService.Pages.Admin.ProductGroupingsClips.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h2>ایجاد</h2>
+
+<h4>کلیپ محصولات</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <h6>شماره سرویس</h6>
+                <input asp-for="ProductGroupingClips.productGroupingId" class="form-control" />
+                <span asp-validation-for="ProductGroupingClips.productGroupingId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <h6>عنوان</h6>
+                <input asp-for="ProductGroupingClips.title" class="form-control" />
+                <span asp-validation-for="ProductGroupingClips.title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <h6>توضیحات</h6>
+                <input asp-for="ProductGroupingClips.description" class="form-control" />
+                <span asp-validation-for="ProductGroupingClips.description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">آپلود PDF</label>
+                <input asp-for="UploadedFile" class="form-control" style="height:auto" />
+                <span asp-validation-for="UploadedFile" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <h6>فنی یا اطلاعات فروش</h6>
+                @*<input asp-for="ProductGroupingClips.FanniOrSalesInfo" class="form-control" />*@
+                <select class="custom-select" asp-for="ProductGroupingClips.FanniOrSalesInfo">
+                    <option value="Fanni">فنی</option>
+                    <option value="SalesInfo">اطلاعات فروش</option>
+                </select>
+                <span asp-validation-for="ProductGroupingClips.FanniOrSalesInfo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

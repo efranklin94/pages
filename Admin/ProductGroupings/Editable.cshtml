@@ -1,0 +1,388 @@
+﻿@page "/Admin/ProductGroupings"
+@model kamjaService.Pages.Admin.ProductGroupings.IndexModel
+@{
+    ViewData["Title"] = "Editable";
+}
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      rel="stylesheet" />
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      rel="stylesheet" />
+<!-- MDB -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css"
+      rel="stylesheet" />
+<!-- Compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<div id="admin_page">
+    <h3>پنل ادمین</h3>
+    @*<h4 id="ProductGroupingName"></h4>*@
+    <h5>
+        توضیحات : <textarea type="text" id="productGroupingDescription" style="        padding-bottom: 32px;
+        border-radius: 2px;
+        margin: 20px;
+        height: auto;
+        white-space: pre-wrap;
+        max-width: 840px;
+        font-size: 14px;
+" contenteditable="true" onfocusout="updateDescriptionProductGrouping()">@Model.productGroupDescription</textarea>
+    </h5>
+
+    <!-- Editable table -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped table-bordered table-responsive-md text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">نام محصول</th>
+                            <th scope="col" class="text-center">کد محصول</th>
+                            <th scope="col" class="text-center">پایه چوبی</th>
+                            <th scope="col" class="text-center">بدنه</th>
+                            <th scope="col" class="text-center">نما</th>
+                            <th scope="col" class="text-center">توضیحات</th>
+                        </tr>
+                    </thead>
+
+                    <!-- This is our clonable table line -->
+                    @foreach (var item in Model.proColViews)
+                    {
+                        <tr>
+                            <td class="pt-3-half" style="direction: rtl; text-align: right;">@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td class="pt-3-half" style="direction: rtl; text-align: right;">@Html.DisplayFor(modelItem => item.Number)</td>
+
+                            <td href="javascript:void(0)" class="clickable-row" data-toggle="modal" data-target="#paye_modal_@item.ProductGroupingId" onclick="getPayeColor(@item.ProductGroupingId)">
+                                <a href="javascript:void(0)" style="text-decoration:none;color:#0275d8;" class="button">کلیک کنید</a>
+                            </td>
+                            <td href="javascript:void(0)" class="clickable-row" data-toggle="modal" data-target="#badane_modal_@item.ProductGroupingId" onclick="getBadaneColor(@item.ProductGroupingId)">
+                                <a href="javascript:void(0)" style="text-decoration:none;color:#0275d8;" class="button">کلیک کنید</a>
+                            </td>
+                            <td href="javascript:void(0)" class="clickable-row" data-toggle="modal" data-target="#nama_modal_@item.ProductGroupingId" onclick="getNamaColor(@item.ProductGroupingId)">
+                                <a href="javascript:void(0)" style="text-decoration:none;color:#0275d8;" class="button">کلیک کنید</a>
+                            </td>
+                            <td>
+                                <textarea type="text" style="       
+                                padding-bottom: 27px;
+                                border-radius: 1px;
+                                height: auto;
+                                white-space: pre-wrap;
+                                min-width: 270px;" id="desc_@item.ProductGroupingId" contenteditable="true" onfocusout="postDescription(@item.ProductGroupingId)" style="direction: rtl; text-align: right;">@Model.productGroupingexps.Where(x => x.ProductGroupingIdref == item.ProductGroupingId).Select(x => x.Pexp).FirstOrDefault()</textarea>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+    @foreach (var rows in Model.proColViews)
+    {
+        <div id="@rows.ProductGroupingId">
+            <div class="modal fade paye_modal" id="paye_modal_@rows.ProductGroupingId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-3 col-sm-3 col-md-3" style="bottom: 15px;">
+                                        <h5 class="modal-title" id="exampleModalLabel" style="text-align:right">پایه</h5>
+                                    </div>
+                                    <div class="col-8 col-sm-8 col-md-8">
+                                        <h6>@rows.Name (@rows.Number)</h6>
+                                    </div>
+                                    <div class="col-1 col-sm-1 col-md-1" style="top: 7px;">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="text-align:left">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-12 col-sm-12 col-lg-12">
+                                @foreach (var item in Model.colors)
+                                {
+                                    <div class="checkbox">
+                                        @Html.AntiForgeryToken()
+                                        <input type="checkbox" id="@item.ID" name="colors" style="opacity: 1 !important;position: initial;pointer-events: auto;" onclick="setPayeColor(this, @item.ID, @rows.ProductGroupingId)">
+                                        <label for="colors" style="color:black;font-size:1rem;">@item.color_category</label><br>
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade nama_modal" id="nama_modal_@rows.ProductGroupingId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-3 col-sm-3 col-md-3" style="bottom: 15px;" ">
+                                        <h5 class="modal-title" id="exampleModalLabel" style="text-align:right">نما</h5>
+                                    </div>
+                                    <div class="col-8 col-sm-8 col-md-8">
+                                        <h6>@rows.Name (@rows.Number)</h6>
+                                    </div>
+                                    <div class="col-1 col-sm-1 col-md-1" style="top: 7px;">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="text-align:left">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-12 col-sm-12 col-lg-12">
+                                @foreach (var item in Model.colors)
+                                {
+                                    <div class="checkbox">
+                                        @Html.AntiForgeryToken()
+                                        <input type="checkbox" id="@item.ID" name="colors" style="opacity: 1 !important;position: initial;pointer-events: auto;" onclick="setNamaColor(this, @item.ID, @rows.ProductGroupingId)">
+                                        <label for="colors" style="color:black;font-size:1rem;">@item.color_category</label><br>
+                                    </div>
+
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade badane_modal" id="badane_modal_@rows.ProductGroupingId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-3 col-sm-3 col-md-3" style="bottom: 15px;" ">
+                                        <h5 class="modal-title" id="exampleModalLabel" style="text-align:right">بدنه</h5>
+                                    </div>
+                                    <div class="col-8 col-sm-8 col-md-8">
+                                        <h6>@rows.Name (@rows.Number)</h6>
+                                    </div>
+                                    <div class="col-1 col-sm-1 col-md-1" style="top: 7px;">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="text-align:left">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-12 col-sm-12 col-lg-12">
+                                @foreach (var item in Model.colors)
+                                {
+                                    <div class="checkbox">
+                                        @Html.AntiForgeryToken()
+                                        <input type="checkbox" id="@item.ID" name="colors" style="opacity: 1 !important;position: initial;pointer-events: auto;" onclick="setBadaneColor(this, @item.ID, @rows.ProductGroupingId)">
+                                        <label for="colors" style="color:black;font-size:1rem;">@item.color_category</label><br>
+                                    </div>
+
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    function getPayeColor(id) {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Page("editable", "PayeColor")',
+            data: {
+                tikId: id
+            },
+            success: function (data) {
+                data.forEach(function(color_id) {
+                    document.querySelector("#paye_modal_"+id+" input[id='"+color_id+"']").checked = true;
+                })
+            }
+        })
+    }
+    function getNamaColor(id) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Page("editable", "NamaColor")',
+            data: {
+                tikId: id
+            },
+            success: function (data) {
+                data.forEach(function(color_id) {
+                    document.querySelector("#nama_modal_"+id+" input[id='"+color_id+"']").checked = true;
+                })
+            }
+        })
+    }
+    function getBadaneColor(id) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Page("editable", "badanecolor")',
+            data: {
+                tikId: id
+            },
+            success: function (data) {
+                data.forEach(function(color_id) {
+                    document.querySelector("#badane_modal_"+id+" input[id='"+color_id+"']").checked = true;
+                })
+            }
+        })
+    }
+
+    function setPayeColor(e, color_id, product_id) {
+        $.ajax({
+            type: 'POST',
+            data: {
+                isChecked: e.checked,
+                colorId: color_id,
+                productId: product_id
+            },
+
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+
+            },
+
+            url: '@Url.Page("editable", "setPayeColor")',
+
+            success: function (result) {
+                //console.log("setting paye color ajax... => " + result);
+
+            }
+        });
+    }
+
+    function setBadaneColor(e, color_id, product_id) {
+        $.ajax({
+            type: 'POST',
+            data: {
+                isChecked: e.checked,
+                colorId: color_id,
+                productId: product_id
+            },
+
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+
+            },
+
+            url: '@Url.Page("editable", "setBadaneColor")',
+
+            success: function (result) {
+                //console.log("setting badane color ajax... => " + result);
+
+            }
+        });
+    }
+
+    function setNamaColor(e, color_id, product_id) {
+        $.ajax({
+            type: 'POST',
+            data: {
+                isChecked: e.checked,
+                colorId: color_id,
+                productId: product_id
+            },
+
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+
+            },
+
+            url: '@Url.Page("editable", "setNamaColor")',
+
+            success: function (result) {
+                //console.log("setting nama color ajax... => " + result);
+
+            }
+        });
+    }
+
+    function postDescription(id) {
+        var desc = document.querySelector("#desc_" + id).value;
+        console.log(desc)
+        $.ajax({
+            type: 'POST',
+            data: {
+                id: id,
+                description: desc
+            },
+
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+
+            },
+
+            url: '@Url.Page("editable", "description")',
+
+            success: function (result) {
+                //console.log("adding product desc ajax... => " + result);
+
+            }
+        });
+    }
+
+    var current_product_grouping_id = window.location.search.substring(1).split('id=', '3')[1];
+
+    function updateDescriptionProductGrouping() {
+        var desc = document.querySelector("#productGroupingDescription").value;
+        $.ajax({
+            type: 'POST',
+            data: {
+                id: current_product_grouping_id,
+                description: desc
+            },
+
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+
+            },
+
+            url: '@Url.Page("editable", "current_pging_description")',
+
+            success: function (result) {
+                //console.log("adding productgrouping desc ajax... => " + result);
+
+            }
+        });
+    }
+
+    //get the current product group name in header node
+
+    @*$.ajax({
+            type: 'GET',
+            url: '@Url.Page("editable", "getCurrentProductGroupName")',
+            data: {
+                current_product_grouping_id: current_product_grouping_id
+            },
+            success: function (data) {
+                document.querySelector("#ProductGroupingName").textContent = data
+            }
+        })*@
+
+    
+</script>

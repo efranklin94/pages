@@ -1,0 +1,61 @@
+﻿@page
+@model kamjaService.Pages.Admin.ProductGroupingsClips.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h2>کلیپ محصولات</h2>
+
+<p>
+    <a asp-page="Create"><h5>ایجاد</h5></a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <h6>گروه محصولات</h6>
+            </th>
+            <th>
+                <h6>اسم کلیپ</h6>
+            </th>
+            <th>
+                <h6>عنوان</h6>
+            </th>
+            <th>
+                <h6>توضیحات</h6>
+            </th>
+            <th>
+                <h6>فنی یا اطلاعات فروش</h6>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ProductGroupingClips) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.productGroupingId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FanniOrSalesInfo)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">ویرایش</a> |
+                @*<a asp-page="./Details" asp-route-id="@item.Id">Details</a>*@ |
+                <a asp-page="./Delete" asp-route-id="@item.Id">پاک کردن</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

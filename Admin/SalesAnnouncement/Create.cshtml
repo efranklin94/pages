@@ -1,0 +1,141 @@
+﻿@page
+@model kamjaService.Pages.Admin.SalesAnnouncement.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<link href="~/css/jalalidatepicker.css" rel="stylesheet" />
+<h2>ایجاد</h2>
+
+<h4>اطلاعیه های فروش</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label"><h6>عنوان</h6></label>
+                <input asp-for="SalesAnnouncements.title" class="form-control" />
+                <span asp-validation-for="SalesAnnouncements.title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label"><h6>تاریخ</h6></label>
+                <input data-jdp asp-for="SalesAnnouncements.date" class="form-control"  autocomplete="off"/>
+                @*<input asp-for="SalesAnnouncements.date" class="form-control" />*@
+                <span asp-validation-for="SalesAnnouncements.date" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label class="control-label">>توضیحات</label>
+                <input asp-for="SalesAnnouncements.description" class="form-control" />
+                <span asp-validation-for="SalesAnnouncements.description" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label class="control-label"><h6>تگ دسته محصولات</h6></label>
+                <select id="parentSelect" class="custom-select" asp-for="SalesAnnouncements.parent_tag">
+                    <option></option>
+                    @foreach(var pr in Model.parents)
+                    {
+                        <option value="@pr">@pr</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label"><h6>تگ گروه محصولات</h6></label>
+                <select id="productGroupSelect" class="custom-select" asp-for="SalesAnnouncements.productGroup_tag" disabled>
+                    <option></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label"><h6>تگ محصولات</h6></label>
+                <select id="productGroupingSelect" class="custom-select" asp-for="SalesAnnouncements.productGrouping_tag" disabled>
+                    <option></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label"><h6>آپلود PDF</h6></label>
+                <input asp-for="UploadedFile" class="form-control"  style="height:auto"/>
+                <span asp-validation-for="UploadedFile" class="text-danger"></span>
+            </div>
+            <div class="form-group row">
+                <div class="col-6 col-md-4" style="margin-bottom:7px;max-width: 200px;">
+                    <img id="CreateSalesAnnouncementsUploadedImage" class="img-thumbnail" style="display:none;">
+                </div>
+            </div>
+
+            <!--<div class="form-group">
+        <label asp-for="SalesAnnouncements.parent_tag" class="control-label"></label>
+        <input asp-for="SalesAnnouncements.parent_tag" class="form-control" />-->
+            @*<span asp-validation-for="SalesAnnouncements.parent_tag" class="text-danger"></span>*@
+            <!--</div>-->
+            <div class="form-group">
+                <button id="SalesAnnouncementSubmitBtn" type="submit" class="btn btn-primary"><h6 class="buttons_h6">ایجاد</h6></button>
+            </div>
+        </form>
+
+        
+        
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+
+    $('#parentSelect').change(function() {
+        
+        $('#productGroupingSelect').attr('disabled', 'disabled')
+        $('#productGroupingSelect').empty();
+
+        var selectedParent = $( "#parentSelect option:selected" ).text();
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json',
+            url: '@Url.Page("create", "parent")',
+            data: {
+                selectedParent: selectedParent,
+            },
+
+            success: function (data) {
+                $('#productGroupSelect').removeAttr('disabled');
+                
+                $('#productGroupSelect').empty();
+                
+                $('#productGroupSelect').append($("<option></option>").attr("value", "").text(""))
+                
+                $.each(data, function(key, value) {
+                    $('#productGroupSelect').append($("<option></option>").attr("value", value).text(value));
+                });
+            }
+        });
+    });
+
+    $('#productGroupSelect').change(function() {
+        var selectedProductGroup = $( "#productGroupSelect option:selected" ).text();
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json',
+            url: '@Url.Page("create", "productGroup")',
+            data: {
+                selectedProductGroup: selectedProductGroup,
+            },
+
+            success: function (data) {
+                $('#productGroupingSelect').removeAttr('disabled');
+                
+                $('#productGroupingSelect').empty();
+
+                $('#productGroupingSelect').append($("<option></option>").attr("value", "").text(""))
+
+                $.each(data, function(key, value) {
+                    $('#productGroupingSelect').append($("<option></option>").attr("value", value).text(value));
+                });
+            }
+        });
+    });
+</script>

@@ -1,0 +1,40 @@
+﻿@page
+@model kamjaService.Pages.Admin.ColorViewTable.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>پاک کردن</h1>
+
+<h3>آیا مطمعن هستید؟ </h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            <h6>گروه رنگ</h6>
+        </dt>
+        <dd class="col-sm-10">
+            <h6>@Model.color_category</h6>
+        </dd>
+        <dt class="col-sm-2">
+            <h6>رنگ</h6>
+        </dt>
+        <dd class="col-sm-10">
+            <h6>@Model.color</h6>
+        </dd>
+        <dt class="col-sm-2">
+            <h6>فعال</h6>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.colorsCATRef.flag)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="colorsCATRef.color_Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">بازگشت به لیست</a>
+    </form>
+</div>

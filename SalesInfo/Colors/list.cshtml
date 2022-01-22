@@ -1,0 +1,88 @@
+﻿@page
+@model kamjaService.Pages.SalesInfo.Colors.listModel
+
+@{
+    ViewData["Title"] = "list";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+
+}
+
+<h2>رنگ ها</h2>
+<hr />
+<div class="container-fluid">
+    <div class="row">
+        @foreach (var category in Model.ColorCAT)
+        {
+        <div class="col-12 col-lg-6 col-md-6" style="margin-bottom:15px">
+            <div class="card">
+                <div class="card-body" style="background: #f7f7f7;">
+                    <a data-toggle="collapse" data-target="#collapse_@category.ID" style="text-decoration:none;color:black;cursor:pointer;">
+                        <h5 class="card-title" style="border-bottom: 1px solid #cbcbcb;padding-bottom: 5px;">
+                            @category.color_category
+                            <i class="arrow down"></i>
+                        </h5>
+                    </a>
+
+                    <div class="collapse" id="collapse_@category.ID">
+                        <div class="container-fluid">
+                            <div class="row">
+                                @foreach (var color in Model.ColorsView)
+                                    {
+                                @if (color.color_category == category.color_category && color.flag == 1)
+                                        {
+                                <div class="col-lg-4 col-md-4 col-6" style="margin-bottom:18px">
+                                    <h6>@color.color</h6>
+
+                                    @if (System.IO.File.Exists("wwwroot\\image\\colors\\" + color.color + ".jpg"))
+                                            {
+                                                var src = "\\image\\colors\\" + color.color + ".jpg";
+                                    <img data-toggle="modal" data-target="#zoomColorImage" src="@src" class="img-fluid" style="width :200px;height:100px" onclick="zoomColorImageFunc('@color.color')" />
+                                            }
+                                            else
+                                            {
+                                    <img src="~/image/no_image.png" class="img-fluid" />
+                                            }
+                                </div>
+                                        }
+                                    }
+                                <div style="display:none;" class="modal fade" id="zoomColorImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="colorImageModalHeader"></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="col-12 col-sm-12 col-lg-12">
+                                                    <img class="w-100 productImg" id="colorModalMainImg" src="#">
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer col-12 col-sm-12 col-lg-12">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    function zoomColorImageFunc(colorName) {
+        var image = document.getElementById('colorModalMainImg');
+        image.setAttribute('src', '/image/colors/originals/' + colorName + '.jpg');
+        var header = document.getElementById('colorImageModalHeader');
+        header.innerText = colorName;
+        //
+    }
+
+</script>

@@ -1,0 +1,65 @@
+﻿@page
+@model kamjaService.Pages.Admin.SalesAnnouncement.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>اطلاعیه های فروش</h2>
+<hr />
+<p>
+    <a asp-page="Create"><h6>ایجاد اطلاعیه جدید</h6></a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                عنوان
+            </th>
+            <th>
+                تاریخ ثبت
+            </th>
+            <th>
+                تگ سرگروه محصولات
+            </th>
+            <th>
+                تگ گروه محصولات
+            </th>
+            <th>
+                تگ محصولات
+            </th>
+            <th>
+                نام فایل
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.SalesAnnouncements) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.parent_tag)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.productGrouping_tag)
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.productGroup_tag)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.file_name)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.SalesAnnouncementId">ویرایش</a> |
+                <a asp-page="./Delete" asp-route-id="@item.SalesAnnouncementId">پاک کردن</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

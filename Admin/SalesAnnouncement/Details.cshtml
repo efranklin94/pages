@@ -1,0 +1,61 @@
+﻿@page
+@model kamjaService.Pages.Admin.SalesAnnouncement.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>SalesAnnouncements</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.date)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.productGroup_tag)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.productGroup_tag)
+        </dd>
+                <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.productGrouping_tag)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.productGrouping_tag)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.file_name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.file_name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalesAnnouncements.parent_tag)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalesAnnouncements.parent_tag)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.SalesAnnouncements.SalesAnnouncementId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

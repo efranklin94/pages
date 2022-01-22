@@ -1,0 +1,66 @@
+﻿@page 
+@model kamjaService.Pages.services.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>لیست خدمات  </h2>
+
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+           جستجو نام یا کد:
+          
+         
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <button type="submit" class="btn btn-danger"><h6 class="buttons_h6">جستجو</h6></button>
+
+        </p>
+    </div>
+</form>
+<div class="table-responsive">
+    <table class="table  table-bordered table-hover table-striped ">
+        <thead>
+            <tr>
+
+                <th>
+                    کد خدمات
+                </th>
+                <th>
+                    عنوان خدمات
+                </th>
+
+
+                <th>
+                    قیمت خدمات
+                </th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Khadamat)
+            {
+                <tr>
+
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fee) ریال
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

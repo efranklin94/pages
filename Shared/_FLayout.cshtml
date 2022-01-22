@@ -1,0 +1,93 @@
+﻿@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <style>
+        .nav-tabs .nav-linkF.active
+        /*.nav-tabs .nav-item.show .nav-link*/ {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            border-bottom: 2px solid #808080;
+            font-weight: bold;
+            /*transition: 0.1s;*/
+        }
+    </style>
+
+</head>
+<body>
+    <header>
+      
+        <div>
+            <ul class="nav nav-tabs nav-fill ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-linkF nlP text-dark" asp-area="" asp-page="/technical/Index">محصولات</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-linkF nlY text-dark" asp-area="" asp-page="/yaraghs/IndexFull">لیست یراق آلات</a>
+                </li>
+                <li class="nav-item">
+                    <a id="YaraghHavaleAnchorlink" class="nav-linkF nlYO text-dark" asp-area="" asp-page="/yaraghhavalehO/Index">یراق حواله ها
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3"  style="padding-top:20px">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>navigator.serviceWorker.register('/service-worker.js');</script>
+    @* <script>navigator.serviceWorker.register('/service-worker.published.js');</script>*@
+    @RenderSection("Scripts", required: false)
+    @* <script src="~/service-worker.js"></script>*@
+    <script>
+        $(function () {
+            var pgurl = window.location.href.includes("technical");
+            var pgcurl = window.location.href.includes("FULL");
+            var pgycurl = window.location.href.includes("yaraghhavaleO");
+
+            //var pgurl = window.location.href.substr(window.location.href.lastIndexOf("/"));
+            $(".nav-linkF").each(function () {
+                //alert(pgurl)
+                //alert($(this).attr("href").substr($(this).attr("href").lastIndexOf("/")));
+                //if ($(this).attr("href").substr($(this).attr("href").lastIndexOf("/")) == pgurl) {
+                //    //alert('2');
+                //    $(this).addClass("active");
+
+                //}
+                if ((pgurl) && !(pgcurl) && !(pgycurl)) {
+                    $('.nlP').addClass("active");
+
+                }
+                if ((pgurl) && (pgcurl) && !(pgycurl)) {
+                    $('.nlY').addClass("active");
+
+                }
+                if ((pgurl) && !(pgcurl) && (pgycurl)) {
+                    $('.nlYO').addClass("active");
+
+                }
+            })
+        });
+
+        var YaraghHavaleAnchorlink = document.getElementById('YaraghHavaleAnchorlink');
+        @if ((await AuthorizationService.AuthorizeAsync(User, "IsForushUser")).Succeeded) {
+            <text>
+                YaraghHavaleAnchorlink.removeAttribute('href');
+                YaraghHavaleAnchorlink.classList.remove('text-dark')
+                YaraghHavaleAnchorlink.style.color = '#b9b9b9';
+                YaraghHavaleAnchorlink.style.textDecoration = 'none';
+            </text>
+        }
+    </script>
+</body>
+</html>

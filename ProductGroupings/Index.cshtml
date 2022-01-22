@@ -1,0 +1,203 @@
+﻿@page "/technical/ProductGroupings"
+@model kamjaService.Pages.ProductGroupings.IndexModel
+@using System.IO;
+
+@{
+    ViewData["Title"] = "Index";
+}
+@{
+    Layout = "/Pages/Shared/_FLayout.cshtml";
+}
+<link href="~/css/swiper-bundle.min.css" rel="stylesheet" />
+
+<h2>محصول</h2>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            جستجو نام:
+            <input type="hidden" name="id" value="@Model.gID" />
+            @*<input type="hidden" name="yt" value="@Model.Yt" />
+                <input type="hidden" name="pn" value="@ViewData["prn"]" />*@
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <button type="submit" class="btn btn-danger"><h6 class="buttons_h6">جستجو</h6></button>
+
+        </p>
+    </div>
+</form>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card bg-light" style="margin-bottom:25px;min-height:200px;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        کلیپ
+                    </h5>
+                    <div class="container-fluid">
+                        <div class="row">
+
+                            <div class="swiper mySwiper">
+                                <div class="swiper-wrapper" style="justify-content: center;">
+
+                                    @{
+                                        if (Model.productGroupingClips.Select(x => x.name).Count() == 0)
+                                        {
+                                            <div class="swiper-slide" style="max-height:460px">
+                                                <img src="~/image/no_image.png" style="width:auto;max-height: 250px;cursor: pointer;" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            foreach (var clipName in Model.productGroupingClips.Select(x => x.name))
+                                            {
+                                                var src = "\\video\\SalesInfo\\" + clipName + ".mp4";
+                                                Console.WriteLine(src);
+                                                <script>console.log(@src)</script>
+                                                <div class="swiper-slide" style="max-height:460px">
+                                                    <video id="productGroupingVideo" style="width: 100%;" disablePictureInPicture controls name="media">
+                                                        <source src="@src" type="video/mp4">
+                                                    </video>
+                                                </div>
+                                            }
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6" id="ProductGroupingImageGallery" style="max-height:460px !important">
+
+            <div class="card bg-light" style="margin-bottom: 25px;min-height: 200px;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        گالری تصاویر
+                    </h5>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <!-- Swiper -->
+                            <div class="swiper mySwiper">
+                                <div class="swiper-wrapper">
+                                    @{
+                                        
+                                        foreach (var imgsrc in @Model.imageSrcList)
+                                        {
+                                            var imgsrc2 = imgsrc.Replace("wwwroot", "");
+
+                                            <div class="swiper-slide" style="max-height:460px">
+                                               <span id="zoomSliderImgOnClick" data-toggle="modal" data-target="#zoomSliderImageModal" data-value="@imgsrc2" onclick="zoomSliderImageFunc()">
+                                                    <img src="@imgsrc2" style="width:auto;max-height: 250px;cursor: pointer;" />
+                                                </span>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<table class="table table-hover table-striped  table-bordered">
+    <thead>
+        <tr>
+
+            <th>
+                کد محصول
+            </th>
+            <th>
+                نام محصول
+            </th>
+
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ProductGrouping)
+        {
+            <tr onclick="location.href = '@(Url.Page("/PartGroupings/Index", new { id =@item.ProductGroupingId,name=@item.Name,code=@item.Number }))'">
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Number)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+
+
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="zoomSliderImageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-lg-12">
+                    <img class="w-100 productImg" id="ZoomSliderModalImg" src="#">
+                </div>
+
+            </div>
+            <div class="modal-footer col-12 col-sm-12 col-lg-12">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/swiper-bundle-min.js"></script>
+<script>
+    //< !--Initialize Swiper-- >
+    var swiper = new Swiper(".mySwiper", {
+        //navigation: {
+        //    nextEl: ".swiper-button-next",
+        //    prevEl: ".swiper-button-prev",
+        //},
+
+        //spaceBetween: 30
+
+        spaceBetween: 30,
+        effect: "fade",
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+
+    });
+
+    function zoomSliderImageFunc() {
+        var src = document.querySelector('#ProductGroupingImageGallery .swiper-slide-active img').getAttribute('src');
+        var image = document.getElementById('ZoomSliderModalImg');
+        image.setAttribute('src', src);
+        //var header = document.getElementById('colorImageModalHeader');
+        //header.innerText = colorName;
+        //
+    }
+</script>

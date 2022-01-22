@@ -1,0 +1,325 @@
+﻿@page "/Salesinfo/ProductGroupings"
+@model kamjaService.Pages.SalesInfo.ProductGroupings.IndexModel
+@using System.IO;
+@{
+    ViewData["Title"] = "Index";
+}
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+<link href="~/css/swiper-bundle.min.css" rel="stylesheet" />
+<div class="container">
+    <h2>محصول</h2>
+    <h5 style="margin-top: 15px;">توضیحات : </h5>
+    <textarea id="desc_product_group" type="text" style="
+                                margin-bottom: 5px;
+                                padding-bottom: 27px;
+                                border-radius: 2px;
+                                overflow: hidden;
+                                resize: none;
+                                width: inherit;
+                                height:50px"
+              disabled>@Model.productGroupDescription
+</textarea>
+    <button class=" btn btn-secondary IranSansFont" id="readmore_btn" onclick="readMore()" style="margin-bottom: 23px;" data-readmore="1">بیشتر...</button>
+    <form asp-page="./Index" method="get">
+        <div class="form-actions no-color" style="margin-top:27px">
+            <p>
+                جستجو نام:
+                <input type="hidden" name="id" value="@Model.gID" />
+                <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+                <button type="submit" class="btn btn-danger"><h6 class="buttons_h6">جستجو</h6></button>
+
+            </p>
+        </div>
+    </form>
+</div>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-lg-6">
+
+            <div class="card bg-light" style="margin-bottom:25px;min-height:200px;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        کلیپ
+                    </h5>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="swiper clipSwiper">
+                                <div class="swiper-wrapper">
+
+                                    @{
+                                        if (Model.productGroupingClips.Select(x => x.name).Count() == 0)
+                                        {
+                                            <div class="swiper-slide" style="max-height:460px">
+                                                <img src="~/image/no_image.png" style="width:auto;max-height: 250px;cursor: pointer;" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            foreach (var clipName in Model.productGroupingClips.Select(x => x.name))
+                                            {
+                                                var src = "\\video\\SalesInfo\\" + clipName + ".mp4";
+                                                Console.WriteLine(src);
+                                                <script>console.log(@src)</script>
+                                                <div class="swiper-slide" style="max-height:460px">
+                                                    <video id="productGroupingVideo" style="width: 100%;" disablePictureInPicture controls name="media">
+                                                        <source src="@src" type="video/mp4">
+                                                    </video>
+                                                </div>
+                                            }
+                                        }
+                                    }
+
+                                </div>
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>
+                        </div>
+                        @*<div class="d-flex margin-buttons">
+                            <button class="btn btn-dark" onclick="playPause()"><h6 class="buttons_h6">Play/Pause</h6></button>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6" id="ProductGroupingImageGallery" style="max-height:460px !important">
+
+            <div class="card bg-light" style="margin-bottom: 25px;min-height: 200px;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        گالری تصاویر
+                    </h5>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <!-- Swiper -->
+                            <div class="swiper mySwiper">
+                                <div class="swiper-wrapper">
+                                    @{
+
+                                        foreach (var imgsrc in Model.imageSrcList)
+                                        {
+                                            var imgsrc2 = imgsrc.Replace("wwwroot", "");
+
+                                            <div class="swiper-slide" style="max-height:460px">
+                                                <span id="zoomSliderImgOnClick" data-toggle="modal" data-target="#zoomSliderImageModal" data-value="@imgsrc2" onclick="zoomSliderImageFunc()">
+                                                    <img src="@imgsrc2" style="width:auto;max-height: 250px;cursor: pointer;" />
+                                                </span>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-pagination"></div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        @foreach (var item in Model.proColViews)
+        {
+            <div class="col-lg-6">
+                <div class="card bg-light" style="margin-bottom:25px;">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name) (@Html.DisplayFor(modelItem => item.Number))</h5>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6" style="padding-right: 0px !important;">
+                                    <div class="rounded border" style="
+                                                        padding: 10px;
+
+                                                        padding-right: 5px;
+                                                        margin-right: 0px;
+                                                        border-color: #991a2633 !important;">
+                                        <h6 class="card-text"><span style="font-weight:bold">پایه چوبی: </span><span class="colors_card">@Html.DisplayFor(modelItem => item.پایه)</span></h6>
+                                        <h6 class="card-text"><span style="font-weight:bold">بدنه: </span><span class="colors_card">@Html.DisplayFor(modelItem => item.بدنه)</span></h6>
+                                        <h6 class="card-text"><span style="font-weight:bold">نما: </span><span class="colors_card">@Html.DisplayFor(modelItem => item.نما)</span></h6>
+                                    </div>
+                                </div>
+
+                                <div class="col-6 productGroupingImgModal" data-toggle="modal" data-target="#zoomImageModal" data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="zoomImage(@item.Number)">
+                                @{
+                                    if (System.IO.File.Exists("wwwroot\\image\\Product\\pic\\" + item.Number + ".jpg")) {
+                                        <img class="card-img-top" src="/image/Product/pic/@(item.Number).jpg" id="img_@item.Number" style="cursor: pointer">
+                                    }   
+                                    else
+                                    {
+                                        <img src="~/image/no_image.png" style="width:inherit"/>
+                                    }
+                                }
+                                </div>
+
+                                <div data-toggle="modal" data-target="#productGroupingModal"
+                                     data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="openDimensionModal(@item.Number)" class="productGroupingImgModal">
+                                    <h6 style="
+                                            text-decoration: underline;
+                                            color: cornflowerblue;
+                                            cursor: pointer;
+                                            font-size: large;
+                                            margin-bottom: 15px;
+                                            margin-top: 15px;
+                                            ">
+                                        ابعاد
+                                    </h6>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <h6 class="card-text">
+                            توضیحات:
+                            <textarea type="text" style="   padding-bottom: 27px;
+                                                        height: auto;
+                                                        min-height: 100px;
+                                                        width: 95%;
+                                                        margin-top: 5px;"
+                                      disabled>@Model.productGroupingexps.Where(x => x.ProductGroupingIdref == item.ProductGroupingId).Select(x => x.Pexp).FirstOrDefault()</textarea>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div style="display:none;" class="modal fade" id="productGroupingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ابعاد</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-lg-12">
+                    <img class="w-100 yimg" id="productGroupingModalImg" src="#">
+                </div>
+
+            </div>
+            <div class="modal-footer col-12 col-sm-12 col-lg-12">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display:none;" class="modal fade" id="zoomImageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-lg-12">
+                    <img class="w-100 productImg" id="productGroupingModalMainImg" src="#">
+                </div>
+
+            </div>
+            <div class="modal-footer col-12 col-sm-12 col-lg-12">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="zoomSliderImageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-lg-12">
+                    <img class="w-100 productImg" id="ZoomSliderModalImg" src="#">
+                </div>
+
+            </div>
+            <div class="modal-footer col-12 col-sm-12 col-lg-12">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/swiper-bundle-min.js"></script>
+<script>
+
+    function openDimensionModal(code) {
+        var image = document.getElementById('productGroupingModalImg');
+        image.setAttribute('src', '/image/dimensions/' + code + '.jpg')
+    }
+
+    function zoomImage(code) {
+        var image = document.getElementById('productGroupingModalMainImg');
+        image.setAttribute('src', '/image/Product/pic/' + code + '.jpg')
+    }
+
+    $(document).ready(function () {
+        $('.swiper-slide-active #zoomSliderImgOnClick').click(function () {
+            //debugger;
+            var src = this.getAttribute('data-value');
+            var image = document.getElementById('SliderModalImg');
+            image.setAttribute('src', src)
+        })
+    })
+    //< !--Initialize Swiper-- >
+    var swiper = new Swiper(".mySwiper", {
+        spaceBetween: 30,
+        effect: "fade",
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+    });
+
+    var swiper = new Swiper(".clipSwiper", {
+        cssMode: true,
+        slidesPerView: 1,
+        spaceBetween: 30,
+
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+            el: ".swiper-pagination",
+        },
+    });
+
+    var myVideo = document.getElementById("productGroupingVideo");
+
+    function playPause() {
+        if (myVideo.paused)
+            myVideo.play();
+        else
+            myVideo.pause();
+    }
+
+    function zoomSliderImageFunc() {
+        var src = document.querySelector('#ProductGroupingImageGallery .swiper-slide-active img').getAttribute('src');
+        var image = document.getElementById('ZoomSliderModalImg');
+        image.setAttribute('src', src);
+        //var header = document.getElementById('colorImageModalHeader');
+        //header.innerText = colorName;
+        //
+    }
+
+</script>

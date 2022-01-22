@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - kamjaService</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    @*<link rel="manifest" href="~/manifest.webmanifest">*@
+    <link href="~/manifest.json" rel="manifest" />
+
+    <link rel="stylesheet" href="~/css/util.css" />
+
+    <style>
+        .nav-tabs .nav-link.active,
+        .nav-tabs .nav-item.show .nav-link {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            border-bottom: 2px solid #808080;
+            font-weight: bold;
+            transition: 2s;
+        }
+        .btnback {
+            font-size: larger;
+            font: bolder;
+            border-radius: 50%;
+        }
+
+     /*   .nav-tabs .nav-link.active,
+        .nav-tabs .nav-item.show .nav-link {
+            color: #ff0000;
+            background-color: #ffd800;
+            border-color: #00ffff #dee2e6 #fff;
+        }
+        .nav-tabs .nav-link.active,
+        .nav-tabs .nav-item.show .nav-link {
+            color: #ff0000;
+            background-color: #00ffff;
+            border-color: #ffd800 #dee2e6 #fff;
+        /*}*/
+    </style>
+    
+</head>
+<body>
+    <header>
+        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-page="/Index">kamjaService</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">*@
+
+        @*<ul class="nav nav-tabs nav-fill">
+            <li class="nav-item active">
+                <a class="nav-link text-dark" asp-area="" asp-page="/Parents/Index">محصولات</a>
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-page="/yaraghs/IndexFull">یراق آلات</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-page="/services/Index">خدمات</a>
+            </li>
+
+        </ul>*@
+        @*</div>
+            </div>
+        </nav>*@
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - kamjaService - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>navigator.serviceWorker.register('/service-worker.js');</script>
+    @* <script>navigator.serviceWorker.register('/service-worker.published.js');</script>*@
+    @RenderSection("Scripts", required: false)
+    @* <script src="~/service-worker.js"></script>*@
+    <script>
+        $(function () {
+            var pgurl = window.location.href.substr(window.location.href.lastIndexOf("/") );
+            $("ul li a").each(function () {
+                //alert(pgurl)
+                //alert($(this).attr("href").substr($(this).attr("href").lastIndexOf("/")));
+                if ($(this).attr("href").substr($(this).attr("href").lastIndexOf("/")) == pgurl) {
+                    //alert('2');
+                    $(this).addClass("active");
+
+                }
+            })
+        });
+    </script>
+</body>
+</html>

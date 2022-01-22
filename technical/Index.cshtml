@@ -1,0 +1,38 @@
+﻿@page
+@model kamjaService.Pages.technical.IndexModel
+
+@{
+    ViewData["Title"] = "کمجا سرویس";
+}
+@{
+    Layout = "/Pages/Shared/_FLayout.cshtml";
+}
+
+<h3>گروه محصولات</h3>
+
+<div class="table-responsive">
+    <table class="table table-hover table-striped  ">
+        <thead>
+            <tr>
+                <th>
+
+                </th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Parent)
+            {
+                <tr onclick="location.href = '@(Url.Page("/ProductGroups/Index", new { id = @item.ParentId }))'">
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

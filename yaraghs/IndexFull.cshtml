@@ -1,0 +1,105 @@
+﻿@page "/technical/yaraghsFULL"
+@model kamjaService.Pages.yaraghs.IndexModel2
+
+@{
+    ViewData["Title"] = "Index";
+}
+@{
+    Layout = "/Pages/Shared/_FLayout.cshtml";
+}
+
+<h2>لیست یراق آلات  </h2>
+
+
+<form asp-page="./IndexFull" method="get">
+    <div class="form-actions no-color">
+        <p>
+            جستجو نام یا کد:
+
+            <input type="hidden" name="pn" value="@ViewData["prn"]" />
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <button type="submit" class="btn btn-danger"><h6 class="buttons_h6">جستجو</h6></button>
+
+        </p>
+    </div>
+</form>
+<table class="table  table-bordered table-hover table-striped">
+    <thead>
+        <tr>
+
+            <th>
+                کد یراق
+            </th>
+            <th>
+                عنوان یراق
+            </th>
+
+
+            <th>
+                قیمت خدمات
+            </th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Yaragh)
+        {
+            <tr class='clickable-row' data-toggle="modal" data-target="#exampleModal"
+                data-value="@Html.DisplayFor(modelItem => item.AjzakalaCode)">
+
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.AjzakalaCode)
+                </td>
+                <td>
+
+
+                    @Html.DisplayFor(modelItem => item.AjzaKalaName)
+
+                </td>
+
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fee)
+                    ریال
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-lg-12">
+
+                    <img class="w-100 yimg" src="#">
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('.clickable-row').on({
+            'click': function () {
+                $(".yimg").attr("src", "../image/component/" + $(this).data('value') + ".JPG");
+
+
+            }
+        });
+    });
+</script>
