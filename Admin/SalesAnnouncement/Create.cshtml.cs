@@ -34,6 +34,12 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
         public List<String> productGroups { get; set; }
         public List<String> productGroupings { get; set; }
         public List<String> parents { get; set; }
+        [BindProperty]
+        public List<string> checkedParents { get; set; }
+        [BindProperty]
+        public List<string> checkedProductGroup { get; set; }
+        [BindProperty]
+        public List<string> checkedProductGroupuing { get; set; }
 
         [BindProperty]
         public string productGroup { get; set; }
@@ -103,17 +109,33 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
             return path + filename;
         }
 
-        public JsonResult OnGetParent(string selectedParent)
+        public async Task<IActionResult> OnGetParent(List<string> selectedParents)
         {
-            var selectedParentId = _context.Parent.Where(p => p.Name == selectedParent).Select(p => p.ParentId).FirstOrDefault();
-            var selectedProductGroups = _context.ProductGroup.Where(pg => pg.ParentRef == selectedParentId).Select(pg => pg.Expr1).ToList();
+            List<long> selectedParentsId = new List<long>();
+            foreach (string selectedParent in selectedParents) {
+                selectedParentsId.Add(await _context.Parent.Where(p => p.Name == selectedParent).Select(p => p.ParentId).FirstOrDefaultAsync());
+            }
+
+            List<string> selectedProductGroups = new List<string>();
+            foreach (var selectedParentId in selectedParentsId) {
+               selectedProductGroups.AddRange(await _context.ProductGroup.Where(pg => pg.ParentRef == selectedParentId).Select(pg => pg.Expr1).ToListAsync());
+            }
 
             return new JsonResult(selectedProductGroups);
         }
-        public JsonResult OnGetProductGroup(string selectedProductGroup)
+        public async Task<IActionResult> OnGetProductGroup(List<string> selectedProductGroups)
         {
-            var selectedProductGroupId = _context.ProductGroup.Where(p => p.Expr1 == selectedProductGroup).Select(p => p.ProductGroupId).FirstOrDefault();
-            var selectedProductGroupings = _context.ProductGrouping.Where(pg => pg.GroupRef == selectedProductGroupId).Select(pg => pg.Name).ToList();
+            List<long> selectedProductGroupsId = new List<long>();
+            foreach (string selectedProductGroup in selectedProductGroups)
+            {
+                selectedProductGroupsId.Add(await _context.ProductGroup.Where(pg => pg.Expr1 == selectedProductGroup).Select(pg => pg.ProductGroupId).FirstOrDefaultAsync());
+            }
+
+            List<string> selectedProductGroupings = new List<string>();
+            foreach (var selectedProductGroupId in selectedProductGroupsId)
+            {
+                selectedProductGroupings.AddRange(await _context.ProductGrouping.Where(pging => pging.GroupRef == selectedProductGroupId).Select(pging => pging.Name).ToListAsync());
+            }
 
             return new JsonResult(selectedProductGroupings);
         }

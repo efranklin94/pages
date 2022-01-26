@@ -67,9 +67,8 @@ namespace kamjaService.Pages.ProductGroupings
             //ProductGrouping = await _context.ProductGrouping.ToListAsync();
 
 
-            if (Directory.Exists("wwwroot\\image\\slider\\fanni\\" + gID))
-            {
-                imageSrcList = Directory.EnumerateFiles("wwwroot\\image\\slider\\fanni\\" + gID, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".jpg"));
+            if (Directory.Exists("wwwroot\\image\\slider\\SalesInfo\\" + gID)) {
+                imageSrcList = Directory.EnumerateFiles("wwwroot\\image\\slider\\SalesInfo\\" + gID, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".jpg"));
             }
             else
             {
@@ -84,7 +83,7 @@ namespace kamjaService.Pages.ProductGroupings
             //{
             //    videoSrc = Directory.EnumerateFiles("wwwroot\\image", "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
             //}
-            productGroupingClips = await _context.ProductGroupingClips.Where(x => x.FanniOrSalesInfo == "ّFanni").Where(x => x.productGroupingId == gID).ToListAsync();
+            productGroupingClips = await _context.ProductGroupingClips.Where(x => x.FanniOrSalesInfo == "Fanni").Where(x => x.productGroupingId == gID).ToListAsync();
             //var videoSrcList = "\\video\\SalesInfo\\" + productGroupingClips.Select(x => x.name) + ".mp4";
             //var clipNames = productGroupingClips.Select(x => x.name);
 
