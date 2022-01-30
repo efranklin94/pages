@@ -23,16 +23,16 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" id="creationForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label"><h6>عنوان</h6></label>
-                <input asp-for="SalesAnnouncements.title" class="form-control" />
+                <input name="SalesAnnouncementsTitle" class="form-control" />
                 <span asp-validation-for="SalesAnnouncements.title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label"><h6>تاریخ</h6></label>
-                <input data-jdp asp-for="SalesAnnouncements.date" class="form-control"  autocomplete="off"/>
+                <input data-jdp name="SalesAnnouncementsDate" class="form-control"  autocomplete="off"/>
                 @*<input asp-for="SalesAnnouncements.date" class="form-control" />*@
                 <span asp-validation-for="SalesAnnouncements.date" class="text-danger"></span>
             </div>
@@ -46,7 +46,7 @@
                 @foreach(var pr in Model.parents)
                 {
                     <h6>@pr</h6>
-                    <input type="checkbox" class="parentSelect" value="@pr">
+                    <input type="checkbox" class="parentSelect" name="parent" value="@pr">
                     <br />
                 }
             </div>
@@ -77,8 +77,13 @@
             @*<span asp-validation-for="SalesAnnouncements.parent_tag" class="text-danger"></span>*@
             <!--</div>-->
             <div class="form-group">
-                <button id="SalesAnnouncementSubmitBtn" type="submit" class="btn btn-primary"><h6 class="buttons_h6">ایجاد</h6></button>
+                <button id="SalesAnnouncementSubmitBtn" type="button" class="btn btn-primary"><h6 class="buttons_h6">ایجاد</h6></button>
             </div>
+
+
+            @*<input type="hidden" asp-for="@Model.sel" />*@
+        
+        
         </form>
 
         
@@ -118,6 +123,7 @@
                     checkbox.value = value;
                     checkbox.id = key;
                     checkbox.className = "productGroupSelect";
+                    checkbox.name = "productGroup";
 
                     var label = document.createElement('label')
                     label.htmlFor = key;
@@ -135,6 +141,7 @@
                 });
             }
         });
+        
     });
 
 
@@ -164,6 +171,7 @@
                     checkbox.type = "checkbox";
                     checkbox.value = value;
                     checkbox.id = key;
+                    checkbox.name = "productGrouping";
 
                     var label = document.createElement('label')
                     label.htmlFor = key;
@@ -175,5 +183,48 @@
             }
         });
     }
+
+    $(document).ready(function () {   
+        $("#SalesAnnouncementSubmitBtn").click(function (e) { 
+            var title = $("input[name='SalesAnnouncementsTitle']").val();
+            var date = $("input[name='SalesAnnouncementsDate']").val();
+            var selectedParents = [];
+            $('.parentSelect:checked').each(function() {
+                selectedParents.push($(this).attr('value'));
+            });
+            var selectedProductGroups = [];
+            $('.productGroupSelect:checked').each(function() {
+                selectedProductGroups.push($(this).attr('value'));
+            });
+            //Serialize the form datas.   
+            var valdata = $("#creationForm").serialize();   
+            //to get alert popup   
+            alert(valdata);   
+            $.ajax({   
+                type: 'POST',   
+
+                data: { 
+                    valdata:valdata,
+                    title:title,
+                    date:date,
+                    selectedParents:selectedParents,
+                    selectedProductGroups:selectedProductGroups
+                
+                },
+
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+
+                url:'@Url.Page("create", "form")',   
+                
+                success: function(data) {
+                    console.log("***************************result from form submit : "+data);
+                }
+
+            });   
+        });   
+    });   
     
 </script>

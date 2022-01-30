@@ -34,13 +34,12 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
         public List<String> productGroups { get; set; }
         public List<String> productGroupings { get; set; }
         public List<String> parents { get; set; }
-        [BindProperty]
-        public List<string> checkedParents { get; set; }
-        [BindProperty]
-        public List<string> checkedProductGroup { get; set; }
-        [BindProperty]
-        public List<string> checkedProductGroupuing { get; set; }
-
+        public ParentTag ParentTag { get; set; }
+        public ProductGroupTag ProductGroupTag { get; set; }
+        public ProductGroupingTag ProductGroupingTag { get; set; }
+        public List<string> parentTagNames { get; set; }
+        public List<string> productGroupTagNames { get; set; }
+        public List<string> productGroupingTagNames { get; set; }
         [BindProperty]
         public string productGroup { get; set; }
         [BindProperty]
@@ -48,14 +47,16 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
         [BindProperty]
         public string parent { get; set; }
 
+
         public async Task OnGetAsync()
         {
             productGroups = await _context.ProductGroup.OrderBy(x => x.ProductGroupId).Select(x=>x.Expr1).Distinct().ToListAsync();
             productGroupings = await _context.ProductGrouping.Select(x=>x.Name).Distinct().ToListAsync();
             parents = await _context.Parent.Select(x => x.Name).Distinct().ToListAsync();
+
         }
 
-        [BindProperty]
+        //[BindProperty]
         public SalesAnnouncements SalesAnnouncements { get; set; }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -85,8 +86,29 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
                     await UploadedFile.CopyToAsync(output);
             }
 
-            _context.SalesAnnouncements.Add(SalesAnnouncements);
-            await _context.SaveChangesAsync();
+            //foreach(var tag in parentTagNames)
+            //{
+            //    ParentTag.tag_name = tag;
+            //    ParentTag.SalesAnnouncementREF = SalesAnnouncements.SalesAnnouncementId;
+            //}
+
+            //foreach (var tag in productGroupTagNames)
+            //{
+            //    ProductGroupTag.tag_name = tag;
+            //    ProductGroupTag.SalesAnnouncementREF = SalesAnnouncements.SalesAnnouncementId;
+            //}
+
+            //foreach (var tag in productGroupingTagNames)
+            //{
+            //    ProductGroupingTag.tag_name = tag;
+            //    ProductGroupingTag.SalesAnnouncementREF = SalesAnnouncements.SalesAnnouncementId;
+            //}
+
+            //_context.SalesAnnouncements.Add(SalesAnnouncements);
+            //await _context.SaveChangesAsync();
+
+
+            Console.WriteLine(ViewData["selectedParentsView"]);
 
             return RedirectToPage("./Index");
         }
@@ -139,5 +161,43 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
 
             return new JsonResult(selectedProductGroupings);
         }
+        public async Task<IActionResult> OnPostForm(string title, string date, List<string> selectedParents, List<string> selectedProductGroups)
+        {
+            SalesAnnouncements salesAnnouncement = new SalesAnnouncements();
+            salesAnnouncement.title = title;
+            salesAnnouncement.date = date;
+
+            _context.SalesAnnouncements.Add(salesAnnouncement);
+            Console.WriteLine(await _context.SaveChangesAsync());
+
+            var SalesAnnouceId = _context.SalesAnnouncements.Max(s => s.SalesAnnouncementId);
+
+            foreach (var selectedParent in selectedParents)
+            {
+                ParentTag parentTag = new ParentTag();
+                parentTag.tag_name = selectedParent;
+
+                parentTag.SalesAnnouncementREF = SalesAnnouceId;
+
+                _context.ParentTag.Add(parentTag);
+                await _context.SaveChangesAsync();
+                
+            }
+
+            foreach (var selectedProductGroup in selectedProductGroups)
+            {
+                ProductGroupTag productGroupTag = new ProductGroupTag();
+                productGroupTag.tag_name = selectedProductGroup;
+                
+                productGroupTag.SalesAnnouncementREF = SalesAnnouceId;
+
+                _context.ProductGroupTag.Add(productGroupTag);
+                await _context.SaveChangesAsync();
+            }
+
+            return new JsonResult("***success***");
+        }
+
+        //
     }
 }
