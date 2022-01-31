@@ -34,18 +34,6 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
         public List<String> productGroups { get; set; }
         public List<String> productGroupings { get; set; }
         public List<String> parents { get; set; }
-        public ParentTag ParentTag { get; set; }
-        public ProductGroupTag ProductGroupTag { get; set; }
-        public ProductGroupingTag ProductGroupingTag { get; set; }
-        public List<string> parentTagNames { get; set; }
-        public List<string> productGroupTagNames { get; set; }
-        public List<string> productGroupingTagNames { get; set; }
-        [BindProperty]
-        public string productGroup { get; set; }
-        [BindProperty]
-        public string productGrouping { get; set; }
-        [BindProperty]
-        public string parent { get; set; }
 
 
         public async Task OnGetAsync()
@@ -56,7 +44,7 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
 
         }
 
-        //[BindProperty]
+        [BindProperty]
         public SalesAnnouncements SalesAnnouncements { get; set; }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -74,6 +62,7 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
                 // Unique filename "Guid"  
                 var myUniqueFileName = Convert.ToString(Guid.NewGuid());
                 //store the filename into the database
+
                 SalesAnnouncements.file_name = myUniqueFileName;
                 fileNameViewBag = myUniqueFileName;
                 // Getting Extension  
@@ -85,30 +74,6 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
                 using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension)))
                     await UploadedFile.CopyToAsync(output);
             }
-
-            //foreach(var tag in parentTagNames)
-            //{
-            //    ParentTag.tag_name = tag;
-            //    ParentTag.SalesAnnouncementREF = SalesAnnouncements.SalesAnnouncementId;
-            //}
-
-            //foreach (var tag in productGroupTagNames)
-            //{
-            //    ProductGroupTag.tag_name = tag;
-            //    ProductGroupTag.SalesAnnouncementREF = SalesAnnouncements.SalesAnnouncementId;
-            //}
-
-            //foreach (var tag in productGroupingTagNames)
-            //{
-            //    ProductGroupingTag.tag_name = tag;
-            //    ProductGroupingTag.SalesAnnouncementREF = SalesAnnouncements.SalesAnnouncementId;
-            //}
-
-            //_context.SalesAnnouncements.Add(SalesAnnouncements);
-            //await _context.SaveChangesAsync();
-
-
-            Console.WriteLine(ViewData["selectedParentsView"]);
 
             return RedirectToPage("./Index");
         }
@@ -161,7 +126,7 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
 
             return new JsonResult(selectedProductGroupings);
         }
-        public async Task<IActionResult> OnPostForm(string title, string date, List<string> selectedParents, List<string> selectedProductGroups)
+        public async Task<IActionResult> OnPostForm(string title, string date, List<string> selectedParents, List<string> selectedProductGroups, List<string> selectedProductGroupings)
         {
             SalesAnnouncements salesAnnouncement = new SalesAnnouncements();
             salesAnnouncement.title = title;
@@ -195,9 +160,46 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
                 await _context.SaveChangesAsync();
             }
 
-            return new JsonResult("***success***");
+            foreach (var selectedProductGrouping in selectedProductGroupings)
+            {
+                ProductGroupingTag productGroupingTag = new ProductGroupingTag();
+                productGroupingTag.tag_name = selectedProductGrouping;
+
+                productGroupingTag.SalesAnnouncementREF = SalesAnnouceId;
+
+                _context.ProductGroupingTag.Add(productGroupingTag);
+                await _context.SaveChangesAsync();
+            }
+            ////////////////////////////////////////////////////////
+            //var file = Request.Form.Files;
+            //if (file != null) {
+            //    string uploadsFolder = Path.Combine(hostingEnv.WebRootPath, "mediaUpload");
+            //    string filePath = Path.Combine(uploadsFolder, MyUploader.FileName);
+            //    using (var fileStream = new FileStream(filePath, FileMode.Create))
+            //    {
+            //        MyUploader.CopyTo(fileStream);
+            //    }
+
+            //    return new JsonResult("success");
+            //}
+            //return new JsonResult("failed");
+            return new JsonResult("form Post ajax");
         }
 
-        //
+        public IActionResult OnPostMyUploader(IFormFile MyUploader)
+        {
+            if (MyUploader != null)
+            {
+                string uploadsFolder = Path.Combine(hostingEnv.WebRootPath, "mediaUpload");
+                string filePath = Path.Combine(uploadsFolder, MyUploader.FileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    MyUploader.CopyTo(fileStream);
+                }
+                return new ObjectResult(new { status = "success" });
+            }
+            return new ObjectResult(new { status = "fail" });
+
+        }
     }
 }

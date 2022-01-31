@@ -14,7 +14,9 @@
         margin: 5px;
         padding: 7px;
     }
-
+/*    #uploadPdf{
+        display: none;
+    }*/
 </style>
 <link href="~/css/jalalidatepicker.css" rel="stylesheet" />
 <h2>ایجاد</h2>
@@ -27,20 +29,14 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label"><h6>عنوان</h6></label>
-                <input name="SalesAnnouncementsTitle" class="form-control" />
+                <input asp-for="SalesAnnouncements.title" class="form-control" />
                 <span asp-validation-for="SalesAnnouncements.title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label"><h6>تاریخ</h6></label>
-                <input data-jdp name="SalesAnnouncementsDate" class="form-control"  autocomplete="off"/>
-                @*<input asp-for="SalesAnnouncements.date" class="form-control" />*@
+                <input data-jdp asp-for="SalesAnnouncements.date" class="form-control"  autocomplete="off"/>
                 <span asp-validation-for="SalesAnnouncements.date" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label class="control-label">>توضیحات</label>
-                <input asp-for="SalesAnnouncements.description" class="form-control" />
-                <span asp-validation-for="SalesAnnouncements.description" class="text-danger"></span>
-            </div>*@
             <div class="form-group">
                 <label class="control-label"><h6>تگ دسته محصولات</h6></label>
                 @foreach(var pr in Model.parents)
@@ -60,7 +56,7 @@
                 <hr />
                 <h6 id="productGroupingContainer"></h6>
             </div>
-            <div class="form-group">
+@*            <div id="uploadPdf" class="form-group">
                 <label class="control-label"><h6>آپلود PDF</h6></label>
                 <input asp-for="UploadedFile" class="form-control"  style="height:auto"/>
                 <span asp-validation-for="UploadedFile" class="text-danger"></span>
@@ -69,20 +65,21 @@
                 <div class="col-6 col-md-4" style="margin-bottom:7px;max-width: 200px;">
                     <img id="CreateSalesAnnouncementsUploadedImage" class="img-thumbnail" style="display:none;">
                 </div>
+            </div>*@
+            <div class="form-group row">
+                <label asp-for="UploadedFile" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-7">
+                    <input asp-for="UploadedFile" class="form-control" id="file">
+                </div>
             </div>
+            <div class="form-group row">
 
-            <!--<div class="form-group">
-        <label asp-for="SalesAnnouncements.parent_tag" class="control-label"></label>
-        <input asp-for="SalesAnnouncements.parent_tag" class="form-control" />-->
-            @*<span asp-validation-for="SalesAnnouncements.parent_tag" class="text-danger"></span>*@
-            <!--</div>-->
-            <div class="form-group">
-                <button id="SalesAnnouncementSubmitBtn" type="button" class="btn btn-primary"><h6 class="buttons_h6">ایجاد</h6></button>
+                <div class="col-sm-7 offset-sm-3">
+                    <button class="btn btn-primary" id="submit"><h6 class="buttons_h6">ارسال</h6></button>
+                </div>
             </div>
-
-
-            @*<input type="hidden" asp-for="@Model.sel" />*@
         
+            
         
         </form>
 
@@ -171,6 +168,7 @@
                     checkbox.type = "checkbox";
                     checkbox.value = value;
                     checkbox.id = key;
+                    checkbox.className = "productGroupingSelect";
                     checkbox.name = "productGrouping";
 
                     var label = document.createElement('label')
@@ -184,10 +182,72 @@
         });
     }
 
-    $(document).ready(function () {   
-        $("#SalesAnnouncementSubmitBtn").click(function (e) { 
-            var title = $("input[name='SalesAnnouncementsTitle']").val();
-            var date = $("input[name='SalesAnnouncementsDate']").val();
+    //$(document).ready(function () {   
+    //    $("#SalesAnnouncementSubmitBtn").click(function (e) { 
+    //        var title = $("input[name='SalesAnnouncementsTitle']").val();
+    //        var date = $("input[name='SalesAnnouncementsDate']").val();
+    //        var selectedParents = [];
+    //        $('.parentSelect:checked').each(function() {
+    //            selectedParents.push($(this).attr('value'));
+    //        });
+    //        var selectedProductGroups = [];
+    //        $('.productGroupSelect:checked').each(function() {
+    //            selectedProductGroups.push($(this).attr('value'));
+    //        });
+    //        var selectedProductGroupings = [];
+    //        $('.productGroupingSelect:checked').each(function() {
+    //            selectedProductGroupings.push($(this).attr('value'));
+    //        });
+    //        ////////////////////////////////////////////////////////
+    //        var files = $('#fileUpload').prop("files");
+    //        formData = new FormData();
+	   //     formData.append("MyUploader", files[0]);
+
+
+    //        ////Serialize the form datas.   
+    //        //var valdata = $("#creationForm").serialize();   
+    //        ////to get alert popup   
+    //        //alert(valdata);   
+    //        $.ajax({   
+    //            type: 'POST',   
+
+    //            data: { 
+    //                title:title,
+    //                date:date,
+    //                selectedParents:selectedParents,
+    //                selectedProductGroups:selectedProductGroups,
+    //                selectedProductGroupings:selectedProductGroupings,
+    //                formData:formData,
+
+    //            },
+
+    //            beforeSend: function (xhr) {
+    //                xhr.setRequestHeader("XSRF-TOKEN",
+    //                $('input:hidden[name="__RequestVerificationToken"]').val());
+    //            },
+
+    //            url:'@Url.Page("create", "form")', 
+                
+    //            cache: false,
+		  //      contentType: false,
+		  //      processData: false,
+
+    //            success: function(data) {
+    //                if (data == "success") {
+    //                    document.querySelector("#uploadPdf").style.display = "block";
+
+    //                }
+    //            }
+
+    //        });   
+    //    });   
+    //});   
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////
+
+     $(function () {
+        $('#submit').on('click', function (evt) {
+
             var selectedParents = [];
             $('.parentSelect:checked').each(function() {
                 selectedParents.push($(this).attr('value'));
@@ -196,35 +256,75 @@
             $('.productGroupSelect:checked').each(function() {
                 selectedProductGroups.push($(this).attr('value'));
             });
-            //Serialize the form datas.   
-            var valdata = $("#creationForm").serialize();   
-            //to get alert popup   
-            alert(valdata);   
-            $.ajax({   
-                type: 'POST',   
+            var selectedProductGroupings = [];
+            $('.productGroupingSelect:checked').each(function() {
+                selectedProductGroupings.push($(this).attr('value'));
+            });
 
-                data: { 
-                    valdata:valdata,
-                    title:title,
-                    date:date,
-                    selectedParents:selectedParents,
-                    selectedProductGroups:selectedProductGroups
-                
-                },
-
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("XSRF-TOKEN",
-                    $('input:hidden[name="__RequestVerificationToken"]').val());
-                },
-
-                url:'@Url.Page("create", "form")',   
-                
-                success: function(data) {
-                    console.log("***************************result from form submit : "+data);
+            evt.preventDefault();
+            var formData = new FormData(document.forms[0]);
+            formData.append('selectedParents', selectedParents);
+            formData.append('selectedProductGroups', selectedProductGroups);
+            formData.append('selectedProductGroupings', selectedProductGroupings);
+            
+            $.ajax({
+                url: '',
+                data: formData,
+                contentType: false,
+                processData: false,
+                type: 'post',
+                success: function () {
+                    alert('Uploaded by jQuery');
                 }
+            });
+            
+        });
+    });
 
-            });   
-        });   
-    });   
-    
+    //////////////////////////////////////////////////////////
+    // $(function () {
+    //    $('#submit').on('click', function (evt) {
+    //        evt.preventDefault();
+    //        $.ajax({
+    //            url: '',
+    //            data: new FormData(document.forms[0]),
+    //            contentType: false,
+    //            processData: false,
+    //            type: 'post',
+    //            success: function () {
+    //                alert('Uploaded by jQuery');
+    //            }
+    //        });
+    //    });
+    //});
+    //////////////////////////////////////////////////////////
+
+    //$("#btnUpload").on('click',function(){
+    //    $("#fileUpload").on('change', function () {
+	                        
+	   //     var url = '@Url.Page("create", "MyUploader")';
+	        
+
+	   //     jQuery.ajax({
+		  //      type: 'POST',
+		  //      url: url,
+		  //      data: formData,
+		  //      cache: false,
+		  //      contentType: false,
+		  //      processData: false,
+		  //      beforeSend: function (xhr) {
+			 //       xhr.setRequestHeader("XSRF-TOKEN",
+				//        $('input:hidden[name="__RequestVerificationToken"]').val());
+		  //      },
+		  //      success: function (repo) {
+			 //       if (repo.status == "success") {
+				//        alert("File : " + repo.filename + " is uploaded successfully");
+			 //       }
+		  //      },
+		  //      error: function() {
+			 //       alert("Error occurs");
+		  //      }
+	   //     });
+    //    });
+    //});
 </script>
