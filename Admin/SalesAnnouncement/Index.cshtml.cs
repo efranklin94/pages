@@ -19,10 +19,17 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
         }
 
         public IList<SalesAnnouncements> SalesAnnouncements { get;set; }
+        public IList<ParentTag> ParentTag { get; set; }
+        public IList<ProductGroupTag> ProductGroupTag { get; set; }
+        public IList<ProductGroupingTag> ProductGroupingTag { get; set; }
+
 
         public async Task OnGetAsync()
         {
             SalesAnnouncements = await _context.SalesAnnouncements.ToListAsync();
+            ParentTag = await _context.ParentTag.ToListAsync();
+            ProductGroupTag = await _context.ProductGroupTag.ToListAsync(); 
+            ProductGroupingTag = await _context.ProductGroupingTag.ToListAsync();
         }
     }
 }
