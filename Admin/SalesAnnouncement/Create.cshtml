@@ -75,7 +75,7 @@
             <div class="form-group row">
 
                 <div class="col-sm-7 offset-sm-3">
-                    <button class="btn btn-primary" id="submit"><h6 class="buttons_h6">ارسال</h6></button>
+                    <button class="btn btn-primary" id="submit"><h6 class="buttons_h6">ایجاد</h6></button>
                 </div>
             </div>
         
@@ -273,8 +273,12 @@
                 contentType: false,
                 processData: false,
                 type: 'post',
-                success: function () {
-                    alert('Uploaded by jQuery');
+                success: function (result) {
+                    if (result == "اشکال در ارسال فایل")
+                        alert(result);
+                    if (result == "success") {
+                        window.location = "/Admin/SalesAnnouncement/Index"
+                    }
                 }
             });
             

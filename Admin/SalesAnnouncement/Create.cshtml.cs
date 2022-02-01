@@ -72,10 +72,55 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
                 var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
 
                 using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension)))
-                    await UploadedFile.CopyToAsync(output);
+                    UploadedFile.CopyTo(output);
+
+                _context.SalesAnnouncements.Add(SalesAnnouncements);
+                await _context.SaveChangesAsync();
+
+                var SalesAnnouceId = _context.SalesAnnouncements.Max(s => s.SalesAnnouncementId);
+
+                //Inserting into Tags databases
+                var selectedParents = Request.Form["selectedParents"];
+                foreach (var selectedParent in selectedParents)
+                {
+                    ParentTag parentTag = new ParentTag();
+                    parentTag.tag_name = selectedParent;
+
+                    parentTag.SalesAnnouncementREF = SalesAnnouceId;
+
+                    _context.ParentTag.Add(parentTag);
+                    await _context.SaveChangesAsync();
+
+                }
+
+                var selectedProductGroups = Request.Form["selectedProductGroups"];
+                foreach (var selectedProductGroup in selectedProductGroups)
+                {
+                    ProductGroupTag productGroupTag = new ProductGroupTag();
+                    productGroupTag.tag_name = selectedProductGroup;
+
+                    productGroupTag.SalesAnnouncementREF = SalesAnnouceId;
+
+                    _context.ProductGroupTag.Add(productGroupTag);
+                    await _context.SaveChangesAsync();
+                }
+
+                var selectedProductGroupings = Request.Form["selectedProductGroupings"];
+                foreach (var selectedProductGrouping in selectedProductGroupings)
+                {
+                    ProductGroupingTag productGroupingTag = new ProductGroupingTag();
+                    productGroupingTag.tag_name = selectedProductGrouping;
+
+                    productGroupingTag.SalesAnnouncementREF = SalesAnnouceId;
+
+                    _context.ProductGroupingTag.Add(productGroupingTag);
+                    await _context.SaveChangesAsync();
+                }
+
+                return new JsonResult("success");
             }
 
-            return RedirectToPage("./Index");
+            return new JsonResult("اشکال در ارسال فایل");
         }
 
         public bool IsReusable
@@ -201,5 +246,6 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
             return new ObjectResult(new { status = "fail" });
 
         }
+
     }
 }
