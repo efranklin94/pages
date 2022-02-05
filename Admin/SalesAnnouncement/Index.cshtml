@@ -36,7 +36,10 @@
     </thead>
     <tbody>
 @foreach (var item in Model.SalesAnnouncements) {
-        <tr>
+            var parentTag = Model.ParentTag.Where(t => t.SalesAnnouncementREF == item.SalesAnnouncementId).Select(t=>t.tag_name).FirstOrDefault();    
+            var pgTag = Model.ProductGroupTag.Where(t => t.SalesAnnouncementREF == item.SalesAnnouncementId).Select(t=>t.tag_name).FirstOrDefault();    
+            var pgingTag = Model.ProductGroupingTag.Where(t => t.SalesAnnouncementREF == item.SalesAnnouncementId).Select(t=>t.tag_name).FirstOrDefault();    
+            <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.title)
             </td>
@@ -44,13 +47,12 @@
                 @Html.DisplayFor(modelItem => item.date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.parent_tag)
+                <h6>@parentTag</h6>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.productGrouping_tag)
-            
+                <h6>@pgTag</h6>
             <td>
-                @Html.DisplayFor(modelItem => item.productGroup_tag)
+                <h6>@pgingTag</h6>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.file_name)
