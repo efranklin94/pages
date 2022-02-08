@@ -88,7 +88,7 @@ namespace kamjaService.Pages.SalesInfo.SalesAnnouncement
 
             }
 
-            SalesAnnouncements = await pr2.OrderByDescending(x=>x.SalesAnnouncementId).Distinct().ToListAsync();
+            SalesAnnouncements = await pr2.Distinct().OrderByDescending(x => x.SalesAnnouncementId).ToListAsync();
         }
 
 

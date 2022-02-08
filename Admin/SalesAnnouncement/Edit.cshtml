@@ -3,66 +3,265 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+
+    //var myList = new List<testObj>();
+    //var list = new JavaScriptSerializer().Serialize(myList);
 }
+<style> 
+    
+#productGroupContainer, #productGroupingContainer {
+    border: 2px solid #ccc;
+    width: 300px;
+    height: 220px;
+    overflow-y: scroll;
+}
+</style>
+<link href="~/css/jalalidatepicker.css" rel="stylesheet" />
+<h2>ویرایش</h2>
 
-<h1>Edit</h1>
-
-<h4>SalesAnnouncements</h4>
+<h4>اطلاعیه های فروش</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="SalesAnnouncements.description" class="control-label"></label>
+                <h6>توضیحات</h6>
                 <input asp-for="SalesAnnouncements.description" class="form-control" />
                 <span asp-validation-for="SalesAnnouncements.description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SalesAnnouncements.title" class="control-label"></label>
+                <h6>عنوان</h6>
                 <input asp-for="SalesAnnouncements.title" class="form-control" />
                 <span asp-validation-for="SalesAnnouncements.title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SalesAnnouncements.date" class="control-label"></label>
+                <h6>تاریخ</h6>
                 <input data-jdp asp-for="SalesAnnouncements.date" class="form-control" autocomplete="off"/>
                 <span asp-validation-for="SalesAnnouncements.date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SalesAnnouncements.productGrouping_tag" class="control-label"></label>
-                <input asp-for="SalesAnnouncements.productGrouping_tag" class="form-control" />
-                <span asp-validation-for="SalesAnnouncements.productGrouping_tag" class="text-danger"></span>
+                <h6>تگ دسته محصولات</h6>
+                @foreach(var pr in Model.parents)
+                {
+                    
+                    if (Model.checkedParents != null) {
+                        if (Model.checkedParents.Contains(pr))
+                        {
+                            <h6>@pr</h6>
+                            <input type="checkbox" class="parentSelect" name="parent" value="@pr" checked>
+                        }
+                        else
+                        {
+                            <h6>@pr</h6>
+                            <input type="checkbox" class="parentSelect" name="parent" value="@pr">
+                        }
+                    }
+                    <br />
+                }
             </div>
+            <hr />
             <div class="form-group">
-                <label asp-for="SalesAnnouncements.productGroup_tag" class="control-label"></label>
-                <input asp-for="SalesAnnouncements.productGroup_tag" class="form-control" />
-                <span asp-validation-for="SalesAnnouncements.productGroup_tag" class="text-danger"></span>
+                <label class="control-label"><h6>تگ گروه محصولات</h6></label>
+                
+                <div class="container" id="productGroupContainer">
+                    @foreach(var pr in Model.productGroups)
+                    {
+                        if (Model.checkedProductGroups != null) {
+                            if (Model.checkedProductGroups.Contains(pr))
+                            {
+                                <h6>@pr</h6>
+                                <input type="checkbox" class="productGroupSelect" name="productGroup" value="@pr" checked>
+                            }
+                            else
+                            {
+                                <h6>@pr</h6>
+                            
+                                <input type="checkbox" class="productGroupSelect" name="productGroup" value="@pr">
+                            }
+                            <br />
+                        }
+                    
+                    }
+                </div>
             </div>
+
             <input type="hidden" asp-for="SalesAnnouncements.SalesAnnouncementId" />
+            <hr />
             <div class="form-group">
-                <label asp-for="SalesAnnouncements.file_name" class="control-label"></label>
-                <input asp-for="SalesAnnouncements.file_name" class="form-control" />
-                <span asp-validation-for="SalesAnnouncements.file_name" class="text-danger"></span>
+                <label class="control-label"><h6>تگ محصولات</h6></label>
+
+                <div class="container" id="productGroupingContainer">
+                    @foreach(var pr in Model.productGroupings)
+                    {
+                        if (Model.checkedProductGroupings != null) {
+                            if (Model.checkedProductGroupings.Contains(pr))
+                            {
+                                <h6>@pr</h6>
+                                <input type="checkbox" class="productGroupingSelect" name="productGrouping" value="@pr" checked>
+                            }
+                            else
+                            {
+                                <h6>@pr</h6>
+                                <input type="checkbox" class="productGroupingSelect" name="productGrouping" value="@pr">
+                            }
+                            <br />
+                        }
+                    }
+                </div>
             </div>
             <div class="form-group">
-                <label asp-for="SalesAnnouncements.parent_tag" class="control-label"></label>
-                <input asp-for="SalesAnnouncements.parent_tag" class="form-control" />
-                <span asp-validation-for="SalesAnnouncements.parent_tag" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <button id="submit" class="btn btn-primary"><h6 class="buttons_h6">ویرایش</h6></button>
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index"><h6>بازگشت به لیست</h6></a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <script>
+    //var parentcheckboxes = document.querySelectorAll('.parentSelect')
+    //
+    //parentcheckboxes.forEach(checkbox => {
+    //    for (let i = 0 ; i < razorCheckedParents.length  ; i++) {
+    //        if (checkbox.value == razorCheckedParents[i]) {
+    //            checkbox.checked = true;
+    //        }
+    //    }
+    //})
 
+    var pgContainer = document.getElementById('productGroupContainer');
+    var pgingConatiner = document.getElementById('productGroupingContainer');
+    
+    $('.parentSelect').change(function() {
+
+        pgingConatiner.innerHTML = '';
+        pgContainer.innerHTML = '';
+
+        var selectedParents = [];
+        $('.parentSelect:checked').each(function() {
+            selectedParents.push($(this).attr('value'));
+        });
+        
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Page("edit", "parent")',
+            data: { selectedParents : selectedParents },
+            traditional: true,   
+
+            success: function (data) {
+                console.log(data);
+                $.each(data, function(key, value) {
+                    var checkbox = document.createElement('input');
+                    checkbox.type = "checkbox";
+                    checkbox.value = value;
+                    checkbox.id = key;
+                    checkbox.className = "productGroupSelect";
+                    checkbox.name = "productGroup";
+
+                    var label = document.createElement('label')
+                    label.htmlFor = key;
+                    label.appendChild(document.createTextNode(value));
+
+                    pgContainer.append(checkbox);
+                    pgContainer.append(label);
+
+
+                    var productGroupSelects = document.querySelectorAll('.productGroupSelect');
+                    productGroupSelects.forEach(function(item, index, arr){
+                        item.addEventListener('change', productgroupSelectChangeFunction)
+                    });
+
+                });
+            }
+        });
+        
+    });
+
+
+    function productgroupSelectChangeFunction() {
+
+        pgingConatiner.innerHTML = '';
+
+        var selectedProductGroups = [];
+        $('.productGroupSelect:checked').each(function() {
+            selectedProductGroups.push($(this).attr('value'));
+        });
+        
+        console.log("you clicked on: " + selectedProductGroups)
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Page("edit", "productGroup")',
+            traditional: true,   
+
+            data: {
+                selectedProductGroups: selectedProductGroups,
+            },
+            success: function (data) {
+                console.log("aja data: "+data)
+                $.each(data, function(key, value) {
+                    var checkbox = document.createElement('input');
+                    checkbox.type = "checkbox";
+                    checkbox.value = value;
+                    checkbox.id = key;
+                    checkbox.className = "productGroupingSelect";
+                    checkbox.name = "productGrouping";
+
+                    var label = document.createElement('label')
+                    label.htmlFor = key;
+                    label.appendChild(document.createTextNode(value));
+
+                    pgingConatiner.append(checkbox);
+                    pgingConatiner.append(label);
+                });
+            }
+        });
+    }
+
+    $(function () {
+        $('#submit').on('click', function (evt) {
+
+            var selectedParents = [];
+            $('.parentSelect:checked').each(function() {
+                selectedParents.push($(this).attr('value'));
+            });
+            var selectedProductGroups = [];
+            $('.productGroupSelect:checked').each(function() {
+                selectedProductGroups.push($(this).attr('value'));
+            });
+            var selectedProductGroupings = [];
+            $('.productGroupingSelect:checked').each(function() {
+                selectedProductGroupings.push($(this).attr('value'));
+            });
+
+            evt.preventDefault();
+            var formData = new FormData(document.forms[0]);
+            formData.append('selectedParents', selectedParents);
+            formData.append('selectedProductGroups', selectedProductGroups);
+            formData.append('selectedProductGroupings', selectedProductGroupings);
+            
+            $.ajax({
+                url: '',
+                data: formData,
+                contentType: false,
+                processData: false,
+                type: 'post',
+                success: function (result) {
+                    if (result == "اشکال در ارسال فایل")
+                        alert(result);
+                    if (result == "success") {
+                        window.location = "/Admin/SalesAnnouncement/Index"
+                    }
+                }
+            });
+            
+        });
+    });
 </script>

@@ -26,7 +26,7 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
 
         public async Task OnGetAsync()
         {
-            SalesAnnouncements = await _context.SalesAnnouncements.ToListAsync();
+            SalesAnnouncements = await _context.SalesAnnouncements.OrderByDescending(x => x.SalesAnnouncementId).ToListAsync();
             ParentTag = await _context.ParentTag.ToListAsync();
             ProductGroupTag = await _context.ProductGroupTag.ToListAsync(); 
             ProductGroupingTag = await _context.ProductGroupingTag.ToListAsync();

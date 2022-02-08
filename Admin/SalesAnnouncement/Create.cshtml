@@ -16,7 +16,14 @@
     }
 /*    #uploadPdf{
         display: none;
-    }*/
+    }*/ 
+    
+    #productGroupContainer, #productGroupingContainer {
+        border: 2px solid #ccc;
+        width: 300px;
+        height: 220px;
+        overflow-y: scroll;
+    }
 </style>
 <link href="~/css/jalalidatepicker.css" rel="stylesheet" />
 <h2>ایجاد</h2>
@@ -46,15 +53,17 @@
                     <br />
                 }
             </div>
+            <hr />
             <div class="form-group">
                 <label class="control-label"><h6>تگ گروه محصولات</h6></label>
-                <hr />
-                <h6 id="productGroupContainer"></h6>
+                
+                <div class="container" id="productGroupContainer"></div>
             </div>
+            <hr />
             <div class="form-group">
                 <label class="control-label"><h6>تگ محصولات</h6></label>
-                <hr />
-                <h6 id="productGroupingContainer"></h6>
+                
+                <div class="container" id="productGroupingContainer"></div>
             </div>
 @*            <div id="uploadPdf" class="form-group">
                 <label class="control-label"><h6>آپلود PDF</h6></label>
