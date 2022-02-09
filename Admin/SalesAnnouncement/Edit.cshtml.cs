@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using kamjaService.Models;
+using Microsoft.AspNetCore.Hosting;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace kamjaService.Pages.Admin.SalesAnnouncement
 {
@@ -14,9 +18,10 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
     {
         private readonly kamjaService.Models.KamjaServiceDbContext _context;
 
-        public EditModel(kamjaService.Models.KamjaServiceDbContext context)
+        public EditModel(kamjaService.Models.KamjaServiceDbContext context, IHostingEnvironment env)
         {
             _context = context;
+            hostingEnv = env;
         }
 
         [BindProperty]
@@ -27,6 +32,12 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
         public string checkedParents { get; set; }
         public string checkedProductGroups { get; set; }
         public string checkedProductGroupings { get; set; }
+        private IHostingEnvironment hostingEnv;
+
+        [BindProperty, Display(Name = "File")]
+        public IFormFile UploadedFile { get; set; }
+        public string fileNameViewBag { get; set; }
+        public string fileExtensionViewBag { get; set; }
         public async Task<IActionResult> OnGetAsync(long? id)
         {
             if (id == null)
@@ -92,10 +103,44 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
             _context.Attach(parentTag).State = EntityState.Modified;
             _context.Attach(productGroupTag).State = EntityState.Modified;
             _context.Attach(productGroupingTag).State = EntityState.Modified;
-            _context.Attach(SalesAnnouncements).State = EntityState.Modified;
+            
 
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
-            try
+            if (UploadedFile != null)
+            {
+                //TODO delete the previous pdf
+                var prevPdfFileName = await _context.SalesAnnouncements.Where(s => s.SalesAnnouncementId == SalesAnnouncements.SalesAnnouncementId).Select(s => s.file_name).FirstOrDefaultAsync();
+
+                string fullPath = hostingEnv.WebRootPath + "\\SalesAnnouncePdf\\" + prevPdfFileName;
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
+
+                //adding the new pdf
+                var filename = UploadedFile.FileName;
+                // Unique filename "Guid"  
+                var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+                //store the filename into the database
+
+                SalesAnnouncements.file_name = myUniqueFileName;
+                fileNameViewBag = myUniqueFileName;
+                // Getting Extension  
+                var fileExtension = Path.GetExtension(filename);
+                fileExtensionViewBag = fileExtension;
+                // Concating filename + fileExtension (unique filename)  
+                var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
+
+                using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension)))
+                    UploadedFile.CopyTo(output);
+
+                _context.Attach(SalesAnnouncements).State = EntityState.Modified;
+            }
+                try
             {
                 await _context.SaveChangesAsync();
             }
@@ -150,6 +195,16 @@ namespace kamjaService.Pages.Admin.SalesAnnouncement
             }
 
             return new JsonResult(selectedProductGroupings);
+        }
+
+        private string GetPathAndFilename(string filename)
+        {
+            string path = hostingEnv.WebRootPath + "\\SalesAnnouncePdf\\";
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            return path + filename;
         }
     }
 }
