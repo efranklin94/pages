@@ -35,6 +35,7 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
         public IEnumerable<string> imageSrcList { get; set; }
         public IEnumerable<string> videoSrcList { get; set; }
         public IList<ProductGroupingClips> productGroupingClips { get; set; }
+        public bool isExistingProductGroup { get; set; }
         public async Task OnGetAsync(long? id, string currentFilter, string searchString)
         {
             if (id != null)
@@ -95,7 +96,16 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
                 imageSrcList = Directory.EnumerateFiles("wwwroot\\image", "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
             }
 
-            productGroupingClips = await _context.ProductGroupingClips.Where(x => x.FanniOrSalesInfo == "SalesInfo").Where(x => x.productGroupingId == gID).ToListAsync();
+            if (Directory.Exists("wwwroot\\video\\slider\\SalesInfo\\" + gID))
+            {
+                videoSrcList = Directory.EnumerateFiles("wwwroot\\video\\slider\\SalesInfo\\" + gID, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp4"));
+            }
+            else
+            {
+                videoSrcList = Directory.EnumerateFiles("wwwroot\\image", "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
+            }
+
+            //productGroupingClips = await _context.ProductGroupingClips.Where(x => x.FanniOrSalesInfo == "SalesInfo").Where(x => x.productGroupingId == gID).ToListAsync();
             //var videoSrcList = "\\video\\SalesInfo\\" + productGroupingClips.Select(x => x.name) + ".mp4";
             //var clipNames = productGroupingClips.Select(x => x.name);
 

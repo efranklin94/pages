@@ -51,26 +51,48 @@
                                 <div class="swiper-wrapper">
 
                                     @{
-                                        if (Model.productGroupingClips.Select(x => x.name).Count() == 0)
+                                        //if (Model.productGroupingClips.Select(x => x.name).Count() == 0)
+                                        //{
+                                        //    <div class="swiper-slide" style="max-height:460px">
+                                        //        <img src="~/image/no_image.png" style="width:auto;max-height: 250px;cursor: pointer;" />
+                                        //    </div>
+                                        //}
+                                        //else
+                                        //{
+                                        //    foreach (var clipName in Model.productGroupingClips.Select(x => x.name))
+                                        //    {
+                                        //        var src = "\\video\\SalesInfo\\" + clipName + ".mp4";
+                                        //        Console.WriteLine(src);
+                                        //        <script>console.log(@src)</script>
+                                        //        <div class="swiper-slide" style="max-height:460px">
+                                        //            <video id="productGroupingVideo" style="width: 100%;" name="media">
+                                        //                <source src="@src" type="video/mp4">
+                                        //            </video>
+                                        //        </div>
+                                        //    }
+                                        //}
+
+                                        foreach (var src in Model.videoSrcList)
                                         {
-                                            <div class="swiper-slide" style="max-height:460px">
-                                                <img src="~/image/no_image.png" style="width:auto;max-height: 250px;cursor: pointer;" />
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            foreach (var clipName in Model.productGroupingClips.Select(x => x.name))
+                                            if (src != "wwwroot\\image\\no_image.png")
                                             {
-                                                var src = "\\video\\SalesInfo\\" + clipName + ".mp4";
-                                                Console.WriteLine(src);
-                                                <script>console.log(@src)</script>
+                                                var src2 = src.Replace("wwwroot", "");
+
                                                 <div class="swiper-slide" style="max-height:460px">
-                                                    <video id="productGroupingVideo" style="width: 100%;" disablePictureInPicture controls name="media">
-                                                        <source src="@src" type="video/mp4">
-                                                    </video>
+                                                   <video controls style="width: 100%;">
+                                                      <source src="@src2" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                   </video>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="swiper-slide" style="max-height:460px">
+                                                    <img src="~/image/no_image.png" style="width:auto;max-height: 250px;cursor: pointer;" />
                                                 </div>
                                             }
                                         }
+
                                     }
 
                                 </div>
