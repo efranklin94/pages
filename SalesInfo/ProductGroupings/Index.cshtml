@@ -72,17 +72,37 @@
                                         //    }
                                         //}
 
-                                        foreach (var src in Model.videoSrcList)
-                                        {
-                                            if (src != "wwwroot\\image\\no_image.png")
-                                            {
-                                                var src2 = src.Replace("wwwroot", "");
+                                        //foreach (var src in Model.videoSrcList)
+                                        //{
+                                        //    if (src != "wwwroot\\image\\no_image.png")
+                                        //    {
+                                        //        var src2 = src.Replace("wwwroot", "");
 
+                                        //        <div class="swiper-slide" style="max-height:460px">
+                                        //           <video controls style="width: 100%;">
+                                        //              <source src="@src2" type="video/mp4">
+                                        //            Your browser does not support the video tag.
+                                        //           </video>
+                                        //        </div>
+                                        //    }
+                                        //    else
+                                        //    {
+                                        //        <div class="swiper-slide" style="max-height:460px">
+                                        //            <img src="~/image/no_image.png" style="width:auto;max-height: 250px;cursor: pointer;" />
+                                        //        </div>
+                                        //    }
+                                        //}
+
+                                        foreach (var clipsrc in Model.videoSrcList)
+                                        {
+                                            if (clipsrc != "wwwroot\\image\\no_image.png")
+                                            {
+                                                var clipsrc2 = clipsrc.Replace("wwwroot", "");
                                                 <div class="swiper-slide" style="max-height:460px">
-                                                   <video controls style="width: 100%;">
-                                                      <source src="@src2" type="video/mp4">
-                                                    Your browser does not support the video tag.
-                                                   </video>
+
+                                                    <video style="width: 100%;" disablePictureInPicture controls name="media">
+                                                        <source src="@clipsrc2" type="video/mp4">
+                                                    </video>
                                                 </div>
                                             }
                                             else
@@ -92,6 +112,7 @@
                                                 </div>
                                             }
                                         }
+                                    
 
                                     }
 

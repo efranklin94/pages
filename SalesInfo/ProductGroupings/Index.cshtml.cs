@@ -96,14 +96,14 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
                 imageSrcList = Directory.EnumerateFiles("wwwroot\\image", "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
             }
 
-            if (Directory.Exists("wwwroot\\video\\slider\\SalesInfo\\" + gID))
-            {
-                videoSrcList = Directory.EnumerateFiles("wwwroot\\video\\slider\\SalesInfo\\" + gID, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp4"));
-            }
-            else
-            {
-                videoSrcList = Directory.EnumerateFiles("wwwroot\\image", "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
-            }
+            //if (Directory.Exists("wwwroot\\video\\slider\\SalesInfo\\" + gID))
+            //{
+            //    videoSrcList = Directory.EnumerateFiles("wwwroot\\video\\slider\\SalesInfo\\" + gID, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp4"));
+            //}
+            //else
+            //{
+            //    videoSrcList = Directory.EnumerateFiles("wwwroot\\image", "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
+            //}
 
             //productGroupingClips = await _context.ProductGroupingClips.Where(x => x.FanniOrSalesInfo == "SalesInfo").Where(x => x.productGroupingId == gID).ToListAsync();
             //var videoSrcList = "\\video\\SalesInfo\\" + productGroupingClips.Select(x => x.name) + ".mp4";
@@ -121,6 +121,15 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
             //        videoSrcList = Directory.EnumerateFiles("wwwroot\\image", "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
             //    }
             //}
+
+            if (Directory.Exists("wwwroot\\video\\slider\\SalesInfo\\" + gID))
+            {
+                videoSrcList = Directory.EnumerateFiles("wwwroot\\video\\slider\\SalesInfo\\" + gID, ".", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp4"));
+            }
+            else
+            {
+                videoSrcList = Directory.EnumerateFiles("wwwroot\\image", ".", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
+            }
         }
     }
 }
