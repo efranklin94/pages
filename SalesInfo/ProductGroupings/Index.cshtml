@@ -256,6 +256,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h6 id="colorsCardHeader" style="font-weight:bold"></h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -347,6 +348,7 @@
                 console.log("colors => " + data);
                 var Container = document.getElementById("colorsCardDiv");
                 Container.innerHTML = '';
+                document.getElementById('colorsCardHeader').innerHTML = colorCatName
                 $.each(data, function(key, value) {
                     var bootstrapDiv = document.createElement('div');
                     bootstrapDiv.className = "col-lg-4 col-md-4 col-6";
