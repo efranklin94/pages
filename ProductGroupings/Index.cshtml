@@ -39,30 +39,28 @@
 
                             <div class="swiper mySwiper">
                                 <div class="swiper-wrapper" style="justify-content: center;">
-
                                     @{
-                                        if (Model.productGroupingClips.Select(x => x.name).Count() == 0)
+                                        foreach (var clipsrc in Model.videoSrcList)
                                         {
-                                            <div class="swiper-slide" style="max-height:460px">
-                                                <img src="~/image/no_image.png" style="width:auto;max-height: 250px;cursor: pointer;" />
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            foreach (var clipName in Model.productGroupingClips.Select(x => x.name))
+                                            if (clipsrc != "wwwroot\\image\\no_image.png")
                                             {
-                                                var src = "\\video\\SalesInfo\\" + clipName + ".mp4";
-                                                Console.WriteLine(src);
-                                                <script>console.log(@src)</script>
+                                                var clipsrc2 = clipsrc.Replace("wwwroot", "");
                                                 <div class="swiper-slide" style="max-height:460px">
-                                                    <video id="productGroupingVideo" style="width: 100%;" disablePictureInPicture controls name="media">
-                                                        <source src="@src" type="video/mp4">
+
+                                                    <video style="width: 100%;" disablePictureInPicture controls name="media">
+                                                        <source src="@clipsrc2" type="video/mp4">
                                                     </video>
                                                 </div>
                                             }
+                                            else
+                                            {
+                                                <div class="swiper-slide" style="max-height:460px">
+                                                    <img src="~/image/no_image.png" style="width:auto;max-height: 250px;cursor: pointer;" />
+                                                </div>
+                                            }
                                         }
-                                    }
 
+                                    }
                                 </div>
                             </div>
                         </div>
