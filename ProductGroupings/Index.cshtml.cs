@@ -84,9 +84,9 @@ namespace kamjaService.Pages.ProductGroupings
             //{
             //    videoSrc = Directory.EnumerateFiles("wwwroot\\image", "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
             //}
-            if (Directory.Exists("wwwroot\\video\\slider\\SalesInfo\\" + gID))
+            if (Directory.Exists("wwwroot\\video\\slider\\fanni\\" + gID))
             {
-                videoSrcList = Directory.EnumerateFiles("wwwroot\\video\\slider\\SalesInfo\\" + gID, ".", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp4"));
+                videoSrcList = Directory.EnumerateFiles("wwwroot\\video\\slider\\fanni\\" + gID, ".", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp4"));
             }
             else
             {
