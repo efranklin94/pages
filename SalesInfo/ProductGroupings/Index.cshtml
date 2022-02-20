@@ -51,48 +51,6 @@
                                 <div class="swiper-wrapper">
 
                                     @{
-                                        //if (Model.productGroupingClips.Select(x => x.name).Count() == 0)
-                                        //{
-                                        //    <div class="swiper-slide" style="max-height:460px">
-                                        //        <img src="~/image/no_image.png" style="width:auto;max-height: 250px;cursor: pointer;" />
-                                        //    </div>
-                                        //}
-                                        //else
-                                        //{
-                                        //    foreach (var clipName in Model.productGroupingClips.Select(x => x.name))
-                                        //    {
-                                        //        var src = "\\video\\SalesInfo\\" + clipName + ".mp4";
-                                        //        Console.WriteLine(src);
-                                        //        <script>console.log(@src)</script>
-                                        //        <div class="swiper-slide" style="max-height:460px">
-                                        //            <video id="productGroupingVideo" style="width: 100%;" name="media">
-                                        //                <source src="@src" type="video/mp4">
-                                        //            </video>
-                                        //        </div>
-                                        //    }
-                                        //}
-
-                                        //foreach (var src in Model.videoSrcList)
-                                        //{
-                                        //    if (src != "wwwroot\\image\\no_image.png")
-                                        //    {
-                                        //        var src2 = src.Replace("wwwroot", "");
-
-                                        //        <div class="swiper-slide" style="max-height:460px">
-                                        //           <video controls style="width: 100%;">
-                                        //              <source src="@src2" type="video/mp4">
-                                        //            Your browser does not support the video tag.
-                                        //           </video>
-                                        //        </div>
-                                        //    }
-                                        //    else
-                                        //    {
-                                        //        <div class="swiper-slide" style="max-height:460px">
-                                        //            <img src="~/image/no_image.png" style="width:auto;max-height: 250px;cursor: pointer;" />
-                                        //        </div>
-                                        //    }
-                                        //}
-
                                         foreach (var clipsrc in Model.videoSrcList)
                                         {
                                             if (clipsrc != "wwwroot\\image\\no_image.png")
@@ -112,7 +70,6 @@
                                                 </div>
                                             }
                                         }
-                                    
 
                                     }
 
@@ -121,9 +78,7 @@
                                 <div class="swiper-button-prev"></div>
                             </div>
                         </div>
-                        @*<div class="d-flex margin-buttons">
-                            <button class="btn btn-dark" onclick="playPause()"><h6 class="buttons_h6">Play/Pause</h6></button>
-                        </div>*@
+
                     </div>
                 </div>
             </div>
@@ -185,9 +140,9 @@
                                                         padding-right: 5px;
                                                         margin-right: 0px;
                                                         border-color: #991a2633 !important;">
-                                        <h6 class="card-text"><span style="font-weight:bold">پایه چوبی: </span><span class="colors_card">@Html.DisplayFor(modelItem => item.پایه)</span></h6>
-                                        <h6 class="card-text"><span style="font-weight:bold">بدنه: </span><span class="colors_card">@Html.DisplayFor(modelItem => item.بدنه)</span></h6>
-                                        <h6 class="card-text"><span style="font-weight:bold">نما: </span><span class="colors_card">@Html.DisplayFor(modelItem => item.نما)</span></h6>
+                                        <h6 class="card-text"><span style="font-weight:bold">پایه چوبی: </span><a class="colors_card" data-toggle="modal" data-target="#pgingColorsModal" onclick="getColors('@item.پایه')" style="cursor:pointer;">@Html.DisplayFor(modelItem => item.پایه)</a></h6>
+                                        <h6 class="card-text"><span style="font-weight:bold">بدنه: </span><a class="colors_card" data-toggle="modal" data-target="#pgingColorsModal" onclick="getColors('@item.بدنه')" style="cursor:pointer;">@Html.DisplayFor(modelItem => item.بدنه)</a></h6>
+                                        <h6 class="card-text"><span style="font-weight:bold">نما: </span><a class="colors_card" data-toggle="modal" data-target="#pgingColorsModal" onclick="getColors('@item.نما')" style="cursor:pointer;">@Html.DisplayFor(modelItem => item.نما)</a></h6>
                                     </div>
                                 </div>
 
@@ -297,6 +252,29 @@
     </div>
 </div>
 
+<div class="modal fade" id="pgingColorsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row" id="colorsCardDiv">
+
+                    </div>
+                    <img class="w-100" id="colorsImg" src="#">
+                </div>
+
+            </div>
+            <div class="modal-footer col-12 col-sm-12 col-lg-12">
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/swiper-bundle-min.js"></script>
 <script>
@@ -347,15 +325,6 @@
         },
     });
 
-    var myVideo = document.getElementById("productGroupingVideo");
-
-    function playPause() {
-        if (myVideo.paused)
-            myVideo.play();
-        else
-            myVideo.pause();
-    }
-
     function zoomSliderImageFunc() {
         var src = document.querySelector('#ProductGroupingImageGallery .swiper-slide-active img').getAttribute('src');
         var image = document.getElementById('ZoomSliderModalImg');
@@ -363,6 +332,64 @@
         //var header = document.getElementById('colorImageModalHeader');
         //header.innerText = colorName;
         //
+    }
+
+    function getColors(colorCatName) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Page("index", "colors")',
+
+            data: {
+                colorCatName: colorCatName,
+            },
+
+            success: function (data) {
+                console.log("colors => " + data);
+                var Container = document.getElementById("colorsCardDiv");
+                Container.innerHTML = '';
+                $.each(data, function(key, value) {
+                    var bootstrapDiv = document.createElement('div');
+                    bootstrapDiv.className = "col-lg-4 col-md-4 col-6";
+                    bootstrapDiv.style = "margin-bottom:18px";
+                    Container.appendChild(bootstrapDiv);
+
+                    var header = document.createElement("h6");
+                    header.innerHTML = value;
+                    bootstrapDiv.appendChild(header);
+
+                    var img = document.createElement("img");
+                    img.src = "\\image\\colors\\" + value + ".jpg";
+                    img.style = "width :100px;height:100px;cursor:pointer";
+                    bootstrapDiv.appendChild(img);
+
+                    //style="width :200px;height:100px;cursor:pointer"
+
+
+                    //var checkbox = document.createElement('input');
+                    //checkbox.type = "checkbox";
+                    //checkbox.value = value;
+                    //checkbox.id = key;
+                    //checkbox.className = "productGroupSelect col-2";
+                    //checkbox.name = "productGroup";
+
+                    //var label = document.createElement('label')
+                    //label.htmlFor = key;
+                    //label.appendChild(document.createTextNode(value));
+                    //label.className = "col-10";
+
+                    //row.append(label);
+                    //row.append(checkbox);
+
+                    //var productGroupSelects = document.querySelectorAll('.productGroupSelect');
+                    //productGroupSelects.forEach(function(item, index, arr){
+                    //    item.addEventListener('change', productgroupSelectChangeFunction)
+                    //});
+                });
+
+            }
+        });
+
+        
     }
 
 </script>

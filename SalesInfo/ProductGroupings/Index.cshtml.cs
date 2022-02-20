@@ -36,6 +36,7 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
         public IEnumerable<string> videoSrcList { get; set; }
         public IList<ProductGroupingClips> productGroupingClips { get; set; }
         public bool isExistingProductGroup { get; set; }
+        public List<string> ColorsViews { get; set; }
         public async Task OnGetAsync(long? id, string currentFilter, string searchString)
         {
             if (id != null)
@@ -131,5 +132,13 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
                 videoSrcList = Directory.EnumerateFiles("wwwroot\\image", ".", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
             }
         }
+
+        public async Task<IActionResult> OnGetColors(string colorCatName)
+        {
+            ColorsViews = await _context.ColorsView.Where(c => c.color_category == colorCatName).Select(c => c.color).ToListAsync();
+
+            return new JsonResult(ColorsViews);
+        }
+
     }
 }
