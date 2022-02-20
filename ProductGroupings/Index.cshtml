@@ -37,8 +37,8 @@
                     <div class="container-fluid">
                         <div class="row">
 
-                            <div class="swiper mySwiper">
-                                <div class="swiper-wrapper" style="justify-content: center;">
+                            <div class="swiper clipSwiper">
+                                <div class="swiper-wrapper">
                                     @{
                                         foreach (var clipsrc in Model.videoSrcList)
                                         {
@@ -62,6 +62,8 @@
 
                                     }
                                 </div>
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
                             </div>
                         </div>
                     </div>
@@ -170,13 +172,6 @@
 <script>
     //< !--Initialize Swiper-- >
     var swiper = new Swiper(".mySwiper", {
-        //navigation: {
-        //    nextEl: ".swiper-button-next",
-        //    prevEl: ".swiper-button-prev",
-        //},
-
-        //spaceBetween: 30
-
         spaceBetween: 30,
         effect: "fade",
         navigation: {
@@ -189,6 +184,21 @@
         },
 
     });
+
+    var swiper = new Swiper(".clipSwiper", {
+        cssMode: true,
+        slidesPerView: 1,
+        spaceBetween: 30,
+
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+            el: ".swiper-pagination",
+        },
+    });
+
 
     function zoomSliderImageFunc() {
         var src = document.querySelector('#ProductGroupingImageGallery .swiper-slide-active img').getAttribute('src');
