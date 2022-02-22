@@ -1,12 +1,14 @@
 ﻿@page "/Salesinfo/ProductGroupings"
 @model kamjaService.Pages.SalesInfo.ProductGroupings.IndexModel
 @using System.IO;
+
 @{
     ViewData["Title"] = "Index";
 }
 @{
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
+
 <link href="~/css/swiper-bundle.min.css" rel="stylesheet" />
 <div class="container">
     <h2>محصول</h2>
@@ -34,6 +36,68 @@
         </div>
     </form>
 </div>
+<style>
+ .tags {
+    list-style: none;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+    .tags li {
+        float: left;
+    }
+
+.tag {
+    background: #eee;
+    border-radius: 3px 0 0 3px;
+    color: #000;
+    display: inline-block;
+    height: 26px;
+    line-height: 26px;
+    padding: 0 20px 0 23px;
+    position: relative;
+    margin: 0 10px 10px 0;
+    text-decoration: none;
+    -webkit-transition: color 0.2s;
+}
+
+    .tag::before {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: inset 0 1px rgba(0, 0, 0, 0.25);
+        content: '';
+        height: 6px;
+        left: 10px;
+        position: absolute;
+        width: 6px;
+        top: 10px;
+    }
+
+    .tag::after {
+        background: #fff;
+        border-bottom: 13px solid transparent;
+        border-left: 10px solid #eee;
+        border-top: 13px solid transparent;
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    .tag:hover {
+        /*background-color: #dc3545;*/
+        background-color: #d71921;
+        text-decoration: none;
+        color:white;
+
+    }
+
+        .tag:hover::after {
+            border-left-color: #d71921;
+        }
+
+</style>
 
 <div class="container-fluid">
 
@@ -140,42 +204,57 @@
                                                         padding-right: 5px;
                                                         margin-right: 0px;
                                                         border-color: #991a2633 !important;">
-                                        <h6 class="card-text">
-                                            <span style="font-weight:bold">پایه چوبی: </span>
+                                        <div class="card-text">
+                                            <h6  style="font-weight:bold">پایه چوبی: </h6>
                                             @if(@item.پایه != null) { 
                                                 String[] payes = item.پایه.Split(",");
-
+                                                <ul class="tags">
                                                 @foreach(var colorCat in payes) {
-                                                    <a class="colors_card" data-toggle="modal" data-target="#pgingColorsModal" onclick="getColors('@colorCat')" style="cursor:pointer;">@Html.DisplayFor(modelItem => colorCat)
-                                                    </a>
+                                                    <li>
+                                                        <a class="colors_card tag" data-toggle="modal" data-target="#pgingColorsModal" onclick="getColors('@colorCat')" style="cursor:pointer;">
+                                                            <span style="font-family: IRANSansWebFaNum">
+                                                                @Html.DisplayFor(modelItem => colorCat)
+                                                            </span>
+                                                        </a>
+                                                    </li>
                                                 }
+                                                </ul>
                                             }
-                                        </h6>
-                                        <h6 class="card-text"><span style="font-weight:bold">بدنه: </span>
-                                            
-                                            @if (@item.بدنه != null)
-                                            {
+                                        </div>
+                                        <div class="card-text">
+                                            <h6  style="font-weight:bold">بدنه: </h6>
+                                            @if(@item.بدنه != null) { 
                                                 String[] badanes = item.بدنه.Split(",");
-
-                                                @foreach (var colorCat in badanes)
-                                                {
-                                                    <a class="colors_card" data-toggle="modal" data-target="#pgingColorsModal" onclick="getColors('@colorCat')" style="cursor:pointer;">@Html.DisplayFor(modelItem => colorCat)</a>
+                                                <ul class="tags">
+                                                @foreach(var colorCat in badanes) {
+                                                    <li>
+                                                        <a class="colors_card tag" data-toggle="modal" data-target="#pgingColorsModal" onclick="getColors('@colorCat')" style="cursor:pointer;">
+                                                            <span style="font-family: IRANSansWebFaNum">
+                                                                @Html.DisplayFor(modelItem => colorCat)
+                                                            </span>
+                                                        </a>
+                                                    </li>
                                                 }
-                                                
+                                                </ul>
                                             }
-                                        </h6>
-                                        <h6 class="card-text"><span style="font-weight:bold">نما: </span>
-                                            @if (@item.نما != null)
-                                            {
+                                        </div>
+                                        <div class="card-text">
+                                            <h6  style="font-weight:bold">نما: </h6>
+                                            @if(@item.نما != null) { 
                                                 String[] namas = item.نما.Split(",");
-
-                                                @foreach (var colorCat in namas)
-                                                {
-                                                    <a class="colors_card" data-toggle="modal" data-target="#pgingColorsModal" onclick="getColors('@colorCat')" style="cursor:pointer;">@Html.DisplayFor(modelItem => colorCat)</a>
+                                                <ul class="tags">
+                                                @foreach(var colorCat in namas) {
+                                                    <li>
+                                                        <a class="colors_card tag" data-toggle="modal" data-target="#pgingColorsModal" onclick="getColors('@colorCat')" style="cursor:pointer;">
+                                                            <span style="font-family: IRANSansWebFaNum">
+                                                                @Html.DisplayFor(modelItem => colorCat)
+                                                            </span>
+                                                        </a>
+                                                    </li>
                                                 }
-
+                                                </ul>
                                             }
-                                        </h6>
+                                        </div>
                                     </div>
                                 </div>
 
