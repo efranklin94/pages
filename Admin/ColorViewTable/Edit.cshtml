@@ -36,6 +36,13 @@
                 </select>
                 <span asp-validation-for="ColorsViewTable.flag" class="text-danger"></span>
             </div>
+
+            <div class="form-group row">
+                <label asp-for="UploadedFile" class="col-sm-3 col-form-label"><h6>عکس</h6></label>
+                <div class="col">
+                    <input asp-for="UploadedFile" class="form-control" id="file" style="height:auto">
+                </div>
+            </div>
             <div class="form-group">
                 <input type="submit" value="ذخیره" class="btn btn-primary" />
             </div>
