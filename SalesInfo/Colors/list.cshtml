@@ -6,8 +6,13 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 
 }
-
+<style>
+    .row img {
+          box-shadow: 0 2px 10px rgba(0,0,0,.9);
+    }
+</style>
 <h2>رنگ ها</h2>
+<h5>با توجه تفاوت مانیتورها و نورپردازی عکاسی امکان مغایرت با واقعیت وجود دارد</h5>
 <hr />
 <div class="container-fluid">
     <div class="row">
@@ -30,13 +35,14 @@
                                     {
                                         @if (color.color_category == category.color_category && color.flag == 1)
                                         {
+                                            
                                             <div class="col-lg-4 col-md-4 col-6" style="margin-bottom:18px">
                                                 <h6>@color.color</h6>
 
-                                                @if (System.IO.File.Exists("wwwroot\\image\\colors\\" + color.color + ".jpg"))
+                                                @if (System.IO.File.Exists("wwwroot\\image\\colors\\" + color.Id + ".jpg"))
                                                 {
-                                                    var src = "\\image\\colors\\" + color.color + ".jpg";
-                                                    <img data-toggle="modal" data-target="#zoomColorImage" src="@src" class="img-fluid" style="width :200px;height:100px;cursor:pointer" onclick="zoomColorImageFunc('@color.color')" />
+                                                    var src = "\\image\\colors\\small\\" + color.Id + ".jpg";
+                                                    <img data-toggle="modal" data-target="#zoomColorImage" src="@src" class="img-fluid" style="cursor:pointer;width:100px;contain-intrinsic-width:100px;" width:100 height:100 onclick="zoomColorImageFunc('@color.color', @color.Id)" />
                                                 }
                                                 else
                                                 {
@@ -78,9 +84,9 @@
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
-    function zoomColorImageFunc(colorName) {
+    function zoomColorImageFunc(colorName, Id) {
         var image = document.getElementById('colorModalMainImg');
-        image.setAttribute('src', '/image/colors/originals/' + colorName + '.jpg');
+        image.setAttribute('src', '/image/colors/' + Id + '.jpg');
         var header = document.getElementById('colorImageModalHeader');
         header.innerText = colorName;
         

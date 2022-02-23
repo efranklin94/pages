@@ -45,21 +45,23 @@
 }
 
     .tags li {
+        width: 100%;
         float: left;
     }
 
 .tag {
     background: #eee;
-    border-radius: 3px 0 0 3px;
+    border-radius: 3px 3px 3px 3px;
     color: #000;
     display: inline-block;
-    height: 26px;
+    /*height: 26px;*/
     line-height: 26px;
     padding: 0 20px 0 23px;
     position: relative;
     margin: 0 10px 10px 0;
     text-decoration: none;
     -webkit-transition: color 0.2s;
+    width:90%;
 }
 
     .tag::before {
@@ -75,10 +77,11 @@
     }
 
     .tag::after {
+        border-radius: 10px;
         background: #fff;
         border-bottom: 13px solid transparent;
-        border-left: 10px solid #eee;
-        border-top: 13px solid transparent;
+      /*  border-left: 10px solid #eee;
+        border-top: 13px solid transparent;*/
         content: '';
         position: absolute;
         right: 0;
@@ -100,7 +103,7 @@
 </style>
 
 <div class="container-fluid">
-
+    
     <div class="row">
         <div class="col-lg-6">
 
@@ -467,12 +470,11 @@
                     Container.appendChild(bootstrapDiv);
 
                     var header = document.createElement("h6");
-                    header.innerHTML = value;
+                    header.innerHTML = value.color_name;
                     bootstrapDiv.appendChild(header);
 
                     var img = document.createElement("img");
-                    img.src = "\\image\\colors\\" + value + ".jpg";
-                    img.style = "width :100px;height:100px;cursor:pointer";
+                    img.src = "\\image\\colors\\small\\" + value.id + ".jpg";
                     bootstrapDiv.appendChild(img);
 
                     
