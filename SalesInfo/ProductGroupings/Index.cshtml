@@ -199,8 +199,8 @@
                     <div class="card-body">
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name) (@Html.DisplayFor(modelItem => item.Number))</h5>
                         <div class="container">
-                            <div class="row">
-                                <div class="col-6" style="padding-right: 0px !important;">
+                            <div class="row" style="flex-wrap: wrap-reverse;">
+                                <div class="col-md-6" style="padding-right: 0px !important;margin-bottom:10px">
                                     <div class="rounded border" style="
                                                         padding: 10px;
 
@@ -261,7 +261,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-6 productGroupingImgModal" data-toggle="modal" data-target="#zoomImageModal" data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="zoomImage(@item.Number)">
+                                <div class="col-md-6 productGroupingImgModal" data-toggle="modal" data-target="#zoomImageModal" data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="zoomImage(@item.Number)" style="margin-bottom:10px">
                                 @{
                                     if (System.IO.File.Exists("wwwroot\\image\\Product\\pic\\" + item.Number + ".jpg")) {
                                         <img class="card-img-top" src="/image/Product/pic/@(item.Number).jpg" id="img_@item.Number" style="cursor: pointer">

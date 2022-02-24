@@ -30,23 +30,23 @@
 
                         <div class="collapse" id="collapse_@category.ID">
                             <div class="container-fluid">
-                                <div class="row">
+                                <div class="row" style="justify-content: space-evenly;align-items:end;">
                                     @foreach (var color in Model.ColorsView)
                                     {
                                         @if (color.color_category == category.color_category && color.flag == 1)
                                         {
                                             
-                                            <div class="col-lg-4 col-md-4 col-6" style="margin-bottom:18px">
-                                                <h6>@color.color</h6>
+                                            <div class="col-lg-4 col-md-4 col-6 align-items" style="margin-bottom:18px">
+                                                <h6 style="padding:0" class="col">@color.color</h6>
 
                                                 @if (System.IO.File.Exists("wwwroot\\image\\colors\\" + color.Id + ".jpg"))
                                                 {
                                                     var src = "\\image\\colors\\small\\" + color.Id + ".jpg";
-                                                    <img data-toggle="modal" data-target="#zoomColorImage" src="@src" class="img-fluid" style="cursor:pointer;width:100px;contain-intrinsic-width:100px;" width:100 height:100 onclick="zoomColorImageFunc('@color.color', @color.Id)" />
+                                                    <img data-toggle="modal" data-target="#zoomColorImage" src="@src" class="img-fluid" style="cursor:pointer;width:100px;height:100px;contain-intrinsic-width:100px;" width:100 height:100 onclick="zoomColorImageFunc('@color.color', @color.Id)" />
                                                 }
                                                 else
                                                 {
-                                                    <img src="~/image/no_image.png" class="img-fluid" />
+                                                    <img style="width:100px;height:100px" src="~/image/no_image.png" class="img-fluid" />
                                                 }
                                             </div>
                                         }
