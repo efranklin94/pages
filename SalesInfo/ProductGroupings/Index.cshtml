@@ -140,7 +140,7 @@
                                             else
                                             {
                                                 <div class="swiper-slide" style="max-height:460px">
-                                                    <img src="~/image/no_image.png" style="width:auto;max-height: 250px;cursor: pointer;" />
+                                                    <img class="lazyload" src="~/image/no_image.png" style="width:auto;max-height: 250px;cursor: pointer;" />
                                                 </div>
                                             }
                                         }
@@ -177,7 +177,7 @@
 
                                             <div class="swiper-slide" style="max-height:460px">
                                                 <span id="zoomSliderImgOnClick" data-toggle="modal" data-target="#zoomSliderImageModal" data-value="@imgsrc2" onclick="zoomSliderImageFunc()">
-                                                    <img src="@imgsrc2" style="width:auto;max-height: 250px;cursor: pointer;" />
+                                                    <img class="lazyload" data-src="@imgsrc2" src="@imgsrc2" style="width:auto;max-height: 250px;cursor: pointer;" />
                                                 </span>
                                             </div>
                                         }
@@ -271,11 +271,11 @@
                                 <div class="col-md-6 productGroupingImgModal" data-toggle="modal" data-target="#zoomImageModal" data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="zoomImage(@item.Number)" style="margin-bottom:10px">
                                 @{
                                     if (System.IO.File.Exists("wwwroot\\image\\Product\\pic\\" + item.Number + ".jpg")) {
-                                        <img class="card-img-top" src="/image/Product/pic/@(item.Number).jpg" id="img_@item.Number" style="cursor: pointer">
+                                        <img class="card-img-top lazyload" data-src="/image/Product/pic/@(item.Number).jpg" id="img_@item.Number" style="cursor: pointer">
                                     }   
                                     else
                                     {
-                                        <img src="~/image/no_image.png" style="width:inherit"/>
+                                        <img class="lazyload" src="~/image/no_image.png" style="width:inherit"/>
                                     }
                                 }
                                 </div>
@@ -440,6 +440,7 @@
             var image = document.getElementById('SliderModalImg');
             image.setAttribute('src', src)
         })
+
     })
     //< !--Initialize Swiper-- >
     var swiper = new Swiper(".mySwiper", {
