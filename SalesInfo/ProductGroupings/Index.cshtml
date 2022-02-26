@@ -8,7 +8,14 @@
 @{
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
-
+<style>
+    #colorsCardDiv {
+        justify-content: space-evenly;align-items:end;
+    }
+    #colorsCardDiv img {
+        box-shadow: 0 2px 10px rgba(0,0,0,.9);
+    }
+</style>
 <link href="~/css/swiper-bundle.min.css" rel="stylesheet" />
 <div class="container">
     <h2>محصول</h2>
@@ -397,7 +404,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="colorImageModalHeader"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span id="closeZoomColorCloseBtn" aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -500,15 +507,11 @@
                     img.style = "cursor:pointer;width:100px;height:100px;contain-intrinsic-width:100px;";
                     $(img).attr("data-toggle","modal");
                     $(img).attr("data-target","#zoomColorImage");
-                    $(img).attr("data-toggle","modal");
-                    $(img).attr("data-toggle","modal");
-                    $(img).attr("data-toggle","modal");
-                    $(img).attr("data-toggle","modal");
+                    $(img).attr("data-dismiss","modal")
+
                     var onclickStr = "zoomColorImageFunc('" + value.color_name + "'," + value.id + ")";
                     $(img).attr("onclick",onclickStr);
                     bootstrapDiv.appendChild(img);
-                    //debugger;
-                    
                 });
 
             }
@@ -520,7 +523,6 @@
         image.setAttribute('src', '/image/colors/' + Id + '.jpg');
         var header = document.getElementById('colorImageModalHeader');
         header.innerText = colorName;
-        debugger;
     }
 
 
