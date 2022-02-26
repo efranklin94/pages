@@ -391,6 +391,27 @@
     </div>
 </div>
 
+<div class="modal fade" id="zoomColorImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="colorImageModalHeader"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-lg-12">
+                    <img class="w-100 productImg" id="colorModalMainImg" src="#">
+                </div>
+
+            </div>
+            <div class="modal-footer col-12 col-sm-12 col-lg-12">
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/swiper-bundle-min.js"></script>
 <script>
@@ -475,15 +496,32 @@
 
                     var img = document.createElement("img");
                     img.src = "\\image\\colors\\small\\" + value.id + ".jpg";
+                    img.classList = "img-fluid";
+                    img.style = "cursor:pointer;width:100px;height:100px;contain-intrinsic-width:100px;";
+                    $(img).attr("data-toggle","modal");
+                    $(img).attr("data-target","#zoomColorImage");
+                    $(img).attr("data-toggle","modal");
+                    $(img).attr("data-toggle","modal");
+                    $(img).attr("data-toggle","modal");
+                    $(img).attr("data-toggle","modal");
+                    var onclickStr = "zoomColorImageFunc('" + value.color_name + "'," + value.id + ")";
+                    $(img).attr("onclick",onclickStr);
                     bootstrapDiv.appendChild(img);
-
+                    //debugger;
                     
                 });
 
             }
         });
-
-        
     }
+
+    function zoomColorImageFunc(colorName, Id) {
+        var image = document.getElementById('colorModalMainImg');
+        image.setAttribute('src', '/image/colors/' + Id + '.jpg');
+        var header = document.getElementById('colorImageModalHeader');
+        header.innerText = colorName;
+        debugger;
+    }
+
 
 </script>
