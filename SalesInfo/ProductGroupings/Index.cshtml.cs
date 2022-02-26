@@ -135,7 +135,7 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
 
         public async Task<IActionResult> OnGetColors(string colorCatName)
         {
-            var Colors = await _context.ColorsView.Where(c => c.color_category == colorCatName).Select(c => c.color).ToListAsync();
+            var Colors = await _context.ColorsView.Where(c => c.color_category == colorCatName).Where(c => c.flag == 1).Select(c => c.color).ToListAsync();
 
             var colorEntites = (from c in _context.Colors
                                 where Colors.Contains(c.color_name)
