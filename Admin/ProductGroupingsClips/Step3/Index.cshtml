@@ -1,0 +1,34 @@
+﻿@page
+@model kamjaService.Pages.Admin.ProductGroupingsClips.Step3.IndexModel
+@{
+}
+
+<div class="container-fluid">
+    <h5 class="buttons_h6">فنی</h5>
+    
+    @foreach(var item in Model.fanniSrcList)
+    {
+        <div class="row">
+            <div class="col-8">
+                <video style="width: 100%;" disablePictureInPicture controls name="media">
+                    @{var item2 = item.Replace("wwwroot", "");}
+                    <source src="@item2" type="video/mp4">
+                </video>        
+            </div>
+            <div class="col-4">
+                <textarea type="text" style="       
+                            padding-bottom: 27px;
+                            border-radius: 1px;
+                            height: auto;
+                            white-space: pre-wrap;
+                                
+                            direction: rtl; 
+                            text-align: right;" 
+                id="title_" contenteditable="true" 
+                onfocusout="postDescription()" ></textarea>
+            </div>
+        </div>
+    }
+</div>
+
+                

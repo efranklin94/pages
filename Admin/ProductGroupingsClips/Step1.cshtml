@@ -1,0 +1,28 @@
+﻿@page
+@model kamjaService.Pages.Admin.ProductGroupingsClips.Step1Model
+@{
+}
+<table class="table table-hover table-striped  ">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Parent)
+        {
+            <tr onclick="location.href = '@(Url.Page("/Admin/ProductGroupingsClips/Step2/Index", new { id = @item.ParentId }))'">
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>
