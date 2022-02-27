@@ -29,7 +29,7 @@ namespace kamjaService.Pages.ProductGroupings
         public IEnumerable<string> videoSrc { get; set; }
         public IList<ProductGroupingClips> productGroupingClips { get; set; }
         public IEnumerable<string> videoSrcList { get; set; }
-
+        public string productGroupName { get; set; }
 
         public async Task OnGetAsync(long? id, string currentFilter, string searchString)
         {
@@ -107,6 +107,8 @@ namespace kamjaService.Pages.ProductGroupings
             //        videoSrcList = Directory.EnumerateFiles("wwwroot\\image", "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
             //    }
             //}
+
+            productGroupName = _context.ProductGroup.Where(pg => pg.ProductGroupId == gID).Select(pg => pg.Expr1).FirstOrDefault();
         }
     }
 }

@@ -37,6 +37,8 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
         public IList<ProductGroupingClips> productGroupingClips { get; set; }
         public bool isExistingProductGroup { get; set; }
         public List<int> ColorsViews { get; set; }
+        public string productGroupName { get; set; }
+
         public async Task OnGetAsync(long? id, string currentFilter, string searchString)
         {
             if (id != null)
@@ -131,6 +133,10 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
             {
                 videoSrcList = Directory.EnumerateFiles("wwwroot\\image", ".", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
             }
+
+
+            productGroupName = _context.ProductGroup.Where(pg => pg.ProductGroupId == gID).Select(pg => pg.Expr1).FirstOrDefault();
+
         }
 
         public async Task<IActionResult> OnGetColors(string colorCatName)
