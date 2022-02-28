@@ -4,31 +4,34 @@
 }
 
 <div class="container-fluid">
-    <h5 class="buttons_h6">فنی</h5>
-    
-    @foreach(var item in Model.fanniSrcList)
-    {
-        <div class="row">
-            <div class="col-8">
-                <video style="width: 100%;" disablePictureInPicture controls name="media">
-                    @{var item2 = item.Replace("wwwroot", "");}
+    <div class="card-title">
+        <button class="btn btn-warning" data-toggle="collapse" data-target="#fanniCollapse" aria-expanded="false" aria-controls="fanniCollapse">
+            <h5 class="buttons_h6">فنی<i class="arrow down"></i></h5>
+            
+        </button>
+    </div>
+    <div class="collapse" id="fanniCollapse">
+        @foreach (var item in Model.fanniSrcList)
+        {
+            <div class="row card card-body">
+                <video style="width: 40%;align-self:center" disablePictureInPicture controls name="media">
+                    @{
+                        var item2 = item.Replace("wwwroot", "");
+                    }
                     <source src="@item2" type="video/mp4">
-                </video>        
+                </video>
+                <textarea type="text" style="
+                        padding-bottom: 27px;
+                        border-radius: 1px;
+                        height: auto;
+                        white-space: pre-wrap;
+                        margin: 20px;
+                        direction: rtl;
+                        text-align: right;"
+                        id="title_" contenteditable="true"
+                        onfocusout="postDescription()"></textarea>
             </div>
-            <div class="col-4">
-                <textarea type="text" style="       
-                            padding-bottom: 27px;
-                            border-radius: 1px;
-                            height: auto;
-                            white-space: pre-wrap;
-                                
-                            direction: rtl; 
-                            text-align: right;" 
-                id="title_" contenteditable="true" 
-                onfocusout="postDescription()" ></textarea>
-            </div>
-        </div>
-    }
-</div>
+        }
+    </div>
 
-                
+</div>
