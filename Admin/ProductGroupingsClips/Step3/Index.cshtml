@@ -4,34 +4,85 @@
 }
 
 <div class="container-fluid">
-    <div class="card-title">
-        <button class="btn btn-warning" data-toggle="collapse" data-target="#fanniCollapse" aria-expanded="false" aria-controls="fanniCollapse">
-            <h5 class="buttons_h6">فنی<i class="arrow down"></i></h5>
-            
-        </button>
-    </div>
-    <div class="collapse" id="fanniCollapse">
-        @foreach (var item in Model.fanniSrcList)
-        {
-            <div class="row card card-body">
-                <video style="width: 40%;align-self:center" disablePictureInPicture controls name="media">
-                    @{
-                        var item2 = item.Replace("wwwroot", "");
-                    }
-                    <source src="@item2" type="video/mp4">
-                </video>
-                <textarea type="text" style="
+    @if (Model.fanniSrcList != null)
+    {
+        <div class="card-title">
+            <button class="btn btn-warning" data-toggle="collapse" data-target="#fanniCollapse" aria-expanded="false" aria-controls="fanniCollapse">
+                <h5 class="buttons_h6">فنی<i class="arrow down"></i></h5>
+
+            </button>
+        </div>
+        <div class="collapse" id="fanniCollapse">
+            <div class="row">
+
+                @foreach (var item in Model.fanniSrcList)
+                {
+                    <div class="col-md-6 card card-body">
+                        <video style="width: 90%;align-self:center" disablePictureInPicture controls name="media">
+                            @{
+                                var item2 = item.Replace("wwwroot", "");
+                            }
+                            <source src="@item2" type="video/mp4">
+                        </video>
+                        <label class="control-label" for="title_@item2" style="margin-top:10px"><h6>عنوان : </h6></label>
+                        <textarea type="text" style="
                         padding-bottom: 27px;
                         border-radius: 1px;
                         height: auto;
                         white-space: pre-wrap;
-                        margin: 20px;
                         direction: rtl;
                         text-align: right;"
-                        id="title_" contenteditable="true"
+                        id="title_@item2" name="title_@item2" contenteditable="true"
                         onfocusout="postDescription()"></textarea>
-            </div>
-        }
-    </div>
+                    </div>
+                }
 
+        </div>
+        </div>
+    }
+    else
+    {
+        <h5>کلیپ فنی وجود ندارد</h5>
+    }
+
+    @if (Model.salesInfoSrcList != null)
+    {
+        <div class="card-title">
+            <button class="btn btn-warning" data-toggle="collapse" data-target="#salesInfoCollapse" aria-expanded="false" aria-controls="salesInfo">
+                <h5 class="buttons_h6">اطلاعات فنی<i class="arrow down"></i></h5>
+
+            </button>
+        </div>
+        <div class="collapse" id="salesInfoCollapse">
+            <div class="row">
+
+                @foreach (var item in Model.salesInfoSrcList)
+                {
+                    <div class="col-md-6 card card-body">
+                        <video style="width: 90%;align-self:center" disablePictureInPicture controls name="media">
+                            @{
+                                var item2 = item.Replace("wwwroot", "");
+                            }
+                            <source src="@item2" type="video/mp4">
+                        </video>
+                        <label class="control-label" for="title_@item2" style="margin-top:10px"><h6>عنوان : </h6></label>
+                        <textarea type="text" style="
+                        padding-bottom: 27px;
+                        border-radius: 1px;
+                        height: auto;
+                        white-space: pre-wrap;
+                        direction: rtl;
+                        text-align: right;"
+                        id="title_@item2" name="title_@item2" contenteditable="true"
+                        onfocusout="postDescription()"></textarea>
+                    </div>
+                }
+
+        </div>
+    </div>
+    }
+    else
+    {
+        <h5>کلیپ اطلاعات وجود ندارد</h5>
+    }
 </div>
