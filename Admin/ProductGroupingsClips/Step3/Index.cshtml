@@ -22,7 +22,7 @@
                             @{
                                 var item2 = item.Replace("wwwroot", "");
                                 var name = item2.Replace("\\video\\slider\\fanni\\"+@Model.gid+"\\", "").Replace(".mp4","");
-
+                                var title = Model.ProductGroupingClips.Where(c => c.FanniOrSalesInfo == "Fanni" && c.name == name).Select(c => c.title).FirstOrDefault();
                             }
                             <source src="@item2" type="video/mp4">
                         </video>
@@ -35,7 +35,7 @@
                         direction: rtl;
                         text-align: right;"
                         id="fanni_title_@name" name="fanni_title_@name" contenteditable="true"
-                        onfocusout="postFanniName(@name)"></textarea>
+                        onfocusout="postFanniName(@name)">@title</textarea>
                     </div>
                 }
 
@@ -65,6 +65,7 @@
                             @{
                                 var item2 = item.Replace("wwwroot", "");
                                 var name = item2.Replace("\\video\\slider\\SalesInfo\\"+@Model.gid+"\\", "").Replace(".mp4","");
+                                var title = Model.ProductGroupingClips.Where(c => c.FanniOrSalesInfo == "SalesInfo" && c.name == name).Select(c => c.title).FirstOrDefault();
                             }
                             <source src="@item2" type="video/mp4">
                         </video>
@@ -77,7 +78,7 @@
                         direction: rtl;
                         text-align: right;"
                         id="SalesInfo_title_@name" name="SalesInfo_title_@name" contenteditable="true"
-                        onfocusout="postSalesInfoName(@name)"></textarea>
+                        onfocusout="postSalesInfoName(@name)">@title</textarea>
                     </div>
                 }
 
