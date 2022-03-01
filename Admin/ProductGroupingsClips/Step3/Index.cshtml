@@ -21,6 +21,8 @@
                         <video style="width: 90%;align-self:center" disablePictureInPicture controls name="media">
                             @{
                                 var item2 = item.Replace("wwwroot", "");
+                                var name = item2.Replace("\\video\\slider\\fanni\\"+@Model.gid+"\\", "").Replace(".mp4","");
+
                             }
                             <source src="@item2" type="video/mp4">
                         </video>
@@ -32,8 +34,8 @@
                         white-space: pre-wrap;
                         direction: rtl;
                         text-align: right;"
-                        id="title_@item2" name="title_@item2" contenteditable="true"
-                        onfocusout="postDescription()"></textarea>
+                        id="fanni_title_@name" name="fanni_title_@name" contenteditable="true"
+                        onfocusout="postFanniName(@name)"></textarea>
                     </div>
                 }
 
@@ -62,6 +64,7 @@
                         <video style="width: 90%;align-self:center" disablePictureInPicture controls name="media">
                             @{
                                 var item2 = item.Replace("wwwroot", "");
+                                var name = item2.Replace("\\video\\slider\\SalesInfo\\"+@Model.gid+"\\", "").Replace(".mp4","");
                             }
                             <source src="@item2" type="video/mp4">
                         </video>
@@ -73,8 +76,8 @@
                         white-space: pre-wrap;
                         direction: rtl;
                         text-align: right;"
-                        id="title_@item2" name="title_@item2" contenteditable="true"
-                        onfocusout="postDescription()"></textarea>
+                        id="SalesInfo_title_@name" name="SalesInfo_title_@name" contenteditable="true"
+                        onfocusout="postSalesInfoName(@name)"></textarea>
                     </div>
                 }
 
@@ -86,3 +89,44 @@
         <h5>کلیپ اطلاعات وجود ندارد</h5>
     }
 </div>
+
+<script>
+    function postFanniName(name) {
+        var title = document.querySelector("#fanni_title_" + name).value;
+        $.ajax({
+            type: 'get',
+            data: {
+                gid: @Model.gid,
+                name:name,
+                title:title,
+                FanniOrSalesInfo: "Fanni"
+            },
+
+            url: '@Url.Page("index", "name")',
+
+            success: function (result) {
+                console.log("adding product clip ajax... => " + result);
+
+            }
+        });
+    }
+    function postSalesInfoName(name) {
+        var title = document.querySelector("#SalesInfo_title_" + name).value;
+        $.ajax({
+            type: 'get',
+            data: {
+                gid: @Model.gid,
+                name:name,
+                title:title,
+                FanniOrSalesInfo: "SalesInfo"
+            },
+
+            url: '@Url.Page("index", "name")',
+
+            success: function (result) {
+                console.log("adding product clip ajax... => " + result);
+
+            }
+        });
+    }
+</script>
