@@ -84,6 +84,9 @@
         </a>
         <div class=" float-left" style="text-align:left;float:left;padding:10px">
             <a class="btn" href="/Identity/Account/Logout"><h6 class="buttons_h6">خروج</h6></a>
+            @if ((await AuthorizationService.AuthorizeAsync(User, "IsAdmin")).Succeeded) {
+                <a class="btn" href="/Admin"><h6 class="buttons_h6">ادمین</h6></a>
+            }
             @{
                 if (Context.Request.Path.ToString() == "/" ||
                    Context.Request.Path.ToString() == "/index")
