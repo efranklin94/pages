@@ -2,93 +2,109 @@
 @model kamjaService.Pages.Admin.ProductGroupingsClips.Step3.IndexModel
 @{
 }
-
+<table id="pgingAdminClipsHeader" class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col" class="col-md-6">کلیپ های مربوط به فنی</th>
+            <th scope="col" class="col-md-6">کلیپ های مربوط به اطلاعات فروش</th>
+        </tr>
+    </thead>
+</table>
 <div class="container-fluid">
-    @if (Model.fanniSrcList != null)
-    {
-        <div class="card-title">
-            <button class="btn btn-warning" data-toggle="collapse" data-target="#fanniCollapse" aria-expanded="false" aria-controls="fanniCollapse">
-                <h5 class="buttons_h6">فنی<i class="arrow down"></i></h5>
-
-            </button>
-        </div>
-        <div class="collapse" id="fanniCollapse">
-            <div class="row">
-
-                @foreach (var item in Model.fanniSrcList)
+    <div class="row">
+        <div class="col-md-6 card">
+            <div class="card-body">
+                @if (Model.fanniSrcList != null)
                 {
-                    <div class="col-md-6 card card-body">
-                        <video style="width: 90%;align-self:center" disablePictureInPicture controls name="media">
-                            @{
-                                var item2 = item.Replace("wwwroot", "");
-                                var name = item2.Replace("\\video\\slider\\fanni\\"+@Model.gid+"\\", "").Replace(".mp4","");
-                                var title = Model.ProductGroupingClips.Where(c => c.FanniOrSalesInfo == "Fanni" && c.name == name).Select(c => c.title).FirstOrDefault();
-                            }
-                            <source src="@item2" type="video/mp4">
-                        </video>
-                        <label class="control-label" for="title_@item2" style="margin-top:10px"><h6>عنوان : </h6></label>
-                        <textarea type="text" style="
+                    <div class="card-title">
+                        <button class="btn" data-toggle="collapse" data-target="#fanniCollapse" aria-expanded="false" aria-controls="fanniCollapse">
+                            <h5 class="buttons_h6"> مشاهده <span style="display:none;" id="pgingAdminFanniClipsHeader"> کلیپ های مربوط به فنی </span><i class="arrow down"></i></h5>
+
+                        </button>
+                    </div>
+                    <div class="collapse" id="fanniCollapse">
+                        <div class="row">
+
+                            @foreach (var item in Model.fanniSrcList)
+                            {
+                                <div class="card card-body">
+                                    <video style="width: 90%;align-self:center" disablePictureInPicture controls name="media">
+                                        @{
+                                            var item2 = item.Replace("wwwroot", "");
+                                            var name = item2.Replace("\\video\\slider\\fanni\\" + @Model.gid + "\\", "").Replace(".mp4", "");
+                                            var title = Model.ProductGroupingClips.Where(c => c.FanniOrSalesInfo == "Fanni" && c.name == name).Select(c => c.title).FirstOrDefault();
+                                        }
+                                        <source src="@item2" type="video/mp4">
+                                    </video>
+                                    <label class="control-label" for="title_@item2" style="margin-top:10px"><h6>عنوان : </h6></label>
+                                    <textarea type="text" style="
                         padding-bottom: 27px;
                         border-radius: 1px;
                         height: auto;
                         white-space: pre-wrap;
                         direction: rtl;
                         text-align: right;"
-                        id="fanni_title_@name" name="fanni_title_@name" contenteditable="true"
-                        onfocusout="postFanniName(@name)">@title</textarea>
+                                      id="fanni_title_@name" name="fanni_title_@name" contenteditable="true"
+                                      onfocusout="postFanniName(@name)">@title</textarea>
+                                </div>
+                            }
+
+                        </div>
                     </div>
                 }
-
-        </div>
-        </div>
-    }
-    else
-    {
-        <h5>کلیپ فنی وجود ندارد</h5>
-    }
-
-    @if (Model.salesInfoSrcList != null)
-    {
-        <div class="card-title">
-            <button class="btn btn-warning" data-toggle="collapse" data-target="#salesInfoCollapse" aria-expanded="false" aria-controls="salesInfo">
-                <h5 class="buttons_h6">اطلاعات فنی<i class="arrow down"></i></h5>
-
-            </button>
-        </div>
-        <div class="collapse" id="salesInfoCollapse">
-            <div class="row">
-
-                @foreach (var item in Model.salesInfoSrcList)
+                else
                 {
-                    <div class="col-md-6 card card-body">
-                        <video style="width: 90%;align-self:center" disablePictureInPicture controls name="media">
-                            @{
-                                var item2 = item.Replace("wwwroot", "");
-                                var name = item2.Replace("\\video\\slider\\SalesInfo\\"+@Model.gid+"\\", "").Replace(".mp4","");
-                                var title = Model.ProductGroupingClips.Where(c => c.FanniOrSalesInfo == "SalesInfo" && c.name == name).Select(c => c.title).FirstOrDefault();
-                            }
-                            <source src="@item2" type="video/mp4">
-                        </video>
-                        <label class="control-label" for="title_@item2" style="margin-top:10px"><h6>عنوان : </h6></label>
-                        <textarea type="text" style="
+                    <h5>کلیپ فنی وجود ندارد</h5>
+                }
+            </div>
+        </div>
+        <div class="col-md-6 card">
+            <div class="card-body">
+                @if (Model.salesInfoSrcList != null)
+                {
+                    <div class="card-title">
+                        <button class="btn" data-toggle="collapse" data-target="#salesInfoCollapse" aria-expanded="false" aria-controls="salesInfo">
+                            <h5 class="buttons_h6"> مشاهده <span style="display:none;" id="pgingAdminFanniClipsHeader"> کلیپ های مربوط به اطلاعات فروش </span><i class="arrow down"></i></h5>
+
+                        </button>
+                    </div>
+                    <div class="collapse" id="salesInfoCollapse">
+                        <div class="row">
+
+                            @foreach (var item in Model.salesInfoSrcList)
+                            {
+                                <div class="card card-body">
+                                    <video style="width: 90%;align-self:center" disablePictureInPicture controls name="media">
+                                        @{
+                                            var item2 = item.Replace("wwwroot", "");
+                                            var name = item2.Replace("\\video\\slider\\SalesInfo\\" + @Model.gid + "\\", "").Replace(".mp4", "");
+                                            var title = Model.ProductGroupingClips.Where(c => c.FanniOrSalesInfo == "SalesInfo" && c.name == name).Select(c => c.title).FirstOrDefault();
+                                        }
+                                        <source src="@item2" type="video/mp4">
+                                    </video>
+                                    <label class="control-label" for="title_@item2" style="margin-top:10px"><h6>عنوان : </h6></label>
+                                    <textarea type="text" style="
                         padding-bottom: 27px;
                         border-radius: 1px;
                         height: auto;
                         white-space: pre-wrap;
                         direction: rtl;
                         text-align: right;"
-                        id="SalesInfo_title_@name" name="SalesInfo_title_@name" contenteditable="true"
-                        onfocusout="postSalesInfoName(@name)">@title</textarea>
+                                      id="SalesInfo_title_@name" name="SalesInfo_title_@name" contenteditable="true"
+                                      onfocusout="postSalesInfoName(@name)">@title</textarea>
+                                </div>
+                            }
+
+                        </div>
                     </div>
                 }
-
+                else
+                {
+                    <h5>کلیپ اطلاعات وجود ندارد</h5>
+                }
+            </div>
         </div>
     </div>
-    }
-    else
-    {
-        <h5>کلیپ اطلاعات وجود ندارد</h5>
-    }
 </div>
 
 <script>

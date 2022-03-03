@@ -38,7 +38,7 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
         public bool isExistingProductGroup { get; set; }
         public List<int> ColorsViews { get; set; }
         public string productGroupName { get; set; }
-
+        public long groupRef { get; set; }
         public async Task OnGetAsync(long? id, string currentFilter, string searchString)
         {
             if (id != null)
@@ -137,6 +137,8 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
 
             productGroupName = _context.ProductGroup.Where(pg => pg.ProductGroupId == gID).Select(pg => pg.Expr1).FirstOrDefault();
 
+            productGroupingClips = await _context.ProductGroupingClips.Where(c => c.productGroupingId == gID).ToListAsync();
+            groupRef = (long)id;
         }
 
         public async Task<IActionResult> OnGetColors(string colorCatName)
