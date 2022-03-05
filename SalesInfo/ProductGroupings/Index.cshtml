@@ -142,23 +142,7 @@
                                                         padding-right: 5px;
                                                         margin-right: 0px;
                                                         border-color: #991a2633 !important;">
-                                        <div class="card-text">
-                                            <h6  style="font-weight:bold">پایه چوبی: </h6>
-                                            @if(@item.پایه != null) { 
-                                                String[] payes = item.پایه.Split(",");
-                                                <ul class="tags">
-                                                @foreach(var colorCat in payes) {
-                                                    <li>
-                                                        <a class="colors_card tag" data-toggle="modal" data-target="#pgingColorsModal" onclick="getColors('@colorCat')" style="cursor:pointer;">
-                                                            <span style="font-family: IRANSansWebFaNum">
-                                                                @Html.DisplayFor(modelItem => colorCat)
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                }
-                                                </ul>
-                                            }
-                                        </div>
+
                                         <div class="card-text">
                                             <h6  style="font-weight:bold">بدنه: </h6>
                                             @if(@item.بدنه != null) { 
@@ -182,6 +166,23 @@
                                                 String[] namas = item.نما.Split(",");
                                                 <ul class="tags">
                                                 @foreach(var colorCat in namas) {
+                                                    <li>
+                                                        <a class="colors_card tag" data-toggle="modal" data-target="#pgingColorsModal" onclick="getColors('@colorCat')" style="cursor:pointer;">
+                                                            <span style="font-family: IRANSansWebFaNum">
+                                                                @Html.DisplayFor(modelItem => colorCat)
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                }
+                                                </ul>
+                                            }
+                                        </div>
+                                        <div class="card-text">
+                                            <h6  style="font-weight:bold">پایه چوبی: </h6>
+                                            @if(@item.پایه != null) { 
+                                                String[] payes = item.پایه.Split(",");
+                                                <ul class="tags">
+                                                @foreach(var colorCat in payes) {
                                                     <li>
                                                         <a class="colors_card tag" data-toggle="modal" data-target="#pgingColorsModal" onclick="getColors('@colorCat')" style="cursor:pointer;">
                                                             <span style="font-family: IRANSansWebFaNum">
