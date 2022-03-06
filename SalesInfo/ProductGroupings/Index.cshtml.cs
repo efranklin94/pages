@@ -88,7 +88,7 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
             var pg_desc_query = from pd in _context.ProductGroupEXP
                                 where pd.ProductGroupIdref == id
                                 select pd.pgexp;
-            proColViews = await prs.ToListAsync();
+            proColViews = await prs.OrderBy(p => p.Number).ToListAsync();
 
 
             productGroupingexps = await _context.ProductGroupingexp.ToListAsync();
@@ -101,32 +101,6 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
             {
                 imageSrcList = Directory.EnumerateFiles("wwwroot\\image", "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
             }
-
-            //if (Directory.Exists("wwwroot\\video\\slider\\SalesInfo\\" + gID))
-            //{
-            //    videoSrcList = Directory.EnumerateFiles("wwwroot\\video\\slider\\SalesInfo\\" + gID, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp4"));
-            //}
-            //else
-            //{
-            //    videoSrcList = Directory.EnumerateFiles("wwwroot\\image", "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
-            //}
-
-            //productGroupingClips = await _context.ProductGroupingClips.Where(x => x.FanniOrSalesInfo == "SalesInfo").Where(x => x.productGroupingId == gID).ToListAsync();
-            //var videoSrcList = "\\video\\SalesInfo\\" + productGroupingClips.Select(x => x.name) + ".mp4";
-            //var clipNames = productGroupingClips.Select(x => x.name);
-
-            //for (int i=0; i< productGroupingClips.Select(x => x.name).Count(); i++)
-            //{
-            //    //@if (System.IO.File.Exists("wwwroot\\image\\colors\\" + color.color + ".jpg"))
-            //    if (System.IO.File.Exists("wwwroot\\video\\SalesInfo\\" + clipName + ".mp4"))
-            //    {
-            //        productGroupingClips. = Directory.EnumerateFiles("wwwroot\\video\\SalesInfo\\" + gID, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp4"));
-            //    }
-            //    else
-            //    {
-            //        videoSrcList = Directory.EnumerateFiles("wwwroot\\image", "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith("no_image.png"));
-            //    }
-            //}
 
             if (Directory.Exists("wwwroot\\video\\slider\\SalesInfo\\" + gID))
             {
