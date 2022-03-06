@@ -45,11 +45,15 @@
                                             if (clipsrc != "wwwroot\\image\\no_image.png")
                                             {
                                                 var clipsrc2 = clipsrc.Replace("wwwroot", "");
-                                                <div class="swiper-slide" style="max-height:460px">
+                                                var name = clipsrc2.Replace("\\video\\slider\\fanni\\"+@Model.groupRef+"\\", "").Replace(".mp4","");
+                                                //var name = clipsrc2.Replace("\\video\\slider\\fanni\\"+@Model.groupRef+"\\", "");
+                                                var title = @Model.productGroupingClips.Where(c => c.FanniOrSalesInfo == "Fanni" && c.name == name).Select(c => c.title).FirstOrDefault();
+                                                <div class="swiper-slide" style="max-height:460px;padding-bottom:50px;">
 
                                                     <video style="width: 100%;" disablePictureInPicture controls name="media">
                                                         <source src="@clipsrc2" type="video/mp4">
                                                     </video>
+                                                    <div class="caption" style="position:absolute;top:280px;">@title</div>
                                                 </div>
                                             }
                                             else

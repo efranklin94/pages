@@ -60,12 +60,12 @@
                                                 var clipsrc2 = clipsrc.Replace("wwwroot", "");
                                                 var name = clipsrc2.Replace("\\video\\slider\\SalesInfo\\"+@Model.groupRef+"\\", "").Replace(".mp4","");
                                                 var title = @Model.productGroupingClips.Where(c => c.FanniOrSalesInfo == "SalesInfo" && c.name == name).Select(c => c.title).FirstOrDefault();
-                                                <div class="swiper-slide" style="max-height:460px">
+                                                <div class="swiper-slide" style="max-height:460px;padding-bottom:50px">
 
                                                     <video style="width: 100%;" disablePictureInPicture controls name="media">
                                                         <source src="@clipsrc2" type="video/mp4">
                                                     </video>
-                                                    <div class="caption">your Text</div>
+                                                    <div class="caption" style="position:absolute;top:280px;"></div>
                                                 </div>
                                                 <!-- Each slide has parallax title -->
                                                 <div class="title" data-swiper-parallax="-100">Slide 1</div>
