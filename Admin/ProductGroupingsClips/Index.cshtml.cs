@@ -18,11 +18,14 @@ namespace kamjaService.Pages.Admin.ProductGroupingsClips
             _context = context;
         }
 
-        public IList<ProductGroupingClips> ProductGroupingClips { get;set; }
+        //public IList<ProductGroupingClips> ProductGroupingClips { get;set; }
+        public IList<Parent> Parent { get; set; }
 
         public async Task OnGetAsync()
         {
-            ProductGroupingClips = await _context.ProductGroupingClips.ToListAsync();
+            //ProductGroupingClips = await _context.ProductGroupingClips.ToListAsync();
+            Parent = await _context.Parent.ToListAsync();
+
         }
     }
 }

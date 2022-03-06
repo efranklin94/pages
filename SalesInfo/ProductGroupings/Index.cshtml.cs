@@ -41,7 +41,7 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
         public string productGroupingFileName { get; set; }
         public List<TBL_dimensionImgs> dimensionFileNames { get; set; }
         public List<TBL_ProductsPictures> productsPicturesFileNames { get; set; }
-
+        public long groupRef { get; set; }
         public async Task OnGetAsync(long? id, string currentFilter, string searchString)
         {
             if (id != null)
@@ -116,6 +116,9 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
 
             dimensionFileNames = _context.TBL_dimensionImgs.ToList();
             productsPicturesFileNames = _context.TBL_ProductsPictures.ToList();
+
+            productGroupingClips = await _context.ProductGroupingClips.Where(c => c.productGroupingId == gID).ToListAsync();
+            groupRef = (long)id;
 
         }
 
