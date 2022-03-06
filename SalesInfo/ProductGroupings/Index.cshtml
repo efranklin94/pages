@@ -200,7 +200,7 @@
                                     var code =  Model.productsPicturesFileNames.Where(d => d.Code == item.Number).Select(d => d.FileName).FirstOrDefault();
 
                                 }
-                                <div class="col-md-6 productGroupingImgModal" data-toggle="modal" data-target="#zoomImageModal" data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="zoomImage('code')" style="margin-bottom:10px">
+                                <div class="col-md-6 productGroupingImgModal" data-toggle="modal" data-target="#zoomImageModal" data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="zoomImage('@code')" style="margin-bottom:10px">
  
                                    @{
                                     if(System.IO.File.Exists("wwwroot\\image\\Product\\pic\\" + code)) {
