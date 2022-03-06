@@ -196,21 +196,28 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="col-md-6 productGroupingImgModal" data-toggle="modal" data-target="#zoomImageModal" data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="zoomImage(@item.Number)" style="margin-bottom:10px">
                                 @{
-                                    if (System.IO.File.Exists("wwwroot\\image\\Product\\pic\\" + item.Number + ".jpg")) {
-                                        <img class="card-img-top lazyload" data-src="/image/Product/pic/@(item.Number).jpg" id="img_@item.Number" style="cursor: pointer">
+                                    var code =  Model.productsPicturesFileNames.Where(d => d.Code == item.Number).Select(d => d.FileName).FirstOrDefault();
+
+                                }
+                                <div class="col-md-6 productGroupingImgModal" data-toggle="modal" data-target="#zoomImageModal" data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="zoomImage('code')" style="margin-bottom:10px">
+ 
+                                   @{
+                                    if(System.IO.File.Exists("wwwroot\\image\\Product\\pic\\" + code)) {
+                                        <img class="card-img-top lazyload" data-src="/image/Product/pic/@code" id="img_@item.Number" style="cursor: pointer">
                                     }   
                                     else
                                     {
                                         <img class="lazyload" src="~/image/no_image.png" style="width:inherit"/>
-                                    }
+                                    } 
                                 }
                                 </div>
 
+                                @{
+                                    var dim_code =  Model.dimensionFileNames.Where(d => d.Code == item.Number).Select(d => d.FileName).FirstOrDefault();
+                                }
                                 <div data-toggle="modal" data-target="#productGroupingModal"
-                                     data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="openDimensionModal(@item.Number)" class="productGroupingImgModal">
+                                     data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="openDimensionModal('@dim_code')" class="productGroupingImgModal">
                                     <h6 style="
                                             text-decoration: underline;
                                             color: cornflowerblue;
@@ -353,12 +360,12 @@
 
     function openDimensionModal(code) {
         var image = document.getElementById('productGroupingModalImg');
-        image.setAttribute('src', '/image/dimensions/' + code + '.jpg')
+        image.setAttribute('src', '/image/dimensions/' + code);
     }
 
     function zoomImage(code) {
         var image = document.getElementById('productGroupingModalMainImg');
-        image.setAttribute('src', '/image/Product/pic/' + code + '.jpg')
+        image.setAttribute('src', '/image/Product/pic/' + code)
     }
 
     $(document).ready(function () {
