@@ -19,14 +19,19 @@ namespace kamjaService.Pages.PartGroupings
         }
 
         public IList<PartGrouping> PartGrouping { get;set; }
-
+        public string fileName { get; set; }
         public async Task OnGetAsync(long? id,string name,string code)
         {
+           
+            fileName = _context.TBL_ProductsPictures.Where(d => d.Code == code).Select(d => d.FileName).FirstOrDefault();
+
             ViewData["prin"] = name;
             ViewData["pri"] = id;
             ViewData["pcode"] = code;
-             ViewData["code"] = "/image/Product/pic/" + code + ".jpg";
+            ViewData["code"] = "/image/Product/pic/" + fileName;
             PartGrouping = await _context.PartGrouping.ToListAsync();
+            
+
         }
     }
 }

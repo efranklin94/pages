@@ -30,7 +30,8 @@ namespace kamjaService.Pages.ProductGroupings
         public IList<ProductGroupingClips> productGroupingClips { get; set; }
         public IEnumerable<string> videoSrcList { get; set; }
         public string productGroupName { get; set; }
-
+        public List<TBL_dimensionImgs> dimensionFileNames { get; set; }
+        public List<TBL_ProductsPictures> productsPicturesFileNames { get; set; }
         public async Task OnGetAsync(long? id, string currentFilter, string searchString)
         {
             if (id != null)
@@ -109,6 +110,10 @@ namespace kamjaService.Pages.ProductGroupings
             //}
 
             productGroupName = _context.ProductGroup.Where(pg => pg.ProductGroupId == gID).Select(pg => pg.Expr1).FirstOrDefault();
+
+            dimensionFileNames = _context.TBL_dimensionImgs.ToList();
+            productsPicturesFileNames = _context.TBL_ProductsPictures.ToList();
+
         }
     }
 }
