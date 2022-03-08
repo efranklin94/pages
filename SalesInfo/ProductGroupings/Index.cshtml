@@ -1,4 +1,4 @@
-﻿@page "/Salesinfo/ProductGroupings"
+﻿    @page "/Salesinfo/ProductGroupings"
 @model kamjaService.Pages.SalesInfo.ProductGroupings.IndexModel
 @using System.IO;
 
@@ -210,8 +210,7 @@
                                 <div class="col-md-6 productGroupingImgModal" data-toggle="modal" data-target="#zoomImageModal" data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="zoomImage('@item.Number')" style="margin-bottom:10px">
 >>>>>>> pgingClips_admin *@
                                 @{
-                                    var code =  Model.productsPicturesFileNames.Where(d => d.Code == item.Number).Select(d => d.FileName).FirstOrDefault();
-
+                                    var code =  Model.productsPicturesFileNames.Where(d => d.Number == item.Number).Select(d => d.FileName).FirstOrDefault();
                                 }
                                 <div class="col-md-6 productGroupingImgModal" data-toggle="modal" data-target="#zoomImageModal" data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="zoomImage('@code')" style="margin-bottom:10px">
  

@@ -28,14 +28,14 @@ namespace kamjaService.Pages.Admin.ProductImages.Step3
         }
         [BindProperty]
         public TBL_ProductsPicturesService TBL_ProductsPicturesService { get; set; }
-        public IList<ProductGrouping> productGroupings { get; set; }
+        public IList<VW_RemainingProductsPictures> productGroupings { get; set; }
         [BindProperty, Display(Name = "File")]
         public IFormFile UploadedFile { get; set; }
         public string fileExtensionViewBag { get; set; }
 
-        public void OnGet(long? id)
+        public void OnGet(long id)
         {
-            productGroupings = _context.ProductGrouping.Where(p => p.GroupRef == id).OrderBy(p => p.Name).ToList();
+            productGroupings = _context.VW_RemainingProductsPictures.Where(p => p.GroupRef == id).OrderBy(p => p.Name).ToList();
         }
         public async Task<IActionResult> OnPostAsync()
         {
@@ -51,12 +51,12 @@ namespace kamjaService.Pages.Admin.ProductImages.Step3
 
                 var filename = UploadedFile.FileName;
                 var myUniqueFileName = Convert.ToString(Guid.NewGuid());
-                TBL_ProductsPicturesService.FileName = myUniqueFileName;
                 TBL_ProductsPicturesService.Code = code;
                 TBL_ProductsPicturesService.Name = name;
                 var fileExtension = Path.GetExtension(filename);
                 fileExtensionViewBag = fileExtension;
                 var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
+                TBL_ProductsPicturesService.FileName = fileNameWithItsExtension;
 
                 using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension)))
                     UploadedFile.CopyTo(output);

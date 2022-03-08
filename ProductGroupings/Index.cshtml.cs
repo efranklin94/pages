@@ -31,7 +31,7 @@ namespace kamjaService.Pages.ProductGroupings
         public IEnumerable<string> videoSrcList { get; set; }
         public string productGroupName { get; set; }
         public List<TBL_dimensionImgs> dimensionFileNames { get; set; }
-        public List<TBL_ProductsPictures> productsPicturesFileNames { get; set; }
+        public List<VW_AllProductsPictures> productsPicturesFileNames { get; set; }
         public long groupRef { get; set; }
         public async Task OnGetAsync(long? id, string currentFilter, string searchString)
         {
@@ -113,7 +113,7 @@ namespace kamjaService.Pages.ProductGroupings
             productGroupName = _context.ProductGroup.Where(pg => pg.ProductGroupId == gID).Select(pg => pg.Expr1).FirstOrDefault();
 
             dimensionFileNames = _context.TBL_dimensionImgs.ToList();
-            productsPicturesFileNames = _context.TBL_ProductsPictures.ToList();
+            productsPicturesFileNames = _context.VW_AllProductsPictures.ToList();
 
             productGroupingClips = _context.ProductGroupingClips.Where(c => c.productGroupingId == gID).Where(c => c.FanniOrSalesInfo == "Fanni").ToList();
             groupRef = (long)id;

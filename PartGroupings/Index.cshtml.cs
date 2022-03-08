@@ -23,7 +23,7 @@ namespace kamjaService.Pages.PartGroupings
         public async Task OnGetAsync(long? id,string name,string code)
         {
            
-            fileName = _context.TBL_ProductsPictures.Where(d => d.Code == code).Select(d => d.FileName).FirstOrDefault();
+            fileName = _context.VW_AllProductsPictures.Where(d => d.Number == code).Select(d => d.FileName).FirstOrDefault();
 
             ViewData["prin"] = name;
             ViewData["pri"] = id;

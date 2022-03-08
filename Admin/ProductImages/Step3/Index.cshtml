@@ -13,7 +13,7 @@
                 <select class="custom-select" asp-for="productGroupings">
                     @foreach (var p in Model.productGroupings)
                     {
-                        <option value="@p.Code"><h6>@p.Name</h6></option>
+                        <option value="@p.Number"><h6>@p.Name</h6></option>
                     }
                 </select>
             </div>
