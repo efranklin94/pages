@@ -1,0 +1,78 @@
+﻿@page
+@model kamjaService.Pages.Admin.ProductImages.Step3.IndexModel
+@{
+}
+<h2>اضافه کردن عکس محصول</h2>
+
+<div class="row">
+    <div class="col">
+        <form method="post" id="productImageForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <h5>محصول مورد نظر خود را انتخاب نمایید</h5>
+                <select class="custom-select" asp-for="productGroupings">
+                    @foreach (var p in Model.productGroupings)
+                    {
+                        <option value="@p.Code"><h6>@p.Name</h6></option>
+                    }
+                </select>
+            </div>
+            <div class="form-group row">
+                <label asp-for="UploadedFile" class="col-sm-3 col-form-label"><h6>فایل</h6></label>
+                <div class="col">
+                    <input asp-for="UploadedFile" class="form-control" id="file" style="height:auto">
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <div class="col-sm-7 offset-sm-3">
+                    <button class="btn btn-primary" id="submit"><h6 class="buttons_h6">ایجاد</h6></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">بازگشت به لیست</a>
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}
+
+<script>
+    var field = document.querySelector(".custom-select");
+    field.style.height =(field.scrollHeight) + "px";
+
+    $(function () {
+        $('#submit').on('click', function (evt) {
+            var code = document.querySelector('.custom-select').value
+            var select = document.querySelector('.custom-select')
+            var name = select[select.selectedIndex].innerHTML;
+            
+            evt.preventDefault();
+            var formData = new FormData(document.forms[0]);
+            formData.append('code', code);
+            formData.append('name', name);
+
+            $.ajax({
+                url: '',
+                data: formData,
+                contentType: false,
+                processData: false,
+                type: 'post',
+                success: function (result) {
+                    if (result == "failed")
+                        alert("اشکال در ارسال فایل");
+                    if (result == "success") {
+                        alert("با موفقیت انجام شد")
+                        window.location = "/Admin"
+                    }
+                }
+            });
+        });
+    });
+</script>
