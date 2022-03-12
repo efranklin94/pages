@@ -1,41 +1,54 @@
 ﻿@page
 @model kamjaService.Pages.Admin.ProductImages.Step3.IndexModel
 @{
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 <h2>اضافه کردن عکس محصول</h2>
 
-<div class="row">
-    <div class="col">
-        <form method="post" id="productImageForm">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <h5>محصول مورد نظر خود را انتخاب نمایید</h5>
-                <select class="custom-select" asp-for="productGroupings">
-                    @foreach (var p in Model.productGroupings)
-                    {
-                        <option value="@p.Number"><h6>@p.Name</h6></option>
-                    }
-                </select>
-            </div>
-            <div class="form-group row">
-                <label asp-for="UploadedFile" class="col-sm-3 col-form-label"><h6>فایل</h6></label>
-                <div class="col">
-                    <input asp-for="UploadedFile" class="form-control" id="file" style="height:auto">
-                </div>
-            </div>
-            <div class="form-group row">
+<form method="post" id="creationForm">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    نام محصول
+                </th>
+                <th>
+                    کد محصول
+                </th>
+                <th>
+                    عکس آپلود شده در سرویس در صورت موجود
+                </th>
+                <th>
+                    آپلود عکس محصول
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.productGroupings)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Number)
+                    </td>
+                    <td>
+                        <img src="/image/Product/pic/@item.FileName" width="85" height="85" />
+                    </td>
+                    <td>
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label"><button class="btn btn-danger" id="submit" onclick="uploadImg(event, '@item.Number', '@item.Name', '@item.GroupRef')"><h6 class="buttons_h6">آپلود</h6></button></label>
+                            <input asp-for="UploadedFile" class="form-control form-control-sm form-control-file" id="file" type="file" style="padding:1px !important">
 
-                <div class="col-sm-7 offset-sm-3">
-                    <button class="btn btn-primary" id="submit"><h6 class="buttons_h6">ایجاد</h6></button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
 
-<div>
-    <a asp-page="Index">بازگشت به لیست</a>
-</div>
 
 @section Scripts {
     @{
@@ -44,35 +57,30 @@
 }
 
 <script>
-    var field = document.querySelector(".custom-select");
-    field.style.height =(field.scrollHeight) + "px";
+    function uploadImg(e, code, name, groupRef)
+    {
+        console.log(e)
+        console.log(code)
+        console.log(name)
+        e.preventDefault();
+        var formData = new FormData(document.forms[0]);
+        formData.append('code', code);
+        formData.append('name', name);
 
-    $(function () {
-        $('#submit').on('click', function (evt) {
-            var code = document.querySelector('.custom-select').value
-            var select = document.querySelector('.custom-select')
-            var name = select[select.selectedIndex].innerHTML;
-            
-            evt.preventDefault();
-            var formData = new FormData(document.forms[0]);
-            formData.append('code', code);
-            formData.append('name', name);
-
-            $.ajax({
-                url: '',
-                data: formData,
-                contentType: false,
-                processData: false,
-                type: 'post',
-                success: function (result) {
-                    if (result == "failed")
-                        alert("اشکال در ارسال فایل");
-                    if (result == "success") {
-                        alert("با موفقیت انجام شد")
-                        window.location = "/Admin"
-                    }
+        $.ajax({
+            url: '',
+            data: formData,
+            contentType: false,
+            processData: false,
+            type: 'post',
+            success: function (result) {
+                if (result == "failed")
+                    alert("اشکال در ارسال فایل");
+                if (result == "success") {
+                    alert("با موفقیت انجام شد")
+                    window.location = "/Admin/ProductImages/Step3?id="+groupRef
                 }
-            });
+            }
         });
-    });
+    }
 </script>

@@ -46,24 +46,46 @@ namespace kamjaService.Pages.Admin.ProductImages.Step3
 
             if (UploadedFile != null)
             {
-                var code = Request.Form["code"];
-                var name = Request.Form["name"];
+                string code = Request.Form["code"];
+                string name = Request.Form["name"];
 
-                var filename = UploadedFile.FileName;
-                var myUniqueFileName = Convert.ToString(Guid.NewGuid());
-                TBL_ProductsPicturesService.Code = code;
-                TBL_ProductsPicturesService.Name = name;
-                var fileExtension = Path.GetExtension(filename);
-                fileExtensionViewBag = fileExtension;
-                var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
-                TBL_ProductsPicturesService.FileName = fileNameWithItsExtension;
+                TBL_ProductsPicturesService picturesService = _context.TBL_ProductsPicturesService.Where(p => p.Code == code).FirstOrDefault();
+               
+                if (picturesService == null)
+                {
+                    var filename = UploadedFile.FileName;
+                    var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+                    TBL_ProductsPicturesService.Code = code;
+                    TBL_ProductsPicturesService.Name = name;
+                    var fileExtension = Path.GetExtension(filename);
+                    fileExtensionViewBag = fileExtension;
+                    var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
+                    TBL_ProductsPicturesService.FileName = fileNameWithItsExtension;
 
-                using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension)))
-                    UploadedFile.CopyTo(output);
+                    using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension)))
+                        UploadedFile.CopyTo(output);
 
-                _context.TBL_ProductsPicturesService.Add(TBL_ProductsPicturesService);
-                await _context.SaveChangesAsync();
+                    _context.TBL_ProductsPicturesService.Add(TBL_ProductsPicturesService);
+                    await _context.SaveChangesAsync();
+                }
 
+                else
+                {
+                    var filename = UploadedFile.FileName;
+                    var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+                    TBL_ProductsPicturesService.Code = picturesService.Code;
+                    TBL_ProductsPicturesService.Name = picturesService.Name;
+                    var fileExtension = Path.GetExtension(filename);
+                    fileExtensionViewBag = fileExtension;
+                    var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
+                    TBL_ProductsPicturesService.FileName = fileNameWithItsExtension;
+
+                    using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension)))
+                        UploadedFile.CopyTo(output);
+
+                    _context.Attach(TBL_ProductsPicturesService).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
                 return new JsonResult("success");
             }
 
