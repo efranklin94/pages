@@ -197,10 +197,7 @@
 
         currentPage = window.location.pathname;
 
-        if (currentPage == '/') {
-          console.log('Is the homepage.')
-        } else {
-          console.log('Not on the homepage.')
+        if (currentPage != '/') {
           var header = document.querySelector('.fixed-top');
           header.style.background = "#fff";
         }
