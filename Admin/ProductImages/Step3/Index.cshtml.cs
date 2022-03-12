@@ -83,6 +83,7 @@ namespace kamjaService.Pages.Admin.ProductImages.Step3
                     using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension)))
                         UploadedFile.CopyTo(output);
 
+                    _context.Attach(picturesService).State = EntityState.Detached;
                     _context.Attach(TBL_ProductsPicturesService).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                 }
