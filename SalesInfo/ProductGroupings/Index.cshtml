@@ -10,6 +10,23 @@
 }
 <script src="~/js/lazyload.js"></script>
 <link href="~/css/swiper-bundle.min.css" rel="stylesheet" />
+<style>
+    .swiper-pagination-bullet {
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        font-size: 15px;
+        color: #000;
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .swiper-pagination-bullet-active {
+        color: #fff;
+        background: #dc3545;
+      }
+</style>
 <div class="container">
     <h2>@Model.productGroupName</h2>
     <h5 style="margin-top: 15px;">توضیحات : </h5>
@@ -103,7 +120,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <!-- Swiper -->
-                            <div class="swiper mySwiper">
+                            <div class="swiper mySwiper" style="padding-bottom:58px;">
                                 <div class="swiper-wrapper">
                                     @{
 
@@ -121,15 +138,17 @@
                                 </div>
                                 <div class="swiper-button-next"></div>
                                 <div class="swiper-button-prev"></div>
+ 
                                 <div class="swiper-pagination"></div>
 
                             </div>
-
                         </div>
                     </div>
 
 
                 </div>
+                                                           
+
             </div>
         </div>
 
@@ -401,6 +420,11 @@
         pagination: {
             el: ".swiper-pagination",
             clickable: true,
+            paginationClickable: true,
+
+            renderBullet: function (index, className) {
+            return '<span class="' + className + '">' + (index + 1) + "</span>";
+          }
         },
     });
 
