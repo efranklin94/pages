@@ -31,7 +31,7 @@
 <form asp-page="./Index" method="get">
     <div class="form-actions no-color">
         <p>
-            جستجو نام:
+            جستجو نام یا کد:
             <input type="hidden" name="id" value="@Model.gID" />
             @*<input type="hidden" name="yt" value="@Model.Yt" />
                 <input type="hidden" name="pn" value="@ViewData["prn"]" />*@
@@ -198,11 +198,15 @@
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
         },
-        pagination: {
+        pagination: {           
             el: ".swiper-pagination",
             clickable: true,
-        },
-
+            paginationClickable: true,
+        
+            renderBullet: function (index, className) {
+            return '<span class="' + className + '">' + (index + 1) + "</span>";
+          }
+        }
     });
 
     var swiper = new Swiper(".clipSwiper", {
@@ -213,16 +217,7 @@
         navigation: {
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
-        },
-        pagination: {
-            clickable: true,
-            paginationClickable: true,
-        
-            el: ".swiper-pagination",
-            renderBullet: function (index, className) {
-            return '<span class="' + className + '">' + (index + 1) + "</span>";
-          }
-        },
+        }
     });
 
 
