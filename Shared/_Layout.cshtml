@@ -75,7 +75,10 @@
             padding-bottom: 50px;
         }
         .fixed-top{
-            background:rgba(0, 0, 0, 0.4) none repeat scroll 0% 0% !important;
+            background:#1d1919  none repeat scroll 0% 0% !important;
+        }
+        .fixed-top a:hover {
+            color: #ffbe40 !important;
         }
     </style>
 
@@ -83,12 +86,12 @@
 <body>
     <header class="fixed-top">
         <a asp-page="/index">
-            <img src="/icons/logo2.png" class=" logoupM" alt="Responsive image" />
+            <img src="/icons/LOGO-MOBILE.png" class=" logoupM" alt="Responsive image" />
         </a>
         <div class=" float-left" style="text-align:left;float:left;padding:10px">
-            <a class="btn" style="background:#1d1919;color:white" href="/Identity/Account/Logout"><h6 class="buttons_h6">خروج</h6></a>
+            <a class="btn btn-danger" style="color:white" href="/Identity/Account/Logout"><h6 class="buttons_h6">خروج</h6></a>
             @if ((await AuthorizationService.AuthorizeAsync(User, "IsAdmin")).Succeeded) {
-                <a class="btn" style="background:#1d1919;color:white" href="/Admin"><h6 class="buttons_h6">ادمین</h6></a>
+                <a class="btn btn-danger" style="color:white" href="/Admin"><h6 class="buttons_h6">ادمین</h6></a>
             }
             @{
                 if (Context.Request.Path.ToString() == "/" ||
