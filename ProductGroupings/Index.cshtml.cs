@@ -59,14 +59,21 @@ namespace kamjaService.Pages.ProductGroupings
             if (!String.IsNullOrEmpty(searchString))
 
             {
-                String[] searchstrZ = searchString.Split(' ');
-                pr = pr.Search(s => s.Name).ContainingAll(searchstrZ).AsQueryable();
-                prs = pr.Where(s => s.Name.Contains(s.Name));
-
-                //pr = pr.Where(s => s.Name.Contains(searchString));
+                if (Regex.IsMatch(searchString, @"^\d+$"))
+                {
+                    String[] searchstrZ = searchString.Split(' ');
+                    pr = pr.Search(s => s.Number).ContainingAll(searchstrZ).AsQueryable();
+                    prs = pr.Where(s => s.Number.Contains(s.Number));
+                }
+                else
+                {
+                    String[] searchstrZ = searchString.Split(' ');
+                    pr = pr.Search(s => s.Name).ContainingAll(searchstrZ).AsQueryable();
+                    prs = pr.Where(s => s.Name.Contains(s.Name));
+                }
             }
 
-            ProductGrouping = await prs.ToListAsync();
+            ProductGrouping = await prs.OrderBy(p => p.Number).ToListAsync();
             //ProductGrouping = await _context.ProductGrouping.ToListAsync();
 
 

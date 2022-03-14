@@ -67,16 +67,31 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                if (Regex.IsMatch(searchString, @"^\d+$")) {
-                    String[] searchstrZ = searchString.Split(' ');
-                    pr = pr.Search(s => s.Number).ContainingAll(searchstrZ).AsQueryable();
-                    prs = pr.Where(s => s.Number.Contains(s.Number));
+
+                String[] searchstrZ = searchString.Split(' ');
+
+                //remove the spaces to prevent exception
+                List<string> searchstrZWithoutNull = new List<string>();
+                foreach (String s in searchstrZ)
+                {
+                    if(s == "")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        searchstrZWithoutNull.Add(s);
+                    }
                 }
-                else {
-                    String[] searchstrZ = searchString.Split(' ');
-                    pr = pr.Search(s => s.Name).ContainingAll(searchstrZ).AsQueryable();
-                    prs = pr.Where(s => s.Name.Contains(s.Name));
-                }
+                searchstrZ = searchstrZWithoutNull.ToArray();
+
+                var prName = pr.Search(s => s.Name).ContainingAll(searchstrZ).AsQueryable();
+                var prsName = prName.Where(s => s.Name.Contains(s.Name));
+
+                var prNumber = pr.Search(s => s.Number).ContainingAll(searchstrZ).AsQueryable();
+                var prsNumber = prNumber.Where(s => s.Number.Contains(s.Number));
+
+                prs = prsName.Concat(prsNumber);
             }
 
             var prgd = from pg in _context.ProductGroup
