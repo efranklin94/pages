@@ -3,7 +3,7 @@
 @using System.IO;
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = @Model.productGroupName;
 }
 @{
     Layout = "/Pages/Shared/_Layout.cshtml";
@@ -171,8 +171,9 @@
                                                         border-color: #991a2633 !important;">
 
                                         <div class="card-text">
-                                            <h6  style="font-weight:bold">بدنه: </h6>
+                                            
                                             @if(@item.بدنه != null) { 
+                                                <h6  style="font-weight:bold">بدنه: </h6>
                                                 String[] badanes = item.بدنه.Split(",");
                                                 <ul class="tags">
                                                 @foreach(var colorCat in badanes) {
@@ -188,8 +189,8 @@
                                             }
                                         </div>
                                         <div class="card-text">
-                                            <h6  style="font-weight:bold">نما: </h6>
                                             @if(@item.نما != null) { 
+                                                <h6  style="font-weight:bold">نما: </h6>
                                                 String[] namas = item.نما.Split(",");
                                                 <ul class="tags">
                                                 @foreach(var colorCat in namas) {
@@ -205,8 +206,8 @@
                                             }
                                         </div>
                                         <div class="card-text">
-                                            <h6  style="font-weight:bold">پایه چوبی: </h6>
                                             @if(@item.پایه != null) { 
+                                                <h6  style="font-weight:bold">پایه چوبی: </h6>
                                                 String[] payes = item.پایه.Split(",");
                                                 <ul class="tags">
                                                 @foreach(var colorCat in payes) {
@@ -245,7 +246,7 @@
                                 </div>
 
                                 @{
-                                    var dim_code =  Model.dimensionFileNames.Where(d => d.Code == item.Number).Select(d => d.FileName).FirstOrDefault();
+                                    var dim_code =  Model.dimensionFileNames.Where(d => d.Number == item.Number).Select(d => d.FileName).FirstOrDefault();
                                 }
                                 <div data-toggle="modal" data-target="#productGroupingModal"
                                      data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="openDimensionModal('@dim_code')" class="productGroupingImgModal">
@@ -261,6 +262,7 @@
                                     </h6>
                                 </div>
 
+                                @*<div>قیمت : @item.Fee</div>*@
                             </div>
                         </div>
 
@@ -280,26 +282,26 @@
     </div>
 </div>
 
-<div style="display:none;" class="modal fade" id="productGroupingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">ابعاد</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="col-12 col-sm-12 col-lg-12">
-                    <img class="w-100 yimg" id="productGroupingModalImg" src="#">
+    <div style="display:none;" class="modal fade" id="productGroupingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">ابعاد</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+                <div class="modal-body">
+                    <div class="col-12 col-sm-12 col-lg-12">
+                        <img class="w-100 yimg" id="productGroupingModalImg" src="#">
+                    </div>
 
-            </div>
-            <div class="modal-footer col-12 col-sm-12 col-lg-12">
+                </div>
+                <div class="modal-footer col-12 col-sm-12 col-lg-12">
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 <div class="modal fade" id="zoomImageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">
@@ -392,6 +394,8 @@
     function openDimensionModal(code) {
         var image = document.getElementById('productGroupingModalImg');
         image.setAttribute('src', '/image/dimensions/' + code);
+        console.log(code)
+        console.log(image)
     }
 
     function zoomImage(code) {

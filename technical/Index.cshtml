@@ -9,7 +9,17 @@
 }
 
 <h3>گروه محصولات</h3>
-
+            <form asp-page="./technical" method="get">
+                <div class="form-actions no-color" style="margin-top:27px">
+                    <p>
+                        <h6>
+                            جستجو نام یا کد:
+                            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+                            <button type="submit" class="btn btn-danger"><h6 class="buttons_h6">جستجو</h6></button>
+                        </h6>
+                    </p>
+                </div>
+            </form>
 <div class="table-responsive">
     <table class="table table-hover table-striped  ">
         <thead>

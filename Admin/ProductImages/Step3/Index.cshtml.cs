@@ -29,13 +29,20 @@ namespace kamjaService.Pages.Admin.ProductImages.Step3
         [BindProperty]
         public TBL_ProductsPicturesService TBL_ProductsPicturesService { get; set; }
         public IList<VW_RemainingProductsPictures> productGroupings { get; set; }
+        [BindProperty]
+        public TBL_dimensionImgsService TBL_dimensionImgsService { get; set; }
+        public IList<VW_RemainingProductDimensions> productGroupingsDims { get; set; }
+
         [BindProperty, Display(Name = "File")]
         public IFormFile UploadedFile { get; set; }
+        [BindProperty, Display(Name = "DimFile")]
+        public IFormFile UploadedDim { get; set; }
         public string fileExtensionViewBag { get; set; }
-
+        public string dimensionFileName { get; set; }
         public void OnGet(long id)
         {
-            productGroupings = _context.VW_RemainingProductsPictures.Where(p => p.GroupRef == id).OrderBy(p => p.Name).ToList();
+            productGroupings = _context.VW_RemainingProductsPictures.Where(p => p.GroupRef == id).OrderBy(p => p.Number).ToList();
+            productGroupingsDims = _context.VW_RemainingProductDimensions.Where(p => p.GroupRef == id).OrderBy(p => p.Number).ToList();
         }
         public async Task<IActionResult> OnPostAsync()
         {
@@ -44,59 +51,119 @@ namespace kamjaService.Pages.Admin.ProductImages.Step3
                 return Page();
             }
 
-            if (UploadedFile != null)
+            string PicOrDim = Request.Form["PicOrDim"];
+            if (PicOrDim == "Pic")
             {
-                string code = Request.Form["code"];
-                string name = Request.Form["name"];
 
-                TBL_ProductsPicturesService picturesService = _context.TBL_ProductsPicturesService.Where(p => p.Code == code).FirstOrDefault();
-               
-                if (picturesService == null)
+                if (UploadedFile != null)
                 {
-                    var filename = UploadedFile.FileName;
-                    var myUniqueFileName = Convert.ToString(Guid.NewGuid());
-                    TBL_ProductsPicturesService.Code = code;
-                    TBL_ProductsPicturesService.Name = name;
-                    var fileExtension = Path.GetExtension(filename);
-                    fileExtensionViewBag = fileExtension;
-                    var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
-                    TBL_ProductsPicturesService.FileName = fileNameWithItsExtension;
+                    string code = Request.Form["code"];
+                    string name = Request.Form["name"];
 
-                    using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension)))
-                        UploadedFile.CopyTo(output);
+                    TBL_ProductsPicturesService picturesService = _context.TBL_ProductsPicturesService.Where(p => p.Code == code).FirstOrDefault();
 
-                    _context.TBL_ProductsPicturesService.Add(TBL_ProductsPicturesService);
-                    await _context.SaveChangesAsync();
+                    if (picturesService == null)
+                    {
+                        var filename = UploadedFile.FileName;
+                        var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+                        TBL_ProductsPicturesService.Code = code;
+                        TBL_ProductsPicturesService.Name = name;
+                        var fileExtension = Path.GetExtension(filename);
+                        fileExtensionViewBag = fileExtension;
+                        var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
+                        TBL_ProductsPicturesService.FileName = fileNameWithItsExtension;
+
+                        using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension,"Pic")))
+                            UploadedFile.CopyTo(output);
+
+                        _context.TBL_ProductsPicturesService.Add(TBL_ProductsPicturesService);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    else
+                    {
+                        var filename = UploadedFile.FileName;
+                        var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+                        TBL_ProductsPicturesService.Code = picturesService.Code;
+                        TBL_ProductsPicturesService.Name = picturesService.Name;
+                        var fileExtension = Path.GetExtension(filename);
+                        fileExtensionViewBag = fileExtension;
+                        var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
+                        TBL_ProductsPicturesService.FileName = fileNameWithItsExtension;
+
+                        using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension,"Pic")))
+                            UploadedFile.CopyTo(output);
+
+                        _context.Attach(picturesService).State = EntityState.Detached;
+                        _context.Attach(TBL_ProductsPicturesService).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+                    }
+                    return new JsonResult("success");
                 }
-
-                else
-                {
-                    var filename = UploadedFile.FileName;
-                    var myUniqueFileName = Convert.ToString(Guid.NewGuid());
-                    TBL_ProductsPicturesService.Code = picturesService.Code;
-                    TBL_ProductsPicturesService.Name = picturesService.Name;
-                    var fileExtension = Path.GetExtension(filename);
-                    fileExtensionViewBag = fileExtension;
-                    var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
-                    TBL_ProductsPicturesService.FileName = fileNameWithItsExtension;
-
-                    using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension)))
-                        UploadedFile.CopyTo(output);
-
-                    _context.Attach(picturesService).State = EntityState.Detached;
-                    _context.Attach(TBL_ProductsPicturesService).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                }
-                return new JsonResult("success");
             }
 
+            if (PicOrDim == "Dim")
+            {
+                if (UploadedDim != null)
+                {
+                    string code = Request.Form["code"];
+                    string name = Request.Form["name"];
+
+                    TBL_dimensionImgsService DimService = _context.TBL_dimensionImgsService.Where(p => p.Code == code).FirstOrDefault();
+
+                    if (DimService == null)
+                    {
+                        var filename = UploadedDim.FileName;
+                        var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+                        TBL_dimensionImgsService.Code = code;
+                        TBL_dimensionImgsService.Name = name;
+                        var fileExtension = Path.GetExtension(filename);
+                        fileExtensionViewBag = fileExtension;
+                        var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
+                        TBL_dimensionImgsService.FileName = fileNameWithItsExtension;
+
+                        using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension,"Dim")))
+                            UploadedDim.CopyTo(output);
+
+                        _context.TBL_dimensionImgsService.Add(TBL_dimensionImgsService);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    else
+                    {
+                        var filename = UploadedDim.FileName;
+                        var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+                        TBL_dimensionImgsService.Code = DimService.Code;
+                        TBL_dimensionImgsService.Name = DimService.Name;
+                        var fileExtension = Path.GetExtension(filename);
+                        fileExtensionViewBag = fileExtension;
+                        var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
+                        TBL_dimensionImgsService.FileName = fileNameWithItsExtension;
+
+                        using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension,"Dim")))
+                            UploadedDim.CopyTo(output);
+
+                        _context.Attach(DimService).State = EntityState.Detached;
+                        _context.Attach(TBL_dimensionImgsService).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+                    }
+                    return new JsonResult("success");
+                }
+            }
             return new JsonResult("failed");
         }
 
-        private string GetPathAndFilename(string filename)
-        {
-            string path = hostingEnv.WebRootPath + "\\image\\Product\\pic\\";
 
+
+        private string GetPathAndFilename(string filename, string PicOrDim)
+        {
+            string path = string.Empty;
+            if (PicOrDim == "Pic") { 
+                path = hostingEnv.WebRootPath + "\\image\\Product\\pic\\";
+            }
+            if (PicOrDim == "Dim") { 
+                path = hostingEnv.WebRootPath + "\\image\\dimensions\\";
+            }
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
@@ -105,3 +172,85 @@ namespace kamjaService.Pages.Admin.ProductImages.Step3
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//public async Task<IActionResult> OnPostDimAsync()
+//{
+//    if (!ModelState.IsValid)
+//    {
+//        return Page();
+//    }
+
+//    if (UploadedDim != null)
+//    {
+//        string code = Request.Form["code"];
+//        string name = Request.Form["name"];
+
+//        TBL_dimensionImgsService DimService = _context.TBL_dimensionImgsService.Where(p => p.Code == code).FirstOrDefault();
+
+//        if (DimService == null)
+//        {
+//            var filename = UploadedDim.FileName;
+//            var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+//            TBL_dimensionImgsService.Code = code;
+//            TBL_dimensionImgsService.Name = name;
+//            var fileExtension = Path.GetExtension(filename);
+//            fileExtensionViewBag = fileExtension;
+//            var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
+//            TBL_dimensionImgsService.FileName = fileNameWithItsExtension;
+
+//            using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension, "Dim")))
+//                UploadedDim.CopyTo(output);
+
+//            _context.TBL_dimensionImgsService.Add(TBL_dimensionImgsService);
+//            await _context.SaveChangesAsync();
+//        }
+
+//        else
+//        {
+//            var filename = UploadedDim.FileName;
+//            var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+//            TBL_dimensionImgsService.Code = DimService.Code;
+//            TBL_dimensionImgsService.Name = DimService.Name;
+//            var fileExtension = Path.GetExtension(filename);
+//            fileExtensionViewBag = fileExtension;
+//            var fileNameWithItsExtension = string.Concat(myUniqueFileName, fileExtension);
+//            TBL_dimensionImgsService.FileName = fileNameWithItsExtension;
+
+//            using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension, "Dim")))
+//                UploadedDim.CopyTo(output);
+
+//            _context.Attach(DimService).State = EntityState.Detached;
+//            _context.Attach(TBL_dimensionImgsService).State = EntityState.Modified;
+//            await _context.SaveChangesAsync();
+//        }
+//        return new JsonResult("success");
+//    }
+
+//    return new JsonResult("failed");
+//}

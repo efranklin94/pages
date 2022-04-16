@@ -3,6 +3,36 @@
 @{
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
+@{
+    ViewData["Title"] = "ادمین عکس محصولات";
+}
+<style>
+    label {
+    display: block;
+    font: 1rem 'Fira Sans', sans-serif;
+}
+
+input,
+label {
+    margin-top: 10px;
+}
+input {
+    width:80%;
+}
+.flex-container {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.flex-container > div {
+    
+ /* width: 100px;*/
+  margin: 10px;
+  text-align: right;	
+  /*line-height: 75px;*/
+  /*font-size: 30px;*/
+}
+</style>
 <h2>اضافه کردن عکس محصول</h2>
 
 <form method="post" id="creationForm">
@@ -16,10 +46,10 @@
                     کد محصول
                 </th>
                 <th>
-                    عکس آپلود شده در سرویس در صورت موجود
+                    عکس محصول
                 </th>
                 <th>
-                    آپلود عکس محصول
+                    ابعاد محصول
                 </th>
             </tr>
         </thead>
@@ -33,14 +63,46 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Number)
                     </td>
+                    
                     <td>
-                        <img src="/image/Product/pic/@item.FileName" width="85" height="85" />
+                        @{
+                            var dimensionFileName = Model.productGroupingsDims.Where(d => d.Number == item.Number).Select(d => d.FileName).FirstOrDefault();
+                            var productPictureFileName = item.FileName;
+                        }
+                        <div>
+                            @if (@productPictureFileName != null)
+                            {
+                                <img data-toggle="modal" data-target="#ZoomImageModal" data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="zoomImageFunc('@productPictureFileName', 'Pic', '@item.Name')" src="/image/Product/pic/@item.FileName" width="85" height="85" />
+                            }
+                            else
+                            {
+                                <img src="/image/no_image.png" width="85" height="85" />
+                            }
+                        </div>
+                        <div>
+                            <label class="btn btn-danger">
+                                <i class="fa fa-image"></i><h6 class="buttons_h6">عکس را انتخاب کنید</h6><input asp-for="UploadedFile" name="UploadedFile" id="UploadedFile" type="file" style="padding:3px !important; display:none;" class="form-control form-control-sm form-control-file" onchange="uploadImg('Pic',event, '@item.Number', '@item.Name', '@item.GroupRef')">
+                            </label>
+@*                            <button class="btn btn-danger" id="submit" onclick="uploadImg('Pic',event, '@item.Number', '@item.Name', '@item.GroupRef')"><h6  class="buttons_h6">آپلود تصویر</h6></button>*@
+                        </div>
                     </td>
+                    
                     <td>
-                        <div class="mb-3">
-                            <label for="formFile" class="form-label"><button class="btn btn-danger" id="submit" onclick="uploadImg(event, '@item.Number', '@item.Name', '@item.GroupRef')"><h6 class="buttons_h6">آپلود</h6></button></label>
-                            <input asp-for="UploadedFile" class="form-control form-control-sm form-control-file" id="file" type="file" style="padding:1px !important">
-
+                        <div>
+                            @if (@dimensionFileName != null)
+                            {
+                                <img data-toggle="modal" data-target="#ZoomImageModal" data-value="@Html.DisplayFor(modelItem => item.Number)" onclick="zoomImageFunc('@dimensionFileName', 'Dim', '@item.Name')"  src="/image/dimensions/@dimensionFileName" width="85" height="85" />
+                            }
+                            else
+                            {
+                                <img src="/image/no_image.png" width="85" height="85" />
+                            }
+                        </div>
+                        <div>
+                            <label class="btn btn-danger">
+                                <i class="fa fa-image"></i><h6 class="buttons_h6">عکس را انتخاب کنید</h6><input asp-for="UploadedDim" class="form-control form-control-sm form-control-file" id="DimFile" type="file" style="padding:3px !important; display:none;" onchange="uploadImg('Dim' ,event, '@item.Number', '@item.Name', '@item.GroupRef')"></label>
+                            @*<button class="btn btn-danger" id="submit" onclick="uploadImg('Dim' ,event, '@item.Number', '@item.Name', '@item.GroupRef')"><h6 class="buttons_h6">آپلود تصویر</h6></button>*@
+                            
                         </div>
                     </td>
                 </tr>
@@ -49,6 +111,26 @@
     </table>
 </form>
 
+<div style="display:none;" class="modal fade" id="ZoomImageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-sm-12 col-lg-12">
+                    <img class="w-100 yimg" id="ModalMainImg" src="#">
+                </div>
+
+            </div>
+            <div class="modal-footer col-12 col-sm-12 col-lg-12">
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @{
@@ -57,15 +139,13 @@
 }
 
 <script>
-    function uploadImg(e, code, name, groupRef)
+    function uploadImg(PicOrDim,e, code, name, groupRef)
     {
-        console.log(e)
-        console.log(code)
-        console.log(name)
         e.preventDefault();
         var formData = new FormData(document.forms[0]);
         formData.append('code', code);
         formData.append('name', name);
+        formData.append('PicOrDim', PicOrDim);
 
         $.ajax({
             url: '',
@@ -77,10 +157,26 @@
                 if (result == "failed")
                     alert("اشکال در ارسال فایل");
                 if (result == "success") {
-                    alert("با موفقیت انجام شد")
+                    //alert("با موفقیت انجام شد")
                     window.location = "/Admin/ProductImages/Step3?id="+groupRef
                 }
             }
         });
     }
+
+    function zoomImageFunc(FileName, DimOrPic, Name) {
+        var image = document.getElementById('ModalMainImg');
+        if(DimOrPic == "Dim")
+        {
+            image.setAttribute('src', '/image/dimensions/' + FileName);
+        }
+        if(DimOrPic == "Pic") 
+        {
+            image.setAttribute('src', '/image/Product/pic/' + FileName);
+        }
+        var ModalLabel = document.getElementById('exampleModalLabel');
+        ModalLabel.innerHTML = Name;
+    }
+
+    
 </script>

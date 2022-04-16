@@ -1,11 +1,50 @@
 ﻿@page "/Admin/ProductGroupings"
 @model kamjaService.Pages.Admin.ProductGroupings.IndexModel
 @{
-    ViewData["Title"] = "Editable";
+    ViewData["Title"] = "ادمین";
 }
 @{
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
+<style>table {
+            width: 100%;
+        }
+
+        thead, tbody, tr, td, th { display: block; }
+
+        tr:after {
+            content: ' ';
+            display: block;
+            visibility: hidden;
+            clear: both;
+        }
+
+        thead th {
+            height: 75px;
+
+            /*text-align: left;*/
+        }
+
+        tbody {
+            height: 450px;
+            overflow-y: auto;
+        }
+
+        thead {
+            /* fallback */
+        }
+
+
+        tbody td, thead th {
+            /*width: 16.6%;*/
+            float: right;
+        }
+        
+        table td {
+            border-bottom: none;
+        }
+        </style>
+
 <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
@@ -17,67 +56,74 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css"
       rel="stylesheet" />
 <!-- Compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-<div id="admin_page">
-    <h3>پنل ادمین</h3>
+@*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+*@<div id="admin_page">
+    <h4 style="margin-bottom: 30px;">پنل ادمین</h4>
+    <h4 style="margin-bottom: 30px;">@Model.productGroupName</h4>
+
     @*<h4 id="ProductGroupingName"></h4>*@
-    <h5>
-        توضیحات : <textarea type="text" id="productGroupingDescription" style="        padding-bottom: 32px;
-        border-radius: 2px;
-        margin: 20px;
+    <h5  style="margin-bottom: 30px;">
+        توضیحات : <textarea type="text" id="productGroupingDescription" style="
         height: auto;
         white-space: pre-wrap;
-        max-width: 840px;
+        width:85%;
         font-size: 14px;
 " contenteditable="true" onfocusout="updateDescriptionProductGrouping()">@Model.productGroupDescription</textarea>
     </h5>
+    <form asp-page="./Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                <h6>جستجو نام یا کد:
+                <input type="hidden" name="id" value="@Model.gID" />
+                @*<input type="hidden" name="yt" value="@Model.Yt" />
+                    <input type="hidden" name="pn" value="@ViewData["prn"]" />*@
+                <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+                <button type="submit" class="btn btn-danger"><h6 class="buttons_h6">جستجو</h6></button></h6>
 
-    <!-- Editable table -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="table-responsive">
-                <table class="table table-hover table-striped table-bordered table-responsive-md text-center">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-center">نام محصول</th>
-                            <th scope="col" class="text-center">کد محصول</th>
-                            <th scope="col" class="text-center">پایه چوبی</th>
-                            <th scope="col" class="text-center">بدنه</th>
-                            <th scope="col" class="text-center">نما</th>
-                            <th scope="col" class="text-center">توضیحات</th>
-                        </tr>
-                    </thead>
-
-                    <!-- This is our clonable table line -->
-                    @foreach (var item in Model.proColViews)
-                    {
-                        <tr>
-                            <td class="pt-3-half" style="direction: rtl; text-align: right;">@Html.DisplayFor(modelItem => item.Name)</td>
-                            <td class="pt-3-half" style="direction: rtl; text-align: right;">@Html.DisplayFor(modelItem => item.Number)</td>
-
-                            <td href="javascript:void(0)" class="clickable-row" data-toggle="modal" data-target="#paye_modal_@item.ProductGroupingId" onclick="getPayeColor(@item.ProductGroupingId)">
-                                <a href="javascript:void(0)" style="text-decoration:none;color:#0275d8;" class="button">کلیک کنید</a>
-                            </td>
-                            <td href="javascript:void(0)" class="clickable-row" data-toggle="modal" data-target="#badane_modal_@item.ProductGroupingId" onclick="getBadaneColor(@item.ProductGroupingId)">
-                                <a href="javascript:void(0)" style="text-decoration:none;color:#0275d8;" class="button">کلیک کنید</a>
-                            </td>
-                            <td href="javascript:void(0)" class="clickable-row" data-toggle="modal" data-target="#nama_modal_@item.ProductGroupingId" onclick="getNamaColor(@item.ProductGroupingId)">
-                                <a href="javascript:void(0)" style="text-decoration:none;color:#0275d8;" class="button">کلیک کنید</a>
-                            </td>
-                            <td>
-                                <textarea type="text" style="       
-                                padding-bottom: 27px;
-                                border-radius: 1px;
-                                height: auto;
-                                white-space: pre-wrap;
-                                min-width: 270px;" id="desc_@item.ProductGroupingId" contenteditable="true" onfocusout="postDescription(@item.ProductGroupingId)" style="direction: rtl; text-align: right;">@Model.productGroupingexps.Where(x => x.ProductGroupingIdref == item.ProductGroupingId).Select(x => x.Pexp).FirstOrDefault()</textarea>
-                            </td>
-                        </tr>
-                    }
-                </table>
-            </div>
+            </p>
         </div>
-    </div>
+    </form>
+    <!-- Editable table -->
+    
+    <table class="table table-responsive-md text-center">
+        <thead>
+            <tr>
+                <th class="text-center col-2">نام محصول</th>
+                <th class="text-center col-1">کد محصول</th>
+                <th class="text-center col-1">پایه چوبی</th>
+                <th class="text-center col-1">بدنه</th>
+                <th class="text-center col-1">نما</th>
+                <th class="text-center col-5">توضیحات</th>
+            </tr>
+        </thead>
+        <!-- This is our clonable table line -->
+        @foreach (var item in Model.proColViews)
+        {
+            <tr>
+                <td class="col-2" style="direction: rtl; text-align: right;">@Html.DisplayFor(modelItem => item.Name)</td>
+                <td class="col-1" style="direction: rtl; text-align: right;">@Html.DisplayFor(modelItem => item.Number)</td>
+
+                <td class="col-1" href="javascript:void(0)" class="clickable-row" data-toggle="modal" data-target="#paye_modal_@item.ProductGroupingId" onclick="getPayeColor(@item.ProductGroupingId)">
+                    <a href="javascript:void(0)" style="text-decoration:none;color:#0275d8;" class="button">کلیک کنید</a>
+                </td>
+                <td class="col-1" href="javascript:void(0)" class="clickable-row" data-toggle="modal" data-target="#badane_modal_@item.ProductGroupingId" onclick="getBadaneColor(@item.ProductGroupingId)">
+                    <a href="javascript:void(0)" style="text-decoration:none;color:#0275d8;" class="button">کلیک کنید</a>
+                </td>
+                <td class="col-1" href="javascript:void(0)" class="clickable-row" data-toggle="modal" data-target="#nama_modal_@item.ProductGroupingId" onclick="getNamaColor(@item.ProductGroupingId)">
+                    <a href="javascript:void(0)" style="text-decoration:none;color:#0275d8;" class="button">کلیک کنید</a>
+                </td>
+                <td class="col-5">
+                    <textarea type="text" style="       
+                    padding-bottom: 27px;
+                    border-radius: 1px;
+                    height: auto;
+                    white-space: pre-wrap;
+                    min-width: 270px;" id="desc_@item.ProductGroupingId" contenteditable="true" onfocusout="postDescription(@item.ProductGroupingId)" style="direction: rtl; text-align: right;">@Model.productGroupingexps.Where(x => x.ProductGroupingIdref == item.ProductGroupingId).Select(x => x.Pexp).FirstOrDefault()</textarea>
+                </td>
+            </tr>
+        }
+    </table>
+
     @foreach (var rows in Model.proColViews)
     {
         <div id="@rows.ProductGroupingId">
@@ -108,7 +154,7 @@
                                     <div class="checkbox">
                                         @Html.AntiForgeryToken()
                                         <input type="checkbox" id="@item.ID" name="colors" style="opacity: 1 !important;position: initial;pointer-events: auto;" onclick="setPayeColor(this, @item.ID, @rows.ProductGroupingId)">
-                                        <label for="colors" style="color:black;font-size:1rem;">@item.color_category</label><br>
+                                        <label for="colors" style="color:black;font-size:1rem;"><h6>@item.color_category</h6></label><br>
                                     </div>
                                 }
 
@@ -147,7 +193,7 @@
                                     <div class="checkbox">
                                         @Html.AntiForgeryToken()
                                         <input type="checkbox" id="@item.ID" name="colors" style="opacity: 1 !important;position: initial;pointer-events: auto;" onclick="setNamaColor(this, @item.ID, @rows.ProductGroupingId)">
-                                        <label for="colors" style="color:black;font-size:1rem;">@item.color_category</label><br>
+                                        <label for="colors" style="color:black;font-size:1rem;"><h6>@item.color_category</h6></label><br>
                                     </div>
 
                                 }
@@ -187,7 +233,7 @@
                                     <div class="checkbox">
                                         @Html.AntiForgeryToken()
                                         <input type="checkbox" id="@item.ID" name="colors" style="opacity: 1 !important;position: initial;pointer-events: auto;" onclick="setBadaneColor(this, @item.ID, @rows.ProductGroupingId)">
-                                        <label for="colors" style="color:black;font-size:1rem;">@item.color_category</label><br>
+                                        <label for="colors" style="color:black;font-size:1rem;"><h6>@item.color_category</h6></label><br>
                                     </div>
 
                                 }

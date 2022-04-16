@@ -34,13 +34,13 @@
     </table>
 </div>
 
-<button class="productGroupCollapseBtn btn btn-light">
-    <a class="nav-linkF text-dark" style="text-decoration:none" asp-area="" asp-page="/SalesInfo/SalesAnnouncement/Index">
-        <h5>اطلاعیه های فروش</h5>
-    </a>
-</button>
-<button class="productGroupCollapseBtn btn btn-light" style="text-decoration:none">
-    <a class="nav-linkF text-dark" style="text-decoration:none" asp-area="" asp-page="/SalesInfo/Colors/list">
-        <h5>رنگ ها</h5>
-    </a>
-</button>
+<a class="productGroupCollapseBtn btn btn-light" asp-page="/SalesInfo/SalesAnnouncement/Index">
+    <h5>اطلاعیه های فروش</h5>
+</a>
+<a class="productGroupCollapseBtn btn btn-light" asp-page="/SalesInfo/Colors/list" style="text-decoration:none">
+    <h5>رنگ ها</h5>
+</a>
+
+<a class="productGroupCollapseBtn btn btn-light" asp-page="/SalesInfo/SMS" style="text-decoration:none">
+    <h5>CRM</h5>
+</a>

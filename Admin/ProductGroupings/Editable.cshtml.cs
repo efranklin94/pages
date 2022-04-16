@@ -10,6 +10,7 @@ using DT = System.Data;
 using QC = Microsoft.Data.SqlClient;
 using System.Data.SqlClient;
 using System.Data;
+using NinjaNye.SearchExtensions;
 
 namespace kamjaService.Pages.Admin.ProductGroupings
 {
@@ -33,13 +34,60 @@ namespace kamjaService.Pages.Admin.ProductGroupings
         [BindProperty]
         public IList<ProductGroupingexp> productGroupingexps { get; set; }
         public String ProductGroupName { get; set; }
+        public string productGroupName  { get; set; }
+        public string CurrentFilter { get; set; }
+        public long? gID { get; set; }
 
-        public async Task OnGetAsync(long? id)
+        public async Task OnGetAsync(long? id, string currentFilter, string searchString)
         {
+            if (id != null)
+            {
+                gID = id;
+            }
+            if (searchString != null)
+            {
+                //pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            CurrentFilter = searchString;
             var ProductG = from m in _context.ProColView
                            select m;
             var pr = ProductG.Where(x => x.GroupRef == id).Distinct();
             IQueryable<ProColView> prs = pr;
+            if (!String.IsNullOrEmpty(searchString))
+
+            {
+                String[] searchstrZ = searchString.Split(' ');
+
+                //remove the spaces to prevent exception
+                List<string> searchstrZWithoutNull = new List<string>();
+                foreach (String s in searchstrZ)
+                {
+                    if (s == "")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        searchstrZWithoutNull.Add(s);
+                    }
+                }
+                searchstrZ = searchstrZWithoutNull.ToArray();
+
+                var prName = pr.Search(s => s.Name).ContainingAll(searchstrZ).AsQueryable();
+                var prsName = prName.Where(s => s.Name.Contains(s.Name));
+
+                var prNumber = pr.Search(s => s.Number).ContainingAll(searchstrZ).AsQueryable();
+                var prsNumber = prNumber.Where(s => s.Number.Contains(s.Number));
+
+                prs = prsName.Concat(prsNumber);
+            }
+
+
             var prgd = from pg in _context.ProductGroup
                        where pg.ProductGroupId == id
                        select pg;
@@ -59,6 +107,7 @@ namespace kamjaService.Pages.Admin.ProductGroupings
             productGroupDescription = await pg_desc_query.FirstOrDefaultAsync();
             productGroupingexps = await pgingdesc_query.ToListAsync();
 
+            productGroupName = _context.ProductGroup.Where(pg => pg.ProductGroupId == gID).Select(pg => pg.Expr1).FirstOrDefault();
         }
 
         public async Task<IActionResult> OnGetBadaneColor(int tikId)
