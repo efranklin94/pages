@@ -9,16 +9,16 @@
 <h1>رنگ ها</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create">ایجاد رنگ جدید</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Colors[0].color_name)
+                نام رنگ
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Colors[0].flag)
+                فعال
             </th>
             <th></th>
         </tr>
@@ -33,9 +33,9 @@
                 @Html.DisplayFor(modelItem => item.flag)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@item.Id">ویرایش</a> |
+                @*<a asp-page="./Details" asp-route-id="@item.Id">Details</a> |*@
+                <a asp-page="./Delete" asp-route-id="@item.Id">پاک کردن</a>
             </td>
         </tr>
 }

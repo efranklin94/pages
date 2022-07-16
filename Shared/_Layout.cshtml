@@ -21,9 +21,10 @@
             border-top: none;   
             border-left: none;
             border-right: none;
-            border-bottom: 2px solid #808080;
+            border-bottom: 2px solid #d71921;
             font-weight: bold;
             /*transition: 0.1s;*/
+            color: #d71921 !important;
         }
 
         .nav-linkS.active
@@ -89,8 +90,30 @@
             <img src="/icons/FLogo.png" class=" logoupM" alt="Responsive image" />
         </a>
         <div class=" float-left" style="text-align:left;float:left;padding:10px">
-            <a class="btn btn-danger" style="color:white" href="/Identity/Account/Logout"><h6 class="buttons_h6">خروج</h6></a>
-            @if ((await AuthorizationService.AuthorizeAsync(User, "IsAdmin")).Succeeded) {
+            @*<a class="btn btn-danger" style="color:white" href="/Identity/Account/Logout"><h6 class="buttons_h6">خروج</h6></a>*@
+@*            <a class="btn btn-danger" style="color:white" href="/Logout/logout"><h6 class="buttons_h6">خروج</h6></a>*@
+@*            <form action="/Logout/logout" id="logoutForm">
+                <button class="btn btn-danger" style="color:white" type="submit"><h6 class="buttons_h6">خروج</h6></button>
+            </form>*@
+
+                        @if (User.Identity.IsAuthenticated)
+            {
+                <a class="btn btn-danger" style="color:white" href="/Logout/Logout"><h6 class="buttons_h6">خروج</h6></a>
+            }
+
+
+            @{
+                var username = (@User.Identity.Name).Replace("KAMJA\\", "");
+            }
+            <a style="text-decoration:none;color:white;margin-left: 10px;">@username</a>
+            @if ((
+                    await AuthorizationService.AuthorizeAsync(User, "edris")).Succeeded
+                ||  (await AuthorizationService.AuthorizeAsync(User, "farhangi")).Succeeded
+                ||  (await AuthorizationService.AuthorizeAsync(User, "bahrami")).Succeeded
+                ||  (await AuthorizationService.AuthorizeAsync(User, "hale")).Succeeded
+                ||  (await AuthorizationService.AuthorizeAsync(User, "abbasi")).Succeeded
+                ||  (await AuthorizationService.AuthorizeAsync(User, "shahabian")).Succeeded
+            ) {
                 <a class="btn btn-danger" style="color:white" href="/Admin"><h6 class="buttons_h6">ادمین</h6></a>
             }
             @{
@@ -133,7 +156,7 @@
                 </li>
 
                 <li class="nav-item ">
-                    <a class="nav-linkS nlT" asp-area="" asp-page="/technical/Index" style="">
+                    <a id="fannihref" class="nav-linkS nlT" asp-area="" asp-page="/technical/Index" style="">
                         <i class="bif bi bi-gear"></i>
                         <span class="nav-text"> اطلاعات فنی</span>
                     </a>
@@ -194,7 +217,10 @@
         });
 
         var servicesLink = document.getElementById('servicesAnchorlink');
-        @if ((await AuthorizationService.AuthorizeAsync(User, "IsForushUser")).Succeeded) {
+        @if ((await AuthorizationService.AuthorizeAsync(User, "IsForushUser")).Succeeded
+            || (await AuthorizationService.AuthorizeAsync(User, "IsShahrestanUser")).Succeeded
+            || (await AuthorizationService.AuthorizeAsync(User, "IsKamjatehranUser")).Succeeded
+        ) {
             <text>
                 servicesLink.removeAttribute('href');
                 servicesLink.style.color = 'gray';
@@ -206,6 +232,18 @@
         if (currentPage != '/') {
           var header = document.querySelector('.fixed-top');
           header.style.background = "#fff";
+        }
+
+        var servicesLink = document.getElementById('fannihref');
+        @if ((await AuthorizationService.AuthorizeAsync(User, "IsShahrestanUser")).Succeeded 
+            || (await AuthorizationService.AuthorizeAsync(User, "IsKamjatehranUser")).Succeeded
+        )
+        {
+            Console.WriteLine("IsShahrestanUser");
+            <text>
+                servicesLink.removeAttribute('href');
+                servicesLink.style.color = 'gray';
+            </text>
         }
 
     </script>

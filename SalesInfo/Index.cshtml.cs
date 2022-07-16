@@ -21,6 +21,7 @@ namespace kamjaService.Pages.SalesInfo
         }
 
         public IList<Parent> Parent { get;set; }
+        public string CurrentFilter { get; set; }
 
         public async Task OnGetAsync()
         {

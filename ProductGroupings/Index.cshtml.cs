@@ -35,12 +35,14 @@ namespace kamjaService.Pages.ProductGroupings
         public long groupRef { get; set; }
         public async Task OnGetAsync(long? id, string currentFilter, string searchString)
         {
+            
             if (id != null)
             {
                 gID = id;
             }
             if (searchString != null)
             {
+                searchString = PersianToEnglish(searchString);
                 //pageIndex = 1;
             }
             else
@@ -136,6 +138,24 @@ namespace kamjaService.Pages.ProductGroupings
 
             productGroupingClips = _context.ProductGroupingClips.Where(c => c.productGroupingId == gID).Where(c => c.FanniOrSalesInfo == "Fanni").ToList();
             groupRef = (long)id;
+        }
+
+        public string PersianToEnglish(string input)
+        {
+            string EnglishNumbers = "";
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (Char.IsDigit(input[i]))
+                {
+                    EnglishNumbers += char.GetNumericValue(input, i);
+                }
+                else
+                {
+                    EnglishNumbers += input[i].ToString();
+                }
+            }
+            return EnglishNumbers;
         }
     }
 }

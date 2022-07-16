@@ -7,10 +7,16 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using kamjaService.Models;
 using Microsoft.AspNetCore.Authorization;
+using kamjaService.authorize;
 
 namespace kamjaService.Pages.Admin
 {
-    [Authorize(Policy = "IsAdmin")]
+    //[Authorize(Policy = "bahrami")]
+    //[Authorize(Policy = "hale")]
+    //[Authorize(Policy = "abbasi")]
+    //[Authorize(Policy = "edris")]
+    //[Authorize(Policy = "farhangi")]
+    [MultiplePolicysAuthorize("edris;hale;bahrami;abbasi;farhangi;shahabian;")]
     public class IndexModel : PageModel
     {
         private readonly kamjaService.Models.KamjaServiceDbContext _context;

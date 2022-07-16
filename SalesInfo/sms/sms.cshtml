@@ -1,0 +1,40 @@
+﻿@page
+@model kamjaService.Pages.SalesInfo.sms.smsModel
+@{
+    ViewData["Title"] = "ارسال پیامک";
+}
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+          <label for="usr"><h5>شماره : </h5></label>
+          <input class="form-control" id="number">
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <button onclick="send()" id="sendBtn" class="btn btn-danger"><h6 class="buttons_h6">ارسال</h6></button>
+</div>
+
+<script>
+    function send() {
+        var number = document.getElementById('number').value.toString();
+        console.log(number.constructor)
+        $.ajax({
+            type: 'GET',
+            data: {receptor : number},
+            url: '?handler=send',
+
+            success: function (result) {
+                //console.log("update talbe ajax => " + result);
+                console.log(result);
+                alert(result)
+                //document.getElementById("sendForm").submit();
+
+            },
+
+            error: function (result) {
+                alert("خطا");
+            }
+        });
+    }
+</script>

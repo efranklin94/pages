@@ -1,0 +1,146 @@
+﻿
+@page  
+@model kamjaService.Pages.Admin.NaghsheCode.Step5.IndexModel
+
+@{
+    ViewData["Title"] = "لیست قطعات";
+}
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+@if(Model.Yaragh.YaraghComponent.Any()) {
+<h2>لیست  @Model.Yaragh.YaraghComponent?.First().گروه @ViewData["prn"] </h2>
+
+    <table class="table" style="margin: 0">
+        <tbody>
+            <tr>
+                <td>
+                    <form asp-page="./Index" method="get">
+                        <input type="hidden" name="id" value="@Model.ID" />
+                        <input type="hidden" name="yt" value="@Model.Yt" />
+                        <input type="hidden" name="pn" value="@ViewData["prn"]" />
+                        <input type="hidden" name="pcode" value="@Model.productGroupCode" />
+                        <div class="input-group search-container">
+                            <input type="text" class="form-control" placeholder="جستجو نام یا کد در این محصول..." aria-label="جستجو" aria-describedby="basic-addon2" name="SearchString" value="@Model.CurrentFilter">
+                            <div class="input-group-append">
+                                <button class="btn btn-danger" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<div class="col-12 col-sm-12 col-lg-8">
+    <img class="w-100 yimg2" src="@ViewData["pcode"]">
+</div>
+<div class="table-responsive">
+    <table class="table  table-bordered table-striped  ">
+        <thead>
+            <tr>
+
+                <th>
+                    کد
+                </th>
+                <th>
+                    عنوان
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Yaragh.YaraghComponent[0].تعداد)
+                </th>
+
+
+
+                <th>
+                    قیمت خدمات
+                </th>
+
+                <th>
+                    کد نقشه
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Yaragh.YaraghComponent)
+            {
+                <tr>
+
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.AjzakalaCode)
+                    </td>
+                    <td>
+
+
+                        @Html.DisplayFor(modelItem => item.AjzaKalaName)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.تعداد)
+                    </td>
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fee)
+                        ریال
+                    </td>
+                    @Html.AntiForgeryToken()
+                    <td contenteditable="true" id="desc_@item.AjzakalaCode" onclick="clearNaghsheCode(@item.AjzakalaCode)" onfocusout="postNaghsheCode(@item.AjzakalaCode)" >
+                        @Html.DisplayFor(modelItem => item.کد_نقشه)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+
+    function clearNaghsheCode(code) {
+        document.querySelector("#desc_" + code).innerHTML="";
+
+    }
+
+    function postNaghsheCode(code) {
+        
+        var naghsheCode = parseFloat(document.querySelector("#desc_" + code).innerHTML);
+        var productCode = document.querySelector("input[name='pcode']").value.match(/(\d+)/)[0];
+        $.ajax({
+            type: 'POST',
+            data: {
+                code: code,
+                naghsheCode: naghsheCode,
+                productCode: productCode
+            },
+
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+
+            },
+
+            url: '@Url.Page("index", "NaghsheCode")',
+
+            success: function (result) {
+                console.log("adding product naghshe code ajax... => " + result);
+                if (result == "failed") {
+                    alert("خطا در پایگاه داده")
+                }
+            },
+
+            error: function(result) {
+                console.log("adding product naghshe code ajax... => " + result);
+                alert("خطا در ارسال داده")
+            }
+        });
+    }
+</script>
+}
+else {
+    <h5>یراق موجود نیست</h5>
+}

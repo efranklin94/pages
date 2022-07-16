@@ -1,0 +1,49 @@
+﻿@page 
+@model kamjaService.Pages.Admin.NaghsheCode.Step4.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-bordered ">
+        <thead>
+            <tr>
+                <th>
+                    <div class="container" style="text-align:center;margin:10px">
+                        <div class="row">
+                            <div class="col-6">
+                                <h5> @ViewData["prin"]</h5>
+
+                            </div>
+                            <div class="col-6">
+                                <h5>کد : @ViewData["pcode"]</h5>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.PartGrouping)
+            {
+
+                <tr onclick="location.href = '@(Url.Page("/Admin/NaghsheCode/Step5/Index",
+                                          new { id =@ViewData["pri"],yt=@item.PartGroupName,pn=@ViewData["prin"],pcode=ViewData["pcode"] }))'">
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.PartGroupName)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="col-12 col-sm-12 col-lg-8">
+    <img class="w-100 yimg" src="@ViewData["code"]">
+</div>

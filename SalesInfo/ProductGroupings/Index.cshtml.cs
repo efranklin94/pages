@@ -29,7 +29,7 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
         public long? gID { get; set; }
         public ProductGroup productGroup { get; set; }
 
-        public string productGroupDescription { get; set; }
+        public IList<ProductGroupEXP> productGroupDescription { get; set; }
         public IList<ProColView> proColViews { get; set; }
         public IList<ProductGroupingexp> productGroupingexps { get; set; }
         public IEnumerable<string> imageSrcList { get; set; }
@@ -42,8 +42,14 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
         public List<VW_AllProductsDimensions> dimensionFileNames { get; set; }
         public List<VW_AllProductsPictures> productsPicturesFileNames { get; set; }
         public long groupRef { get; set; }
+        public string generalProductGroupEXP { get; set; }
         public async Task OnGetAsync(long? id, string currentFilter, string searchString)
         {
+            if (searchString != null)
+            {
+                searchString = PersianToEnglish(searchString);
+                //pageIndex = 1;
+            }
             if (id != null)
             {
                 gID = id;
@@ -102,12 +108,12 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
 
             var pg_desc_query = from pd in _context.ProductGroupEXP
                                 where pd.ProductGroupIdref == id
-                                select pd.pgexp;
+                                select pd;
             proColViews = await prs.OrderBy(p => p.Number).ToListAsync();
 
 
             productGroupingexps = await _context.ProductGroupingexp.ToListAsync();
-            productGroupDescription = await pg_desc_query.FirstOrDefaultAsync();
+            productGroupDescription = await pg_desc_query.ToListAsync();
 
             if (Directory.Exists("wwwroot\\image\\slider\\SalesInfo\\" + gID)) {
                 imageSrcList = Directory.EnumerateFiles("wwwroot\\image\\slider\\SalesInfo\\" + gID, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".jpg"));
@@ -135,6 +141,8 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
             productGroupingClips = await _context.ProductGroupingClips.Where(c => c.productGroupingId == gID).ToListAsync();
             groupRef = (long)id;
 
+
+            generalProductGroupEXP = await pg_desc_query.Where(p => p.catergory == "1").Select(p => p.pgexp).FirstOrDefaultAsync();
         }
 
         public async Task<IActionResult> OnGetColors(string colorCatName)
@@ -149,6 +157,22 @@ namespace kamjaService.Pages.SalesInfo.ProductGroupings
 
             return new JsonResult(colorEntites);
         }
+        public string PersianToEnglish(string input)
+        {
+            string EnglishNumbers = "";
 
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (Char.IsDigit(input[i]))
+                {
+                    EnglishNumbers += char.GetNumericValue(input, i);
+                }
+                else
+                {
+                    EnglishNumbers += input[i].ToString();
+                }
+            }
+            return EnglishNumbers;
+        }
     }
 }

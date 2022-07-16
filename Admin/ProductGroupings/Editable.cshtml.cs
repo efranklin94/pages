@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,14 +30,14 @@ namespace kamjaService.Pages.Admin.ProductGroupings
         public IList<int> productBadaneColCat { get; set; }
         public IList<int> productNamaColCat { get; set; }
         public IList<int> productPayeChoobiColCat { get; set; }
-        public string productGroupDescription { get; set; }
+        public IList<ProductGroupEXP> productGroupDescription { get; set; }
         [BindProperty]
         public IList<ProductGroupingexp> productGroupingexps { get; set; }
         public String ProductGroupName { get; set; }
         public string productGroupName  { get; set; }
         public string CurrentFilter { get; set; }
         public long? gID { get; set; }
-
+        public string generalProductGroupEXP { get; set; }
         public async Task OnGetAsync(long? id, string currentFilter, string searchString)
         {
             if (id != null)
@@ -93,7 +93,7 @@ namespace kamjaService.Pages.Admin.ProductGroupings
                        select pg;
             var pg_desc_query = from pd in _context.ProductGroupEXP
                                 where pd.ProductGroupIdref == id
-                                select pd.pgexp;
+                                select pd;
 
             var pgingdesc_query = from pgindesc in _context.ProductGroupingexp
                                   select pgindesc;
@@ -104,10 +104,12 @@ namespace kamjaService.Pages.Admin.ProductGroupings
             //productGroup = await prgd.SingleOrDefaultAsync();
             proColViews = await prs.ToListAsync();
             colors = await _context.ColorCAT.ToListAsync();
-            productGroupDescription = await pg_desc_query.FirstOrDefaultAsync();
+            productGroupDescription = await pg_desc_query.ToListAsync();
             productGroupingexps = await pgingdesc_query.ToListAsync();
 
             productGroupName = _context.ProductGroup.Where(pg => pg.ProductGroupId == gID).Select(pg => pg.Expr1).FirstOrDefault();
+
+            generalProductGroupEXP = await pg_desc_query.Where(p => p.catergory == "1").Select(p => p.pgexp).FirstOrDefaultAsync();
         }
 
         public async Task<IActionResult> OnGetBadaneColor(int tikId)
@@ -234,6 +236,11 @@ namespace kamjaService.Pages.Admin.ProductGroupings
 
         public async Task<IActionResult> OnPostDescription(long id, string description)
         {
+            if(description != null) { 
+                description = description.Replace("ک", "ك");
+                description = description.Replace("ی", "ي");
+            }
+
             try
             {
                 using (SqlConnection conn = new SqlConnection("Server=172.16.231.14;Database=KamjaServiceDb;User Id=sa;Password=h0$t@2019;MultipleActiveResultSets=true"))
@@ -279,8 +286,11 @@ namespace kamjaService.Pages.Admin.ProductGroupings
 
             return new JsonResult("success");
         }
-        public async Task<IActionResult> OnPostCurrent_pging_description(long id, string description)
+        public async Task<IActionResult> OnPostCurrent_pging_description(long id, string description, string category)
         {
+            description = description.Replace("ك", "ک");
+            description = description.Replace("ي", "ی");
+
             try
             {
                 using (SqlConnection conn = new SqlConnection("Server=172.16.231.14;Database=KamjaServiceDb;User Id=sa;Password=h0$t@2019;MultipleActiveResultSets=true"))
@@ -296,12 +306,18 @@ namespace kamjaService.Pages.Admin.ProductGroupings
 
                     SqlParameter param2 = new SqlParameter();
                     param2.ParameterName = "@desc";
-                    param2.SqlDbType = SqlDbType.NVarChar;
+                    param2.SqlDbType = SqlDbType.Text;
                     if (description == null)
                         param2.Value = DBNull.Value;
                     else
                         param2.Value = description;
 
+                    SqlParameter param3 = new SqlParameter();
+                    param3.ParameterName = "@cat";
+                    param3.SqlDbType = SqlDbType.NVarChar;
+                    param3.Value = category;
+
+                    cmd.Parameters.Add(param3);
                     cmd.Parameters.Add(param2);
                     cmd.Parameters.Add(param1);
 

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using NinjaNye.SearchExtensions;
 
 namespace kamjaService.Pages.Admin.ProductImages.Step3
 {
@@ -39,9 +40,59 @@ namespace kamjaService.Pages.Admin.ProductImages.Step3
         public IFormFile UploadedDim { get; set; }
         public string fileExtensionViewBag { get; set; }
         public string dimensionFileName { get; set; }
-        public void OnGet(long id)
+        public string CurrentFilter { get; set; }
+        public long? gID { get; set; }
+        public void OnGet(long? id, string currentFilter, string searchString)
         {
-            productGroupings = _context.VW_RemainingProductsPictures.Where(p => p.GroupRef == id).OrderBy(p => p.Number).ToList();
+            if (id != null)
+            {
+                gID = id;
+            }
+            if (searchString != null)
+            {
+                //pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            CurrentFilter = searchString;
+            var ProductG = from m in _context.VW_RemainingProductsPictures
+                           select m;
+            var pr = ProductG.Where(x => x.GroupRef == id).Distinct();
+            IQueryable<VW_RemainingProductsPictures> prs = pr;
+            if (!String.IsNullOrEmpty(searchString))
+
+            {
+                String[] searchstrZ = searchString.Split(' ');
+
+                //remove the spaces to prevent exception
+                List<string> searchstrZWithoutNull = new List<string>();
+                foreach (String s in searchstrZ)
+                {
+                    if (s == "")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        searchstrZWithoutNull.Add(s);
+                    }
+                }
+                searchstrZ = searchstrZWithoutNull.ToArray();
+
+                var prName = pr.Search(s => s.Name).ContainingAll(searchstrZ).AsQueryable();
+                var prsName = prName.Where(s => s.Name.Contains(s.Name));
+
+                var prNumber = pr.Search(s => s.Number).ContainingAll(searchstrZ).AsQueryable();
+                var prsNumber = prNumber.Where(s => s.Number.Contains(s.Number));
+
+                prs = prsName.Concat(prsNumber);
+            }
+
+
+            productGroupings = prs.OrderBy(p => p.Number).ToList();
             productGroupingsDims = _context.VW_RemainingProductDimensions.Where(p => p.GroupRef == id).OrderBy(p => p.Number).ToList();
         }
         public async Task<IActionResult> OnPostAsync()
@@ -93,6 +144,14 @@ namespace kamjaService.Pages.Admin.ProductImages.Step3
 
                         using (FileStream output = System.IO.File.Create(GetPathAndFilename(fileNameWithItsExtension,"Pic")))
                             UploadedFile.CopyTo(output);
+
+                        //TBL_ProductsPictures prev_productsPictures = new TBL_ProductsPictures();
+                        //prev_productsPictures.Code = picturesService.Code;
+                        //prev_productsPictures.Name = picturesService.Name;
+                        //prev_productsPictures.FileName = picturesService.FileName;
+                        
+                        //prev_productsPictures.IsDefault = true;
+                        //_context.Entry(prev_productsPictures).State = EntityState.Deleted;
 
                         _context.Attach(picturesService).State = EntityState.Detached;
                         _context.Attach(TBL_ProductsPicturesService).State = EntityState.Modified;

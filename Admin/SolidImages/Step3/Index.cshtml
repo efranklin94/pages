@@ -1,0 +1,34 @@
+﻿@page
+@model kamjaService.Pages.Admin.SolidImages.Step3.IndexModel
+@{
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+@{
+    ViewData["Title"] = "ادمین عکس نقشه های انفجاری";
+}
+
+@*@foreach (var item in Model.SolidImgSrcList)
+    {
+    <div class="card card-body">
+        <div style="width: 90%;align-self:center">
+            @{
+                var item2 = item.Replace("wwwroot", "");
+            }
+            <img src="@item2" width=200 height=200>
+        </div>
+    </div>
+    }*@
+    <div class="container">
+        <div class="row">
+            @foreach (var item in Model.SolidImgSrcList)
+            {
+                <div class="card card-body col-6">
+                        @{
+                            var item2 = item.Replace("wwwroot", "");
+                        }
+                        <img src="@item2" width=200>
+                        <h6>@item2</h6>
+                </div>
+            }
+        </div>
+    </div>

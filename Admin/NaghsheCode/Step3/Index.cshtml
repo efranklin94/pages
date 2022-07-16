@@ -1,0 +1,86 @@
+﻿@page 
+@model kamjaService.Pages.Admin.NaghsheCode.Step3.IndexModel
+@using System.IO;
+
+@{
+    ViewData["Title"] = "Index";
+}
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+<link href="~/css/swiper-bundle.min.css" rel="stylesheet" />
+<style>
+    .swiper-pagination-bullet {
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        font-size: 15px;
+        color: #000;
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .swiper-pagination-bullet-active {
+        color: #fff;
+        background: #dc3545;
+      }
+</style>
+<h2>@Model.productGroupName</h2>
+<table class="table" style="margin: 0">
+    <tbody>
+        <tr>
+            <td>
+                <form asp-page="./Index" method="get">
+                    <div class="input-group search-container">
+                        <input type="hidden" name="id" value="@Model.gID" />
+                        <input type="text" class="form-control" placeholder="جستجو نام یا کد..." aria-label="جستجو" aria-describedby="basic-addon2" name="SearchString" value="@Model.CurrentFilter">
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" type="submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<table class="table table-hover table-striped  table-bordered">
+    <thead>
+        <tr>
+
+            <th>
+                کد محصول
+            </th>
+            <th>
+                نام محصول
+            </th>
+
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ProductGrouping)
+        {
+            <tr onclick="location.href = '@(Url.Page("/Admin/NaghsheCode/Step4/Index", new { id =@item.ProductGroupingId,name=@item.Name,code=@item.Number }))'">
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Number)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+
+
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

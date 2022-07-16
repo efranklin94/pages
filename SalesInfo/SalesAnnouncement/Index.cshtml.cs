@@ -27,7 +27,11 @@ namespace kamjaService.Pages.SalesInfo.SalesAnnouncement
 
         public async Task OnGetAsync(string searchString, string currentFilter)
         {
-
+            if (searchString != null)
+            {
+                searchString = PersianToEnglish(searchString);
+                //pageIndex = 1;
+            }
             if (searchString == null)
             {
                 searchString = currentFilter;
@@ -90,7 +94,23 @@ namespace kamjaService.Pages.SalesInfo.SalesAnnouncement
 
             SalesAnnouncements = await pr2.Distinct().OrderByDescending(x => x.SalesAnnouncementId).ToListAsync();
         }
+        public string PersianToEnglish(string input)
+        {
+            string EnglishNumbers = "";
 
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (Char.IsDigit(input[i]))
+                {
+                    EnglishNumbers += char.GetNumericValue(input, i);
+                }
+                else
+                {
+                    EnglishNumbers += input[i].ToString();
+                }
+            }
+            return EnglishNumbers;
+        }
 
     }
 }

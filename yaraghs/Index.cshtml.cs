@@ -27,8 +27,10 @@ namespace kamjaService.Pages.yaraghs
         public string CurrentFilter { get; set; }
         public long? ID { get; set; }
         public string Yt { get; set; }
+        public string productGroupCode { get; set; }
         public async Task OnGetAsync(long? id, string yt, string currentFilter, string searchString, string pn,string pcode)
         {
+            productGroupCode = pcode;
             Yaragh = new YaraghCVM();
             ViewData["prn"] = pn;
             if (id != null && yt != null)
@@ -73,7 +75,7 @@ namespace kamjaService.Pages.yaraghs
                 //Yaragh.YaraghComponent= Yaragh.YaraghComponent.Where(s => s.AjzaKalaName.Contains(searchString)
                 //              || s.AjzakalaCode.Contains(searchString)).ToList();
             }
-            ViewData["pcode"] = "/image/Product/solid/" + pcode + ".png";
+            ViewData["pcode"] = "/image/Product/solid/" + productGroupCode + ".png";
             Yaragh.YaraghComponent = await prs.ToListAsync();
 
 

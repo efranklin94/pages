@@ -23,13 +23,14 @@ namespace kamjaService.Pages.yaraghs
 
         public IList<YaraghVM> Yaragh { get;set; }
         public string CurrentFilter { get; set; }
-       
+        public IList<String> ZeroFeeYaraghs { get; set; }
         public async Task OnGetAsync(string currentFilter, string searchString,string pn )
         {
             ViewData["prn"] = pn;
-           
+
             if (searchString != null)
             {
+                searchString = PersianToEnglish(searchString);
                 //pageIndex = 1;
             }
             else
@@ -46,7 +47,8 @@ namespace kamjaService.Pages.yaraghs
           
            
                var  pr2 = ProductG.Select(x => new YaraghVM { 
-                                   AjzakalaCode= x.AjzakalaCode,AjzaKalaName=x.AjzaKalaName,Fee=x.Fee }).Distinct().Where(x=>x.Fee>0);
+                                   AjzakalaCode= x.AjzakalaCode,AjzaKalaName=x.AjzaKalaName,Fee=x.Fee,واحد = x.واحد}).Distinct();
+                                   //.Where(x=>x.Fee>0);
 
             IQueryable<YaraghVM> prs=pr2;
                 if (!String.IsNullOrEmpty(searchString))
@@ -68,7 +70,25 @@ namespace kamjaService.Pages.yaraghs
             }
             Yaragh = await prs.ToListAsync();
 
-            
+            ZeroFeeYaraghs = await ProductG.Where(yaragh => yaragh.Fee == 0).Select(yaragh => yaragh.AjzakalaCode).ToListAsync();
+        }
+
+        public string PersianToEnglish(string input)
+        {
+            string EnglishNumbers = "";
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (Char.IsDigit(input[i]))
+                {
+                    EnglishNumbers += char.GetNumericValue(input, i);
+                }
+                else
+                {
+                    EnglishNumbers += input[i].ToString();
+                }
+            }
+            return EnglishNumbers;
         }
     }
 }

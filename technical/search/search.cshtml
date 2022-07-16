@@ -1,0 +1,158 @@
+﻿@page
+@model kamjaService.Pages.technical.search.searchModel
+
+@{
+    ViewData["Title"] = "search";
+    Layout = "~/Pages/Shared/_FLayout.cshtml";
+}
+<div>
+    <h4>جستجو</h4>
+</div>
+<div>
+    <h5>@Model.resultCount نتیجه یافت شد  </h5>
+</div>
+    <table class="table" style="margin: 0">
+    <tbody>
+        <tr>
+            <td>
+<form action="/technical/search/search" method="get">
+            <div class="input-group search-container">
+            <input type="text" class="form-control" placeholder="جستجو نام یا کد محصولات..." aria-label="جستجو" aria-describedby="basic-addon2" name="SearchString" value="@Model.CurrentFilter" onkeyup="fixNumbers(this.value)">
+            <div class="input-group-append">
+                <button class="btn btn-danger" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+</form>
+</td></tr></tbody></table>
+
+<table class="table table-hover table-striped  table-bordered">
+    <thead>
+        <tr>
+
+            <th>
+                کد محصول
+            </th>
+            <th>
+                نام محصول
+            </th>
+
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.productGroupings)
+        {
+            <tr onclick="location.href = '@(Url.Page("/PartGroupings/Index", new { id =@item.ProductGroupingId,name=@item.Name,code=@item.Number }))'">
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Number)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+
+
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    var persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g],
+        arabicNumbers  = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g],
+    fixNumbers = function (str)
+    {
+      if(typeof str === 'string')
+      {
+        for(var i=0; i<10; i++)
+        {
+          str = str.replace(persianNumbers[i], i).replace(arabicNumbers[i], i);
+        }
+      }
+      return str;
+    };
+</script>
+
+@*<h1>search</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.productGroupings[0].PartRef)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.productGroupings[0].Number)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.productGroupings[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.productGroupings[0].State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.productGroupings[0].Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.productGroupings[0].GroupingRef)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.productGroupings[0].GroupRef)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.productGroupings[0].Expr1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.productGroupings[0].ParentRef)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.productGroupings) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PartRef)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Number)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GroupingRef)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GroupRef)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Expr1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParentRef)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ProductGroupingId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ProductGroupingId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ProductGroupingId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>*@

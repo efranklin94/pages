@@ -10,19 +10,28 @@
 
 <h2>لیست یراق آلات  </h2>
 
-
+ <table class="table" style="margin: 0">
+    <tbody>
+        <tr>
+            <td>
 <form asp-page="./IndexFull" method="get">
-    <div class="form-actions no-color">
-        <p>
-            جستجو نام یا کد:
-
-            <input type="hidden" name="pn" value="@ViewData["prn"]" />
-            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-            <button type="submit" class="btn btn-danger"><h6 class="buttons_h6">جستجو</h6></button>
-
-        </p>
+    <div class="input-group search-container">
+            <input type="text" class="form-control" placeholder="جستجو نام یا کد یراق آلات..." aria-label="جستجو" aria-describedby="basic-addon2" name="SearchString" value="@Model.CurrentFilter" onkeyup="fixNumbers(this.value)">
+            <div class="input-group-append">
+                <button class="btn btn-danger" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg>
+                </button>
+            </div>
     </div>
 </form>
+
+</td></tr></tbody></table>
+
+<input type="checkbox" id="myCheckbox">
+<label for="myCheckbox"><h6>*نشان دادن یراق آلات بدون قیمت</h6></label><br>
+
 <table class="table  table-bordered table-hover table-striped">
     <thead>
         <tr>
@@ -34,6 +43,9 @@
                 عنوان یراق
             </th>
 
+            <th>
+                واحد
+            </th>
 
             <th>
                 قیمت خدمات
@@ -45,28 +57,61 @@
     <tbody>
         @foreach (var item in Model.Yaragh)
         {
-            <tr class='clickable-row' data-toggle="modal" data-target="#exampleModal"
-                data-value="@Html.DisplayFor(modelItem => item.AjzakalaCode)">
+            if(item.Fee != 0) {
+                <tr class='clickable-row' data-toggle="modal" data-target="#exampleModal"
+                    data-value="@Html.DisplayFor(modelItem => item.AjzakalaCode)">
 
-                <td>
+                    <td>
 
-                    @Html.DisplayFor(modelItem => item.AjzakalaCode)
-                </td>
-                <td>
-
-
-                    @Html.DisplayFor(modelItem => item.AjzaKalaName)
-
-                </td>
+                        @Html.DisplayFor(modelItem => item.AjzakalaCode)
+                    </td>
+                    <td>
 
 
+                        @Html.DisplayFor(modelItem => item.AjzaKalaName)
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Fee)
-                    ریال
-                </td>
+                    </td>
 
-            </tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.واحد)
+                    </td>
+                    
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fee)
+                        ریال
+                    </td>
+
+                </tr>
+            }
+            else
+            {
+
+                <tr class='clickable-row table-warning' data-toggle="modal" data-target="#exampleModal"
+                    data-value="@Html.DisplayFor(modelItem => item.AjzakalaCode)" style="display:none;">
+
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.AjzakalaCode)
+                    </td>
+                    <td>
+
+
+                        @Html.DisplayFor(modelItem => item.AjzaKalaName)
+
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.واحد)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fee)
+                        ریال
+                    </td>
+
+                </tr>
+            }
         }
     </tbody>
 </table>
@@ -100,6 +145,17 @@
 
 
             }
+        });
+    });
+
+    $(function() {
+        $('#myCheckbox').change(function() {
+            document.querySelectorAll('.table-warning').forEach(function(el) {
+               if(el.style.display == 'none')
+                    el.style.display = '';
+                else 
+                    el.style.display = 'none';
+            });
         });
     });
 </script>

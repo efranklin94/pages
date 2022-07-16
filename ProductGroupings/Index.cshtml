@@ -27,20 +27,27 @@
       }
 </style>
 <h2>@Model.productGroupName</h2>
-    
-<form asp-page="./Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            <h6>جستجو نام یا کد:
-            <input type="hidden" name="id" value="@Model.gID" />
-            @*<input type="hidden" name="yt" value="@Model.Yt" />
-                <input type="hidden" name="pn" value="@ViewData["prn"]" />*@
-            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-            <button type="submit" class="btn btn-danger"><h6 class="buttons_h6">جستجو</h6></button></h6>
-
-        </p>
-    </div>
-</form>
+<table class="table" style="margin: 0">
+    <tbody>
+        <tr>
+            <td>
+                <form asp-page="./Index" method="get">
+                    <div class="input-group search-container">
+                        <input type="hidden" name="id" value="@Model.gID" />
+                        <input type="text" class="form-control" placeholder="جستجو نام یا کد..." aria-label="جستجو" aria-describedby="basic-addon2" name="SearchString" value="@Model.CurrentFilter">
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" type="submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 <div class="container-fluid">
     <div class="row">
@@ -65,7 +72,7 @@
                                                 var title = @Model.productGroupingClips.Where(c => c.FanniOrSalesInfo == "Fanni" && c.name == name).Select(c => c.title).FirstOrDefault();
                                                 <div class="swiper-slide" style="max-height:460px;padding-bottom:45px;">
 
-                                                    <video style="width: 100%;" disablePictureInPicture controls name="media">
+                                                    <video style="width: 100%;" disablePictureInPicture controls name="media"  oncontextmenu="return false;" controlslist="nodownload">
                                                         <source src="@clipsrc2" type="video/mp4">
                                                     </video>
                                                     <div class="caption" style="position:absolute;top:285px;"><h6>@title</h6></div>
@@ -229,4 +236,6 @@
         //header.innerText = colorName;
         //
     }
+
+console.log($.cookie("previousUrl", window.location.href, {path:"/"}));
 </script>

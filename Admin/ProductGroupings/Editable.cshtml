@@ -6,46 +6,47 @@
 @{
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
-<style>table {
+<style>.mytable {
             width: 100%;
+            font-size: 0.9rem;
         }
 
-        thead, tbody, tr, td, th { display: block; }
+        .mytable thead, tbody, tr, td, th { display: block; }
 
-        tr:after {
+        .mytable tr:after {
             content: ' ';
             display: block;
             visibility: hidden;
             clear: both;
         }
 
-        thead th {
+        .mytable thead th {
             height: 75px;
 
             /*text-align: left;*/
         }
 
-        tbody {
-            height: 450px;
+        .mytable tbody {
+            height: 350px;
             overflow-y: auto;
         }
 
-        thead {
+        .mytable thead {
             /* fallback */
         }
 
 
-        tbody td, thead th {
+        .mytable tbody td, thead th {
             /*width: 16.6%;*/
             float: right;
         }
         
-        table td {
+        .mytable table td {
             border-bottom: none;
         }
         </style>
 
-<script type="text/javascript"
+@*<script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
       rel="stylesheet" />
@@ -56,36 +57,78 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css"
       rel="stylesheet" />
 <!-- Compiled and minified CSS -->
-@*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-*@<div id="admin_page">
+@*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">*@
+<div id="admin_page">
     <h4 style="margin-bottom: 30px;">پنل ادمین</h4>
     <h4 style="margin-bottom: 30px;">@Model.productGroupName</h4>
 
     @*<h4 id="ProductGroupingName"></h4>*@
-    <h5  style="margin-bottom: 30px;">
-        توضیحات : <textarea type="text" id="productGroupingDescription" style="
-        height: auto;
-        white-space: pre-wrap;
-        width:85%;
-        font-size: 14px;
-" contenteditable="true" onfocusout="updateDescriptionProductGrouping()">@Model.productGroupDescription</textarea>
-    </h5>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <a class="btn btn-secondary" data-toggle="collapse" href="#general" role="button" aria-expanded="false" aria-controls="general"><h6 class="">توضیحات کلی</h6></a>
+                <div class="collapse" id="general">
+                    <h5  style="margin-bottom: 30px;">
+
+
+
+                        @{var generalVar = "general";}
+                        
+                        
+                        <textarea type="text" id="productGroupingDescription" style="
+                        height: 250px;
+                        white-space: pre-wrap;
+                        width:85%;
+                        font-size: 14px;
+                " contenteditable="true" onfocusout="updateDescriptionProductGrouping(1)">@Model.generalProductGroupEXP</textarea>
+
+                        
+
+
+
+
+
+                    </h5>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table" style="margin: 0">
+    <tbody>
+        <tr>
+            <td>
+<form asp-page="./Index" method="get">
+            <div class="input-group search-container">
+            <input type="hidden" name="id" value="@Model.gID" />
+            <input type="text" class="form-control" placeholder="جستجو نام یا کد محصولات..." aria-label="جستجو" aria-describedby="basic-addon2" name="SearchString" value="@Model.CurrentFilter" onkeyup="fixNumbers(this.value)">
+            <div class="input-group-append">
+                <button class="btn btn-danger" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+</form>
+</td></tr></tbody></table>
+
+
+@*
     <form asp-page="./Index" method="get">
         <div class="form-actions no-color">
             <p>
                 <h6>جستجو نام یا کد:
                 <input type="hidden" name="id" value="@Model.gID" />
-                @*<input type="hidden" name="yt" value="@Model.Yt" />
-                    <input type="hidden" name="pn" value="@ViewData["prn"]" />*@
                 <input type="text" name="SearchString" value="@Model.CurrentFilter" />
                 <button type="submit" class="btn btn-danger"><h6 class="buttons_h6">جستجو</h6></button></h6>
 
             </p>
         </div>
-    </form>
+    </form>*@
     <!-- Editable table -->
     
-    <table class="table table-responsive-md text-center">
+    <table class="table mytable table-responsive-md text-center">
         <thead>
             <tr>
                 <th class="text-center col-2">نام محصول</th>
@@ -393,13 +436,14 @@
 
     var current_product_grouping_id = window.location.search.substring(1).split('id=', '3')[1];
 
-    function updateDescriptionProductGrouping() {
+    function updateDescriptionProductGrouping(category) {
         var desc = document.querySelector("#productGroupingDescription").value;
         $.ajax({
             type: 'POST',
             data: {
                 id: current_product_grouping_id,
-                description: desc
+                description: desc,
+                category: category
             },
 
             beforeSend: function (xhr) {

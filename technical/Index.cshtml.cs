@@ -30,6 +30,11 @@ namespace kamjaService.Pages.technical
         {
             Parent = await _context.Parent.ToListAsync();
 
+            if (searchString != null)
+            {
+                searchString = PersianToEnglish(searchString);
+                //pageIndex = 1;
+            }
             CurrentFilter = searchString;
 
             var Procolview_query = from m in _context.ProColView
@@ -67,6 +72,32 @@ namespace kamjaService.Pages.technical
                 prs = prsName.Concat(prsNumber);
             }
             proColViews = await prs.OrderBy(p => p.Number).ToListAsync();
+        }
+
+        public IActionResult OnGetSearch(string customerName)
+        {
+            var products = from p in _context.ProductGrouping
+                           where p.Name.Contains(customerName)
+                           select p.Name;
+            return new JsonResult(products.ToList());
+        }
+
+        public string PersianToEnglish(string input)
+        {
+            string EnglishNumbers = "";
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (Char.IsDigit(input[i]))
+                {
+                    EnglishNumbers += char.GetNumericValue(input, i);
+                }
+                else
+                {
+                    EnglishNumbers += input[i].ToString();
+                }
+            }
+            return EnglishNumbers;
         }
     }
 }

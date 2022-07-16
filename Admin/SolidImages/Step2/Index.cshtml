@@ -1,0 +1,28 @@
+﻿@page
+@model kamjaService.Pages.Admin.SolidImages.Step2.IndexModel
+@{
+}
+<table class="table table-hover table-striped  ">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ProductGroup)
+        {
+            <tr onclick="location.href = '@(Url.Page("/Admin/SolidImages/Step3/Index", new { id = @item.ProductGroupId }))'">
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.Expr1)
+                </td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>
